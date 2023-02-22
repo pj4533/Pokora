@@ -8,13 +8,18 @@
 import Foundation
 
 class Store: ObservableObject {
-    @Published var frames: [Frame] = [
-        Frame(id: 1),
-        Frame(id: 2),
-        Frame(id: 3),
-        Frame(id: 4),
-        Frame(id: 5)
-    ]
+    @Published var frames: [Frame] = []
+    @Published var movieFileUrl: URL?
+        
+    func readFrames() {
+        frames = [
+            Frame(id: 1, inputMovieUrl: movieFileUrl),
+            Frame(id: 2, inputMovieUrl: movieFileUrl),
+            Frame(id: 3, inputMovieUrl: movieFileUrl),
+            Frame(id: 4, inputMovieUrl: movieFileUrl),
+            Frame(id: 5, inputMovieUrl: movieFileUrl)
+        ]
+    }
     
     subscript(frameID: Frame.ID?) -> Frame {
         get {
@@ -30,5 +35,4 @@ class Store: ObservableObject {
             }
         }
     }
-
 }

@@ -10,9 +10,18 @@ import SwiftUI
 struct FrameDetail: View {
     @EnvironmentObject var store: Store
     @Binding var frameId: Frame.ID?
-
+    @State private var image: Image?
+    
     var body: some View {
-        Text("Frame #\(frame.id)")
+        VStack {
+            image
+        }.task {
+            do {
+                image = try await Image(frame.image()!, scale: 1.0, label: Text(""))
+            } catch {
+                print("caught error")
+            }
+        }
     }
 }
 
