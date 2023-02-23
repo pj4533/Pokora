@@ -8,40 +8,21 @@
 import SwiftUI
 
 struct FrameDetail: View {
-    @EnvironmentObject var store: Store
-    @Binding var frameId: Frame.ID?
-    @State private var image: Image?
-    
+    var frame: Frame?
+
     var body: some View {
         VStack {
-            image
-        }.task {
-            do {
-                image = try await Image(frame.image()!, scale: 1.0, label: Text(""))
-            } catch {
-                print("caught error")
+            if let url = frame?.inputUrl, let image = NSImage(contentsOf: url) {
+                Image(nsImage: image)
+            } else {
+                Text("Error loading image")
             }
         }
     }
 }
 
 struct FrameDetail_Previews: PreviewProvider {
-    static var store = Store()
     static var previews: some View {
-        FrameDetail(frameId:
-            .constant(store.frames.first!.id))
-            .environmentObject(store)
+        FrameDetail(frame: Frame.placeholder)
     }
-}
-
-extension FrameDetail {
-    
-    var frame: Frame {
-        store[frameId]
-    }
-    
-    var frameBinding: Binding<Frame> {
-        $store[frameId]
-    }
-
 }

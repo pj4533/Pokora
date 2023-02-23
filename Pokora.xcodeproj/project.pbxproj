@@ -9,22 +9,24 @@
 /* Begin PBXBuildFile section */
 		0A48554129A6949800BA1614 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554029A6949800BA1614 /* ContentView.swift */; };
 		0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554229A694AD00BA1614 /* FrameDetail.swift */; };
+		0A81798129A8014C00C513F2 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81798029A8014C00C513F2 /* Sidebar.swift */; };
+		0A81798329A80BA600C513F2 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81798229A80BA600C513F2 /* Video.swift */; };
 		0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1859729A6873200BCC57C /* PokoraApp.swift */; };
 		0AB1859C29A6873300BCC57C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AB1859B29A6873300BCC57C /* Assets.xcassets */; };
 		0AB1859F29A6873300BCC57C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AB1859E29A6873300BCC57C /* Preview Assets.xcassets */; };
-		0AB185A829A68BF100BCC57C /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB185A729A68BF100BCC57C /* Store.swift */; };
 		0AB185AA29A68C3F00BCC57C /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB185A929A68C3F00BCC57C /* Frame.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0A48554029A6949800BA1614 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0A48554229A694AD00BA1614 /* FrameDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetail.swift; sourceTree = "<group>"; };
+		0A81798029A8014C00C513F2 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
+		0A81798229A80BA600C513F2 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		0AB1859429A6873200BCC57C /* Pokora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokora.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB1859729A6873200BCC57C /* PokoraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokoraApp.swift; sourceTree = "<group>"; };
 		0AB1859B29A6873300BCC57C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AB1859E29A6873300BCC57C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0AB185A029A6873300BCC57C /* Pokora.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pokora.entitlements; sourceTree = "<group>"; };
-		0AB185A729A68BF100BCC57C /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		0AB185A929A68C3F00BCC57C /* Frame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -44,6 +46,7 @@
 			children = (
 				0A48554029A6949800BA1614 /* ContentView.swift */,
 				0A48554229A694AD00BA1614 /* FrameDetail.swift */,
+				0A81798029A8014C00C513F2 /* Sidebar.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -88,8 +91,8 @@
 		0AB185A629A68BDC00BCC57C /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0AB185A729A68BF100BCC57C /* Store.swift */,
 				0AB185A929A68C3F00BCC57C /* Frame.swift */,
+				0A81798229A80BA600C513F2 /* Video.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -164,10 +167,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AB185A829A68BF100BCC57C /* Store.swift in Sources */,
 				0AB185AA29A68C3F00BCC57C /* Frame.swift in Sources */,
+				0A81798329A80BA600C513F2 /* Video.swift in Sources */,
 				0A48554129A6949800BA1614 /* ContentView.swift in Sources */,
 				0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */,
+				0A81798129A8014C00C513F2 /* Sidebar.swift in Sources */,
 				0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
