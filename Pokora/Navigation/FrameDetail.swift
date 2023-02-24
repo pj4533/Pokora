@@ -14,6 +14,8 @@ struct FrameDetail: View {
         VStack {
             if let url = frame?.inputUrl, let image = NSImage(contentsOf: url) {
                 Image(nsImage: image)
+                    .resizable()
+                    .scaledToFit()
             } else {
                 Text("Error loading image")
             }
