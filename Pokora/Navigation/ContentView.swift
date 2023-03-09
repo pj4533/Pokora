@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var video: Video?
+    @State private var video: Video?
 
+    init(video: Video? = nil) {
+        self.video = video
+    }
+    
     var body: some View {
         NavigationSplitView {
             Sidebar(video: video)

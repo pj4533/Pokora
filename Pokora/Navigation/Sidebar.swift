@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct Sidebar: View {
-    @State var video: Video?
+    @State private var video: Video?
+    
+    init(video: Video?) {
+        self.video = video
+    }
+    
     var body: some View {
         VStack {
             Button("Select File") {
@@ -28,6 +33,13 @@ struct Sidebar: View {
                     } label: {
                         Label("Frame #\(frame.index)", systemImage: "video.square.fill")
                     }
+                }
+            }
+        }
+        .onAppear {
+            if let url = UserDefaults.standard.url(forKey: "currentVideoFile") {
+                Store.loadCachedFrames(url: url) { previousVideo in
+                    video = previousVideo
                 }
             }
         }
