@@ -18,7 +18,7 @@ struct FrameDetail: View {
                         .resizable()
                         .scaledToFit()
                 } else {
-                    Text("Error loading image")
+                    Text("Error loading source image")
                 }
             }
             VStack {
@@ -27,11 +27,7 @@ struct FrameDetail: View {
                         .resizable()
                         .scaledToFit()
                 } else {
-                    if let url = frame?.inputUrl {
-                        StableDiffusionStore.process(imageUrl: url)
-                    } else {
-                        Text("Error input loading image")
-                    }
+                    Text("Error loading processed image")
                 }
             }
         }
