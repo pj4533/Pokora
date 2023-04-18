@@ -1,5 +1,5 @@
 # Pokora
-AI Video Editing Platform
+AI Video Editing Platform build using SwiftUI
 
 ![Early concept drawing of Pokora interface](pokora_concept.png)
 
