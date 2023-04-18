@@ -11,13 +11,24 @@ struct FrameDetail: View {
     var frame: Frame?
 
     var body: some View {
-        VStack {
-            if let url = frame?.inputUrl, let image = NSImage(contentsOf: url) {
-                Image(nsImage: image)
-                    .resizable()
-                    .scaledToFit()
-            } else {
-                Text("Error loading image")
+        HStack {
+            VStack {
+                if let url = frame?.inputUrl, let image = NSImage(contentsOf: url) {
+                    Image(nsImage: image)
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Text("Error loading source image")
+                }
+            }
+            VStack {
+                if let url = frame?.outputUrl, let image = NSImage(contentsOf: url) {
+                    Image(nsImage: image)
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Text("Error loading processed image")
+                }
             }
         }
     }
