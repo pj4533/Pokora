@@ -13,6 +13,7 @@ struct Frame: Codable, Identifiable, Hashable {
     var id = UUID()
     var index: Int
     var inputUrl: URL
+    var outputUrl: URL?
 }
 
 extension Frame {

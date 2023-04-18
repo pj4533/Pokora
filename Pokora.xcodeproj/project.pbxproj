@@ -12,6 +12,8 @@
 		0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554229A694AD00BA1614 /* FrameDetail.swift */; };
 		0A81798129A8014C00C513F2 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81798029A8014C00C513F2 /* Sidebar.swift */; };
 		0A81798329A80BA600C513F2 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81798229A80BA600C513F2 /* Video.swift */; };
+		0AAC1D6129CCBA27009C1402 /* StableDiffusionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC1D6029CCBA27009C1402 /* StableDiffusionStore.swift */; };
+		0AAC1D6629CCBD53009C1402 /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAC1D6529CCBD53009C1402 /* StableDiffusion */; };
 		0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1859729A6873200BCC57C /* PokoraApp.swift */; };
 		0AB1859C29A6873300BCC57C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AB1859B29A6873300BCC57C /* Assets.xcassets */; };
 		0AB1859F29A6873300BCC57C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AB1859E29A6873300BCC57C /* Preview Assets.xcassets */; };
@@ -24,6 +26,7 @@
 		0A48554229A694AD00BA1614 /* FrameDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetail.swift; sourceTree = "<group>"; };
 		0A81798029A8014C00C513F2 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		0A81798229A80BA600C513F2 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		0AAC1D6029CCBA27009C1402 /* StableDiffusionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StableDiffusionStore.swift; sourceTree = "<group>"; };
 		0AB1859429A6873200BCC57C /* Pokora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokora.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB1859729A6873200BCC57C /* PokoraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokoraApp.swift; sourceTree = "<group>"; };
 		0AB1859B29A6873300BCC57C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -37,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AAC1D6629CCBD53009C1402 /* StableDiffusion in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +100,7 @@
 				0AB185A929A68C3F00BCC57C /* Frame.swift */,
 				0A81798229A80BA600C513F2 /* Video.swift */,
 				0A0B113C29A94F22003CD29A /* Store.swift */,
+				0AAC1D6029CCBA27009C1402 /* StableDiffusionStore.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -116,6 +121,9 @@
 			dependencies = (
 			);
 			name = Pokora;
+			packageProductDependencies = (
+				0AAC1D6529CCBD53009C1402 /* StableDiffusion */,
+			);
 			productName = Pokora;
 			productReference = 0AB1859429A6873200BCC57C /* Pokora.app */;
 			productType = "com.apple.product-type.application";
@@ -144,6 +152,9 @@
 				Base,
 			);
 			mainGroup = 0AB1858B29A6873200BCC57C;
+			packageReferences = (
+				0AAC1D6429CCBD53009C1402 /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */,
+			);
 			productRefGroup = 0AB1859529A6873200BCC57C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -174,6 +185,7 @@
 				0AB185AA29A68C3F00BCC57C /* Frame.swift in Sources */,
 				0A81798329A80BA600C513F2 /* Video.swift in Sources */,
 				0A48554129A6949800BA1614 /* ContentView.swift in Sources */,
+				0AAC1D6129CCBA27009C1402 /* StableDiffusionStore.swift in Sources */,
 				0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */,
 				0A81798129A8014C00C513F2 /* Sidebar.swift in Sources */,
 				0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */,
@@ -372,6 +384,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0AAC1D6429CCBD53009C1402 /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/ml-stable-diffusion";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0AAC1D6529CCBD53009C1402 /* StableDiffusion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AAC1D6429CCBD53009C1402 /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */;
+			productName = StableDiffusion;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0AB1858C29A6873200BCC57C /* Project object */;
 }
