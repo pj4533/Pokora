@@ -17,8 +17,10 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             Sidebar(video: video)
-        } detail: {
+        } content: {
             FrameDetail(frame: video?.frames.first)
+        } detail: {
+            Settings()
         }
     }
 }
