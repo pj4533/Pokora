@@ -17,7 +17,7 @@ class StableDiffusionStore {
         case saving(String)
     }
 
-    static func process(imageUrl: URL) throws -> URL? {
+    static func process(imageUrl: URL, strength: Float, seed: UInt32) throws -> URL? {
         let config = MLModelConfiguration()
         config.computeUnits = .cpuAndNeuralEngine
         let resourceURL = URL(filePath: "model_output/Resources")
@@ -34,17 +34,16 @@ class StableDiffusionStore {
 
             pipelineConfig.negativePrompt = ""
             pipelineConfig.startingImage = cgImage
-            pipelineConfig.strength = 0.2
+            pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1
             pipelineConfig.stepCount = 30
-            pipelineConfig.seed = UInt32.random(in: 0...UInt32.max)
+            pipelineConfig.seed = seed
             pipelineConfig.guidanceScale = 7.5
             
             do {
                 let images = try pipeline.generateImages(configuration: pipelineConfig)
                 for i in 0 ..< images.count {
                     if let image = images[i] {
-                        print("LAST PATH COMPONENT: \(imageUrl.lastPathComponent)")
                         let name = (imageUrl.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
                         let fileURL = imageUrl.deletingLastPathComponent().appending(path:name)
 

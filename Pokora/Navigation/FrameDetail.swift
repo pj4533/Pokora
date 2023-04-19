@@ -10,7 +10,8 @@ import SwiftUI
 struct FrameDetail: View {
     @ObservedObject var frame: Frame
     @State private var prompt = ""
-
+    let seed: UInt32 = UInt32.random(in: 0...UInt32.max)
+    
     var body: some View {
         VStack {
             HStack {
@@ -25,7 +26,7 @@ struct FrameDetail: View {
                 }
                 Button("Process") {
                     do {
-                        frame.outputUrl = try StableDiffusionStore.process(imageUrl: frame.inputUrl)
+                        frame.outputUrl = try StableDiffusionStore.process(imageUrl: frame.inputUrl, strength: 0.2, seed: seed)
                     } catch let error {
                         print(error)
                     }
