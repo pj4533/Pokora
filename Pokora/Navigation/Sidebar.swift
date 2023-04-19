@@ -23,6 +23,12 @@ struct Sidebar: View {
                         FrameDetail(frame: frame)
                     } label: {
                         Label("Frame #\(frame.index)", systemImage: "video.square.fill")
+                        if frame.outputUrl == nil {
+                            Image(systemName: "square")
+                        } else {
+                            Image(systemName: "checkmark.square.fill")
+                                .foregroundColor(.green)
+                        }
                     }
                 }
             } else {
