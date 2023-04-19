@@ -62,12 +62,15 @@ class Store {
                         while let sampleBuffer = trackReaderOutput.copyNextSampleBuffer() {
                             if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
                                 let ciimage = CIImage(cvImageBuffer: imageBuffer)
+                                let scaleFactor = 512.0 / ciimage.extent.width
+                                let resizedCIImage = ciimage.transformed(by: CGAffineTransform(scaleX: scaleFactor, y: scaleFactor))
+                                
                                 let path = cachesDirectory.appendingPathComponent("out\(String(format: "%05d", index)).png")
                                 print("\(path.absoluteString)")
                                 if let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) {
                                     let format = CIFormat.RGBA8
                                     let context = CIContext()
-                                    try context.writePNGRepresentation(of: ciimage, to: path, format: format, colorSpace: colorSpace)
+                                    try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
                                 }
                                 frames.append(Frame(index: index, inputUrl: path))
                             }

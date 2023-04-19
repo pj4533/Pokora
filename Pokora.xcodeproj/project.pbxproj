@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0A0B113D29A94F22003CD29A /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B113C29A94F22003CD29A /* Store.swift */; };
-		0A1C1EF429EF0D8F000A04F1 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1C1EF329EF0D8F000A04F1 /* Settings.swift */; };
 		0A48554129A6949800BA1614 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554029A6949800BA1614 /* ContentView.swift */; };
 		0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554229A694AD00BA1614 /* FrameDetail.swift */; };
 		0A81798129A8014C00C513F2 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81798029A8014C00C513F2 /* Sidebar.swift */; };
@@ -23,7 +22,6 @@
 
 /* Begin PBXFileReference section */
 		0A0B113C29A94F22003CD29A /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
-		0A1C1EF329EF0D8F000A04F1 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		0A48554029A6949800BA1614 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0A48554229A694AD00BA1614 /* FrameDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetail.swift; sourceTree = "<group>"; };
 		0A81798029A8014C00C513F2 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
@@ -55,7 +53,6 @@
 				0A48554029A6949800BA1614 /* ContentView.swift */,
 				0A48554229A694AD00BA1614 /* FrameDetail.swift */,
 				0A81798029A8014C00C513F2 /* Sidebar.swift */,
-				0A1C1EF329EF0D8F000A04F1 /* Settings.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -190,7 +187,6 @@
 				0A48554129A6949800BA1614 /* ContentView.swift in Sources */,
 				0AAC1D6129CCBA27009C1402 /* StableDiffusionStore.swift in Sources */,
 				0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */,
-				0A1C1EF429EF0D8F000A04F1 /* Settings.swift in Sources */,
 				0A81798129A8014C00C513F2 /* Sidebar.swift in Sources */,
 				0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */,
 			);
