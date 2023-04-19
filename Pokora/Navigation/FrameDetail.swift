@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct FrameDetail: View {
-    var frame: Frame?
+    @ObservedObject var frame: Frame
     @State private var prompt = ""
 
     var body: some View {
         VStack {
             HStack {
                 VStack {
-                    if let url = frame?.inputUrl, let image = NSImage(contentsOf: url) {
+                    if let image = NSImage(contentsOf: frame.inputUrl) {
                         Image(nsImage: image)
                             .resizable()
                             .scaledToFit()
@@ -24,9 +24,14 @@ struct FrameDetail: View {
                     }
                 }
                 Button("Process") {
+                    do {
+                        frame.outputUrl = try StableDiffusionStore.process(imageUrl: frame.inputUrl)
+                    } catch let error {
+                        print(error)
+                    }
                 }
                 VStack {
-                    if let url = frame?.outputUrl, let image = NSImage(contentsOf: url) {
+                    if let url = frame.outputUrl, let image = NSImage(contentsOf: url) {
                         Image(nsImage: image)
                             .resizable()
                             .scaledToFit()

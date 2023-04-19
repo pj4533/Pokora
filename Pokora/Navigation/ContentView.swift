@@ -18,7 +18,7 @@ struct ContentView: View {
         NavigationSplitView {
             Sidebar(video: video)
         } detail: {
-            FrameDetail(frame: video?.frames.first)
+            FrameDetail(frame: Frame.placeholder)
         }
     }
 }

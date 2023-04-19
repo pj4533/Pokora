@@ -15,21 +15,45 @@ class Store {
         print(cachesDirectory)
         var frames: [Frame] = []
         var index = 1
+        
         // Define the regular expression pattern
-        let regexPattern = "^out.*\\.png$"
-        let regex = try! Regex(regexPattern)
+        let inputRegexPattern = "^out(\\d+)\\.png$"
+        let outputRegexPattern = "^out(\\d+)_processed\\.png$"
+
+        let inputRegex = try! NSRegularExpression(pattern: inputRegexPattern)
+        let outputRegex = try! NSRegularExpression(pattern: outputRegexPattern)
+        
         do {
             let files = try FileManager.default.contentsOfDirectory(atPath: cachesDirectory.path)
-            // Filter the list of files to only include those that match the regex pattern
-            let matchingFiles = try files.filter { filename in
-                return try regex.firstMatch(in: filename) != nil
+
+            var inputFiles: [String: String] = [:]
+            var outputFiles: [String: String] = [:]
+
+            for file in files {
+                if let match = inputRegex.firstMatch(in: file, range: NSRange(file.startIndex..., in: file)) {
+                    let range = match.range(at: 1)
+                    let fileNumber = (file as NSString).substring(with: range)
+                    inputFiles[fileNumber] = file
+                } else if let match = outputRegex.firstMatch(in: file, range: NSRange(file.startIndex..., in: file)) {
+                    let range = match.range(at: 1)
+                    let fileNumber = (file as NSString).substring(with: range)
+                    outputFiles[fileNumber] = file
+                }
             }
 
-            // Print the list of matching files
-            for file in matchingFiles.sorted() {
-                frames.append(Frame(index: index, inputUrl: cachesDirectory.appending(path: file)))
+            let sortedInputKeys = inputFiles.keys.sorted()
+
+            for key in sortedInputKeys {
+                let inputFrame = cachesDirectory.appendingPathComponent(inputFiles[key]!)
+                var outputFrame: URL? = nil
+                if let outputFileName = outputFiles[key] {
+                    outputFrame = cachesDirectory.appendingPathComponent(outputFileName)
+                }
+
+                frames.append(Frame(index: index, inputUrl: inputFrame, outputUrl: outputFrame))
                 index += 1
             }
+
             completionHandler(Video(url: url, frames: frames))
         } catch {
             print(error.localizedDescription)
@@ -72,7 +96,7 @@ class Store {
                                     let context = CIContext()
                                     try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
                                 }
-                                frames.append(Frame(index: index, inputUrl: path))
+                                frames.append(Frame(index: index, inputUrl: path, outputUrl: nil))
                             }
                             index += 1
                         }
