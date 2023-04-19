@@ -9,7 +9,8 @@ import SwiftUI
 
 struct FrameDetail: View {
     @ObservedObject var frame: Frame
-    @State private var prompt = ""
+    @State private var prompt = "A cyberpunk cityscape"
+    @State private var strengthString = "0.2"
     let seed: UInt32 = UInt32.random(in: 0...UInt32.max)
     
     var body: some View {
@@ -37,12 +38,14 @@ struct FrameDetail: View {
                     }
                 }
                 Button("Process") {
-                    if let url = frame.inputUrl {
+                    if let url = frame.inputUrl, let strength = Float(strengthString) {
                         do {
-                            frame.outputUrl = try StableDiffusionStore.process(imageUrl: url, prompt: "a cyberpunk cityscape", strength: 0.2, seed: seed)
+                            frame.outputUrl = try StableDiffusionStore.process(imageUrl: url, prompt: prompt, strength: strength, seed: seed)
                         } catch let error {
                             print(error)
                         }
+                    } else {
+                        print("Error during processing")
                     }
                 }
                 .frame(width: 80.0)
@@ -77,7 +80,7 @@ struct FrameDetail: View {
             HStack {
                 Text("Strength: ")
                     .fixedSize()
-                TextField("0.5", text: $prompt)
+                TextField("0.5", text: $strengthString)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
         }
