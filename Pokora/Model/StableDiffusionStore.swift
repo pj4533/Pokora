@@ -17,7 +17,7 @@ class StableDiffusionStore {
         case saving(String)
     }
 
-    static func process(imageUrl: URL, strength: Float, seed: UInt32) throws -> URL? {
+    static func process(imageUrl: URL, prompt: String, strength: Float, seed: UInt32) throws -> URL? {
         let config = MLModelConfiguration()
         config.computeUnits = .cpuAndNeuralEngine
         let resourceURL = URL(filePath: "model_output/Resources")
@@ -28,9 +28,8 @@ class StableDiffusionStore {
                                                    reduceMemory: false)
         try pipeline.loadResources()
 
-        var finalPrompt = "a cyberpunk cityscape"
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
-            var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: finalPrompt)
+            var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
             pipelineConfig.negativePrompt = ""
             pipelineConfig.startingImage = cgImage

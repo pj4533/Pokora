@@ -36,13 +36,6 @@ struct Sidebar: View {
                 }
             }
         }
-        .onAppear {
-            if let url = UserDefaults.standard.url(forKey: "currentVideoFile") {
-                Store.loadCachedFrames(url: url) { previousVideo in
-                    video = previousVideo
-                }
-            }
-        }
     }
 }
 

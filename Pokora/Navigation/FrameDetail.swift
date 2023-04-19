@@ -26,7 +26,7 @@ struct FrameDetail: View {
                 }
                 Button("Process") {
                     do {
-                        frame.outputUrl = try StableDiffusionStore.process(imageUrl: frame.inputUrl, strength: 0.2, seed: seed)
+                        frame.outputUrl = try StableDiffusionStore.process(imageUrl: frame.inputUrl, prompt: "a cyberpunk cityscape", strength: 0.2, seed: seed)
                     } catch let error {
                         print(error)
                     }
