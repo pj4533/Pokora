@@ -8,23 +8,41 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var video: Video?
-
-    init(video: Video? = nil) {
-        self.video = video
-    }
+    @ObservedObject var store: VideoStore
     
     var body: some View {
-        NavigationSplitView {
-            Sidebar(video: video)
-        } detail: {
-            FrameDetail(frame: Frame.placeholder)
+        NavigationView {
+            // TODO: There is some way to make this placeholder work automatically
+            if let frames = store.video?.frames, !frames.isEmpty {
+                List {
+                    ForEach(frames) { frame in
+                        FrameCell(frameIndex: frame.index, store: store)
+                    }
+                }
+            } else {
+                VStack {
+                    Button("Select File") {
+                        let panel = NSOpenPanel()
+                        panel.allowsMultipleSelection = false
+                        panel.canChooseDirectories = false
+                        if panel.runModal() == .OK, let url = panel.url {
+                            store.loadVideo(url: url)
+                        }
+                    }
+                    Text("Please select a video above to load frames.")
+                        .foregroundColor(.secondary)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding()
+                }
+            }
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(video: testvideo)
+        ContentView(store: testStore)
+        ContentView(store: VideoStore())
     }
 }

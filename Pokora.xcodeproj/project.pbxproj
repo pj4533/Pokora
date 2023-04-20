@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A0B113D29A94F22003CD29A /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B113C29A94F22003CD29A /* Store.swift */; };
+		0A09872E29F1827F00056DA8 /* FrameImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A09872D29F1827F00056DA8 /* FrameImageView.swift */; };
+		0A09873029F1845F00056DA8 /* FrameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A09872F29F1845F00056DA8 /* FrameCell.swift */; };
+		0A09873629F193EB00056DA8 /* VideoStore+StableDiffusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A09873529F193EB00056DA8 /* VideoStore+StableDiffusion.swift */; };
+		0A0B113D29A94F22003CD29A /* VideoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B113C29A94F22003CD29A /* VideoStore.swift */; };
 		0A48554129A6949800BA1614 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554029A6949800BA1614 /* ContentView.swift */; };
 		0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554229A694AD00BA1614 /* FrameDetail.swift */; };
-		0A81798129A8014C00C513F2 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81798029A8014C00C513F2 /* Sidebar.swift */; };
 		0A81798329A80BA600C513F2 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81798229A80BA600C513F2 /* Video.swift */; };
-		0AAC1D6129CCBA27009C1402 /* StableDiffusionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAC1D6029CCBA27009C1402 /* StableDiffusionStore.swift */; };
 		0AAC1D6629CCBD53009C1402 /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAC1D6529CCBD53009C1402 /* StableDiffusion */; };
 		0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1859729A6873200BCC57C /* PokoraApp.swift */; };
 		0AB1859C29A6873300BCC57C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AB1859B29A6873300BCC57C /* Assets.xcassets */; };
@@ -21,12 +22,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A0B113C29A94F22003CD29A /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		0A09872D29F1827F00056DA8 /* FrameImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameImageView.swift; sourceTree = "<group>"; };
+		0A09872F29F1845F00056DA8 /* FrameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameCell.swift; sourceTree = "<group>"; };
+		0A09873529F193EB00056DA8 /* VideoStore+StableDiffusion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+StableDiffusion.swift"; sourceTree = "<group>"; };
+		0A0B113C29A94F22003CD29A /* VideoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoStore.swift; sourceTree = "<group>"; };
 		0A48554029A6949800BA1614 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0A48554229A694AD00BA1614 /* FrameDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetail.swift; sourceTree = "<group>"; };
-		0A81798029A8014C00C513F2 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		0A81798229A80BA600C513F2 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
-		0AAC1D6029CCBA27009C1402 /* StableDiffusionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StableDiffusionStore.swift; sourceTree = "<group>"; };
 		0AB1859429A6873200BCC57C /* Pokora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokora.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB1859729A6873200BCC57C /* PokoraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokoraApp.swift; sourceTree = "<group>"; };
 		0AB1859B29A6873300BCC57C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -52,7 +54,8 @@
 			children = (
 				0A48554029A6949800BA1614 /* ContentView.swift */,
 				0A48554229A694AD00BA1614 /* FrameDetail.swift */,
-				0A81798029A8014C00C513F2 /* Sidebar.swift */,
+				0A09872D29F1827F00056DA8 /* FrameImageView.swift */,
+				0A09872F29F1845F00056DA8 /* FrameCell.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -99,8 +102,8 @@
 			children = (
 				0AB185A929A68C3F00BCC57C /* Frame.swift */,
 				0A81798229A80BA600C513F2 /* Video.swift */,
-				0A0B113C29A94F22003CD29A /* Store.swift */,
-				0AAC1D6029CCBA27009C1402 /* StableDiffusionStore.swift */,
+				0A0B113C29A94F22003CD29A /* VideoStore.swift */,
+				0A09873529F193EB00056DA8 /* VideoStore+StableDiffusion.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -181,13 +184,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A0B113D29A94F22003CD29A /* Store.swift in Sources */,
+				0A09872E29F1827F00056DA8 /* FrameImageView.swift in Sources */,
+				0A09873029F1845F00056DA8 /* FrameCell.swift in Sources */,
+				0A0B113D29A94F22003CD29A /* VideoStore.swift in Sources */,
 				0AB185AA29A68C3F00BCC57C /* Frame.swift in Sources */,
 				0A81798329A80BA600C513F2 /* Video.swift in Sources */,
 				0A48554129A6949800BA1614 /* ContentView.swift in Sources */,
-				0AAC1D6129CCBA27009C1402 /* StableDiffusionStore.swift in Sources */,
 				0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */,
-				0A81798129A8014C00C513F2 /* Sidebar.swift in Sources */,
+				0A09873629F193EB00056DA8 /* VideoStore+StableDiffusion.swift in Sources */,
 				0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

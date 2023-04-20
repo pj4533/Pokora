@@ -1,8 +1,8 @@
 //
-//  StableDiffusionStore.swift
+//  VideoStore+StableDiffusion.swift
 //  Pokora
 //
-//  Created by PJ Gray on 3/23/23.
+//  Created by PJ Gray on 4/20/23.
 //
 
 import Foundation
@@ -11,13 +11,8 @@ import StableDiffusion
 import CoreML
 import UniformTypeIdentifiers
 
-class StableDiffusionStore {
-    enum RunError: Error {
-        case resources(String)
-        case saving(String)
-    }
-
-    static func process(imageUrl: URL, prompt: String, strength: Float, seed: UInt32) throws -> URL? {
+extension VideoStore {
+    func process(imageUrl: URL, prompt: String, strength: Float, seed: UInt32) throws -> URL? {
         let config = MLModelConfiguration()
         config.computeUnits = .cpuAndNeuralEngine
         let resourceURL = URL(filePath: "model_output/Resources")
@@ -64,4 +59,5 @@ class StableDiffusionStore {
         }
         return nil
     }
+
 }

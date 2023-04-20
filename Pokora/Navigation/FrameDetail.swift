@@ -8,68 +8,31 @@
 import SwiftUI
 
 struct FrameDetail: View {
-    @ObservedObject var frame: Frame
+    var frameIndex: Int
     @State private var prompt = "A cyberpunk cityscape"
     @State private var strengthString = "0.2"
     let seed: UInt32 = UInt32.random(in: 0...UInt32.max)
-    
+    @ObservedObject var store: VideoStore
+
     var body: some View {
         VStack {
             HStack {
-                ZStack {
-                    Color.clear
-                        .frame(width: 512, height: 512)
-                    if let url = frame.inputUrl, let image = NSImage(contentsOf: url) {
-                        Image(nsImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 512, height: 512)
-                    } else {
-                        VStack {
-                            Image(systemName: "video.slash.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.primary)
-                            Spacer()
-                                .frame(height: 50)
-                            Text("No frame loaded")
-                        }
-                    }
-                }
+                FrameImageView(imageUrl: store.video?.frames[frameIndex-1].url, emptyStateString: "No frame loaded")
                 Button("Process") {
-                    if let url = frame.inputUrl, let strength = Float(strengthString) {
+                    if let url = store.video?.frames[frameIndex-1].url, let strength = Float(strengthString) {
+                        var processedFrame = ProcessedFrame(seed: seed, prompt: prompt, strength: strength)
                         do {
-                            frame.outputUrl = try StableDiffusionStore.process(imageUrl: url, prompt: prompt, strength: strength, seed: seed)
+                            processedFrame.url = try store.process(imageUrl: url, prompt: prompt, strength: strength, seed: seed)
+                            store.video?.frames[frameIndex-1].processed = processedFrame
                         } catch let error {
                             print(error)
-                        }
+                        }                        
                     } else {
                         print("Error during processing")
                     }
                 }
                 .frame(width: 80.0)
-                ZStack {
-                    Color.clear
-                        .frame(width: 512, height: 512)
-                    if let url = frame.outputUrl, let image = NSImage(contentsOf: url) {
-                        Image(nsImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 512, height: 512)
-                    } else {
-                        VStack {
-                            Image(systemName: "video.slash.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.primary)
-                            Spacer()
-                                .frame(height: 50)
-                            Text("Frame not processed")
-                        }
-                    }
-                }
+                FrameImageView(imageUrl: store.video?.frames[frameIndex-1].processed?.url, emptyStateString: "Frame not processed")
             }
             HStack {
                 Text("Prompt: ")
@@ -89,6 +52,6 @@ struct FrameDetail: View {
 
 struct FrameDetail_Previews: PreviewProvider {
     static var previews: some View {
-        FrameDetail(frame: Frame.placeholder)
+        FrameDetail(frameIndex: 1, store: VideoStore())
     }
 }

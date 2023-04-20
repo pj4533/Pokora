@@ -6,28 +6,17 @@
 //
 
 import Foundation
-import AVKit
 
 struct Video: Identifiable {
     var id = UUID()
-    var url: URL
+    var url: URL?
     var frames: [Frame] = []
 }
 
-let testvideo = Video(url: URL(string: "file:///Users/pgray/Downloads/Testdata/waitingforyou.mov")!, frames: [
-    Frame(index: 1, inputUrl: URL(string: "file:///Users/pgray/Downloads/Testdata/inputframes/out1.png")!, outputUrl: nil),
-    Frame(index: 2, inputUrl: URL(string: "file:///Users/pgray/Downloads/Testdata/inputframes/out2.png")!, outputUrl: nil),
-    Frame(index: 3, inputUrl: URL(string: "file:///Users/pgray/Downloads/Testdata/inputframes/out3.png")!, outputUrl: nil),
-    Frame(index: 4, inputUrl: URL(string: "file:///Users/pgray/Downloads/Testdata/inputframes/out4.png")!, outputUrl: nil),
-    Frame(index: 5, inputUrl: URL(string: "file:///Users/pgray/Downloads/Testdata/inputframes/out5.png")!, outputUrl: nil)
+let testvideo = Video(url: nil, frames: [
+    Frame(index: 1),
+    Frame(index: 2),
+    Frame(index: 3),
+    Frame(index: 4),
+    Frame(index: 5)
 ])
-
-extension Video {
-    init(url: URL) {
-        self.url = url
-    }
-    
-    mutating func add(frame: Frame) {
-        frames.append(frame)
-    }
-}

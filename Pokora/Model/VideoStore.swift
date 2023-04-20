@@ -1,5 +1,5 @@
 //
-//  Store.swift
+//  VideoStore.swift
 //  Pokora
 //
 //  Created by PJ Gray on 2/24/23.
@@ -8,9 +8,23 @@
 import Foundation
 import AVKit
 
-class Store {
-    // not sure if this should be static like this, i need to figure out more about how Stores work in the declarative world
-    static func loadVideo(url: URL, completionHandler: @escaping (Video?) -> Void) {
+let testStore = VideoStore(video: testvideo)
+let emptyStore = VideoStore()
+
+class VideoStore: ObservableObject {
+    @Published var video: Video?
+    
+    enum RunError: Error {
+        case resources(String)
+        case saving(String)
+    }
+
+    init(video: Video? = nil ) {
+        self.video = video
+    }
+    
+    // use async/await here for the loadTracks() function
+    func loadVideo(url: URL) {
         let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         do {
             
@@ -44,11 +58,13 @@ class Store {
                                     let context = CIContext()
                                     try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
                                 }
-                                frames.append(Frame(index: index, inputUrl: path, outputUrl: nil))
+                                frames.append(Frame(index: index, url: path))
                             }
                             index += 1
                         }
-                        completionHandler(Video(url: url, frames: frames))
+                        DispatchQueue.main.async {
+                            self.video = Video(url: url, frames: frames)
+                        }
                     } else {
                         print("didn't get tracks")
                     }
@@ -61,3 +77,4 @@ class Store {
         }
     }
 }
+

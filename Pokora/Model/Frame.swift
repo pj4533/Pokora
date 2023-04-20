@@ -6,33 +6,23 @@
 //
 
 import Foundation
-import CoreGraphics
-import AVKit
 
-class Frame: ObservableObject, Identifiable, Hashable {
+struct Frame: Identifiable {
     var id = UUID()
     var index: Int
-    @Published var inputUrl: URL?
-    @Published var outputUrl: URL?
+    var url: URL?
+    var processed: ProcessedFrame?
+}
 
-    init(id: UUID = UUID(), index: Int, inputUrl: URL?, outputUrl: URL?) {
-        self.id = id
-        self.index = index
-        self.inputUrl = inputUrl
-        self.outputUrl = outputUrl
-    }
-
-    static func ==(lhs: Frame, rhs: Frame) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
+struct ProcessedFrame {
+    var url: URL?
+    var seed: UInt32
+    var prompt: String
+    var strength: Float
 }
 
 extension Frame {
     static var placeholder: Frame {
-        Frame(index: 1, inputUrl: nil, outputUrl: nil)
+        Frame(index: 1)
     }
 }
