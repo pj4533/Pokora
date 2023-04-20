@@ -12,17 +12,21 @@ import CoreML
 import UniformTypeIdentifiers
 
 extension VideoStore {
-    func process(imageUrl: URL, prompt: String, strength: Float, seed: UInt32) throws -> URL? {
+    
+    func initializePipeline() throws {
         let config = MLModelConfiguration()
         config.computeUnits = .cpuAndNeuralEngine
         let resourceURL = URL(filePath: "model_output/Resources")
 
-        let pipeline = try StableDiffusionPipeline(resourcesAt: resourceURL,
+        print("Initializing pipeline...")
+        self.pipeline = try StableDiffusionPipeline(resourcesAt: resourceURL,
                                                    configuration: config,
                                                    disableSafety: true,
                                                    reduceMemory: false)
-        try pipeline.loadResources()
-
+        try self.pipeline?.loadResources()
+    }
+    
+    func process(imageUrl: URL, prompt: String, strength: Float, seed: UInt32) throws -> URL? {
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
@@ -34,25 +38,26 @@ extension VideoStore {
             pipelineConfig.seed = seed
             pipelineConfig.guidanceScale = 7.5
             
+            print("Calling generateImages()")
             do {
-                let images = try pipeline.generateImages(configuration: pipelineConfig)
-                for i in 0 ..< images.count {
-                    if let image = images[i] {
-                        let name = (imageUrl.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
-                        let fileURL = imageUrl.deletingLastPathComponent().appending(path:name)
+                if let images = try pipeline?.generateImages(configuration: pipelineConfig) {
+                    for i in 0 ..< images.count {
+                        if let image = images[i] {
+                            let name = (imageUrl.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
+                            let fileURL = imageUrl.deletingLastPathComponent().appending(path:name)
 
-                        guard let dest = CGImageDestinationCreateWithURL(fileURL as CFURL, UTType.png.identifier as CFString, 1, nil) else {
-                            throw RunError.saving("Failed to create destination for \(fileURL)")
-                        }
+                            guard let dest = CGImageDestinationCreateWithURL(fileURL as CFURL, UTType.png.identifier as CFString, 1, nil) else {
+                                throw RunError.saving("Failed to create destination for \(fileURL)")
+                            }
 
-                        CGImageDestinationAddImage(dest, image, nil)
-                        if !CGImageDestinationFinalize(dest) {
-                            throw RunError.saving("Failed to save \(fileURL)")
+                            CGImageDestinationAddImage(dest, image, nil)
+                            if !CGImageDestinationFinalize(dest) {
+                                throw RunError.saving("Failed to save \(fileURL)")
+                            }
+                            return fileURL
                         }
-                        return fileURL
                     }
                 }
-
             } catch {
                 print("CAUGHT ERROR IN GENERATE IMAGES...")
             }

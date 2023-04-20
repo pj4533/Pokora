@@ -11,7 +11,7 @@ struct ContentView: View {
     @ObservedObject var store: VideoStore
     
     var body: some View {
-        NavigationView {
+        NavigationSplitView {
             // TODO: There is some way to make this placeholder work automatically
             if let frames = store.video?.frames, !frames.isEmpty {
                 List {
@@ -35,6 +35,10 @@ struct ContentView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .padding()
                 }
+            }
+        } detail: {
+            if let frames = store.video?.frames, !frames.isEmpty {
+                FrameDetail(frameIndex: 1, store: store)
             }
         }
     }

@@ -23,6 +23,7 @@ struct FrameCell: View {
                     .foregroundColor(.green)
             }
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 

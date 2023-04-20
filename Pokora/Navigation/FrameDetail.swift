@@ -19,6 +19,13 @@ struct FrameDetail: View {
             HStack {
                 FrameImageView(imageUrl: store.video?.frames[frameIndex-1].url, emptyStateString: "No frame loaded")
                 Button("Process") {
+                    if store.pipeline == nil {
+                        do {
+                            try store.initializePipeline()
+                        } catch let error {
+                            print("ERROR INIT PIPELINE: \(error)")
+                        }
+                    }
                     if let url = store.video?.frames[frameIndex-1].url, let strength = Float(strengthString) {
                         var processedFrame = ProcessedFrame(seed: seed, prompt: prompt, strength: strength)
                         do {
@@ -47,6 +54,7 @@ struct FrameDetail: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
         }
+        .padding()
     }
 }
 

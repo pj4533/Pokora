@@ -7,12 +7,14 @@
 
 import Foundation
 import AVKit
+import StableDiffusion
 
 let testStore = VideoStore(video: testvideo)
 let emptyStore = VideoStore()
 
 class VideoStore: ObservableObject {
     @Published var video: Video?
+    var pipeline: StableDiffusionPipeline?
     
     enum RunError: Error {
         case resources(String)
