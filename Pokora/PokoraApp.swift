@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct PokoraApp: App {
-    @StateObject private var store = VideoStore()
+    @StateObject private var store = VideoStore(video: Video())
 
     var body: some Scene {
         WindowGroup {

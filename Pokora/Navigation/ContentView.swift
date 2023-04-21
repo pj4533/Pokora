@@ -13,9 +13,9 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             // TODO: There is some way to make this placeholder work automatically
-            if let frames = store.video?.frames, !frames.isEmpty {
+            if !store.video.frames.isEmpty {
                 List {
-                    ForEach(frames) { frame in
+                    ForEach(store.video.frames) { frame in
                         FrameCell(frameIndex: frame.index, store: store)
                     }
                 }
@@ -37,7 +37,7 @@ struct ContentView: View {
                 }
             }
         } detail: {
-            if let frames = store.video?.frames, !frames.isEmpty {
+            if !store.video.frames.isEmpty {
                 FrameDetail(frameIndex: 1, store: store)
             }
         }
@@ -47,6 +47,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(store: testStore)
-        ContentView(store: VideoStore())
+        ContentView(store: VideoStore(video: Video()))
     }
 }

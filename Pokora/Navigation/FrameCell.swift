@@ -16,7 +16,7 @@ struct FrameCell: View {
             FrameDetail(frameIndex: frameIndex, store: store)
         } label: {
             Label("Frame #\(frameIndex)", systemImage: "video.square.fill")
-            if store.video?.frames[frameIndex-1].processed == nil {
+            if store.video.frames[frameIndex-1].processed.url == nil {
                 Image(systemName: "square")
             } else {
                 Image(systemName: "checkmark.square.fill")
@@ -29,6 +29,6 @@ struct FrameCell: View {
 
 struct FrameCell_Previews: PreviewProvider {
     static var previews: some View {
-        FrameCell(frameIndex: 1, store: VideoStore())
+        FrameCell(frameIndex: 1, store: VideoStore(video: Video()))
     }
 }

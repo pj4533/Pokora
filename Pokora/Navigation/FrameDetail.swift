@@ -7,35 +7,34 @@
 
 import SwiftUI
 
+// ok so, pass in a binding to the frame
+// i have a mock processed frame
 struct FrameDetail: View {
     var frameIndex: Int
-    @State private var prompt = "A cyberpunk cityscape"
-    @State private var strengthString = "0.2"
-    @State private var seedString = "\(UInt32.random(in: 0...UInt32.max))"
     @ObservedObject var store: VideoStore
     @State private var showProcessed = false
 
     var body: some View {
-        let url = showProcessed ? store.video?.frames[frameIndex-1].processed?.url ?? store.video?.frames[frameIndex-1].url : store.video?.frames[frameIndex-1].url
+        let url = showProcessed ? store.video.frames[frameIndex-1].processed.url ?? store.video.frames[frameIndex-1].url : store.video.frames[frameIndex-1].url
         VStack {
             FrameImageView(imageUrl: url, emptyStateString: "No frame loaded")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             HStack {
                 Text("Prompt: ")
                     .fixedSize()
-                TextField("A cyberpunk cityscape", text: $prompt)
+                TextField("Enter prompt here...", text: $store.video.frames[frameIndex-1].processed.prompt)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
             HStack {
                 Text("Strength: ")
                     .fixedSize()
-                TextField("0.5", text: $strengthString)
+                TextField("0.0 to 1.0", text: $store.video.frames[frameIndex-1].processed.strengthString)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
             HStack {
                 Text("Seed: ")
                     .fixedSize()
-                TextField("", text: $seedString)
+                TextField("", text: $store.video.frames[frameIndex-1].processed.seedString)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
         }
@@ -46,7 +45,7 @@ struct FrameDetail: View {
                     Label("Show Processed Image", systemImage: "sparkles")
                 }
                 .toggleStyle(.button)
-                .disabled(store.video?.frames[frameIndex-1].processed?.url == nil)
+                .disabled(store.video.frames[frameIndex-1].processed.url == nil)
                 Menu("Process") {
                     Button("Process All") {
                     }
@@ -58,11 +57,11 @@ struct FrameDetail: View {
                             print("ERROR INIT PIPELINE: \(error)")
                         }
                     }
-                    if let url = store.video?.frames[frameIndex-1].url, let strength = Float(strengthString), let seed = UInt32(seedString) {
-                        var processedFrame = ProcessedFrame(seed: seed, prompt: prompt, strength: strength)
+                    if let url = store.video.frames[frameIndex-1].url {
+                        var processedFrame = ProcessedFrame(seed: store.video.frames[frameIndex-1].processed.seed, prompt: store.video.frames[frameIndex-1].processed.prompt, strength: store.video.frames[frameIndex-1].processed.strength)
                         do {
-                            processedFrame.url = try store.process(imageUrl: url, prompt: prompt, strength: strength, seed: seed)
-                            store.video?.frames[frameIndex-1].processed = processedFrame
+                            processedFrame.url = try store.process(imageUrl: url, prompt: store.video.frames[frameIndex-1].processed.prompt, strength: store.video.frames[frameIndex-1].processed.strength, seed: store.video.frames[frameIndex-1].processed.seed)
+                            store.video.frames[frameIndex-1].processed = processedFrame
                             showProcessed = true
                         } catch let error {
                             print(error)
@@ -79,6 +78,6 @@ struct FrameDetail: View {
 
 struct FrameDetail_Previews: PreviewProvider {
     static var previews: some View {
-        FrameDetail(frameIndex: 1, store: VideoStore())
+        FrameDetail(frameIndex: 1, store: VideoStore(video: Video()))
     }
 }

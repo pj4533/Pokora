@@ -10,10 +10,10 @@ import AVKit
 import StableDiffusion
 
 let testStore = VideoStore(video: testvideo)
-let emptyStore = VideoStore()
+let emptyStore = VideoStore(video: Video())
 
 class VideoStore: ObservableObject {
-    @Published var video: Video?
+    @Published var video: Video
     var pipeline: StableDiffusionPipeline?
     
     enum RunError: Error {
@@ -21,7 +21,7 @@ class VideoStore: ObservableObject {
         case saving(String)
     }
 
-    init(video: Video? = nil ) {
+    init(video: Video) {
         self.video = video
     }
     
