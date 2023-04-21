@@ -11,7 +11,7 @@ struct FrameDetail: View {
     var frameIndex: Int
     @State private var prompt = "A cyberpunk cityscape"
     @State private var strengthString = "0.2"
-    let seed: UInt32 = UInt32.random(in: 0...UInt32.max)
+    @State private var seedString = "\(UInt32.random(in: 0...UInt32.max))"
     @ObservedObject var store: VideoStore
     @State private var showProcessed = false
 
@@ -19,6 +19,7 @@ struct FrameDetail: View {
         let url = showProcessed ? store.video?.frames[frameIndex-1].processed?.url ?? store.video?.frames[frameIndex-1].url : store.video?.frames[frameIndex-1].url
         VStack {
             FrameImageView(imageUrl: url, emptyStateString: "No frame loaded")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             HStack {
                 Text("Prompt: ")
                     .fixedSize()
@@ -29,6 +30,12 @@ struct FrameDetail: View {
                 Text("Strength: ")
                     .fixedSize()
                 TextField("0.5", text: $strengthString)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            HStack {
+                Text("Seed: ")
+                    .fixedSize()
+                TextField("", text: $seedString)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
         }
@@ -51,7 +58,7 @@ struct FrameDetail: View {
                             print("ERROR INIT PIPELINE: \(error)")
                         }
                     }
-                    if let url = store.video?.frames[frameIndex-1].url, let strength = Float(strengthString) {
+                    if let url = store.video?.frames[frameIndex-1].url, let strength = Float(strengthString), let seed = UInt32(seedString) {
                         var processedFrame = ProcessedFrame(seed: seed, prompt: prompt, strength: strength)
                         do {
                             processedFrame.url = try store.process(imageUrl: url, prompt: prompt, strength: strength, seed: seed)

@@ -12,25 +12,20 @@ struct FrameImageView: View {
     var emptyStateString: String
     
     var body: some View {
-        ZStack {
-            Color.clear
-                .frame(width: 512, height: 512)
-            if let url = imageUrl, let image = NSImage(contentsOf: url) {
-                Image(nsImage: image)
+        if let url = imageUrl, let image = NSImage(contentsOf: url) {
+            Image(nsImage: image)
+                .resizable()
+                .scaledToFit()
+        } else {
+            VStack {
+                Image(systemName: "video.slash.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 512, height: 512)
-            } else {
-                VStack {
-                    Image(systemName: "video.slash.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.primary)
-                    Spacer()
-                        .frame(height: 50)
-                    Text(emptyStateString)
-                }
+                    .frame(width: 50, height: 50)
+                    .foregroundColor(.primary)
+                Spacer()
+                    .frame(height: 50)
+                Text(emptyStateString)
             }
         }
     }
