@@ -18,31 +18,7 @@ struct ProcessedFrame {
     var url: URL?
     var seed: UInt32
     var prompt: String
-    var strength: Float
-    
-    // Add a computed property for the seed as a string
-    var seedString: String {
-        get {
-            String(seed)
-        }
-        set {
-            if let newSeed = UInt32(newValue) {
-                seed = newSeed
-            }
-        }
-    }
-
-    // Add a computed property for the strength as a string
-    var strengthString: String {
-        get {
-            String(format: "%.2f", strength)
-        }
-        set {
-            if let newStrength = Float(newValue) {
-                strength = newStrength
-            }
-        }
-    }
+    var strength: Float    
 }
 
 extension Frame {

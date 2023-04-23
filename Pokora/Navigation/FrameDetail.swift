@@ -13,6 +13,9 @@ struct FrameDetail: View {
     var frameIndex: Int
     @ObservedObject var store: VideoStore
     @State private var showProcessed = false
+    
+    @State private var strengthString = "0.2"
+    @State private var seedString = "\(UInt32.random(in: 0...UInt32.max))"
 
     var body: some View {
         let url = showProcessed ? store.video.frames[frameIndex-1].processed.url ?? store.video.frames[frameIndex-1].url : store.video.frames[frameIndex-1].url
@@ -28,14 +31,30 @@ struct FrameDetail: View {
             HStack {
                 Text("Strength: ")
                     .fixedSize()
-                TextField("0.0 to 1.0", text: $store.video.frames[frameIndex-1].processed.strengthString)
+                TextField("0.0 to 1.0", text: $strengthString)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onSubmit {
+                        if let strength = Float(strengthString) {
+                            store.video.frames[frameIndex-1].processed.strength = strength
+                        }
+                    }
+                    .onChange(of: store.video.frames[frameIndex-1].processed.strength, perform: { newValue in
+                        strengthString = "\(newValue)"
+                    })
             }
             HStack {
                 Text("Seed: ")
                     .fixedSize()
-                TextField("", text: $store.video.frames[frameIndex-1].processed.seedString)
+                TextField("", text: $seedString)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onSubmit {
+                        if let seed = UInt32(seedString) {
+                            store.video.frames[frameIndex-1].processed.seed = seed
+                        }
+                    }
+                    .onChange(of: store.video.frames[frameIndex-1].processed.seed, perform: { newValue in
+                        seedString = "\(newValue)"
+                    })
             }
         }
         .padding()
@@ -59,9 +78,11 @@ struct FrameDetail: View {
                     }
                     if let url = store.video.frames[frameIndex-1].url {
                         var processedFrame = ProcessedFrame(seed: store.video.frames[frameIndex-1].processed.seed, prompt: store.video.frames[frameIndex-1].processed.prompt, strength: store.video.frames[frameIndex-1].processed.strength)
+                        print("PRE-PROCESSED: \(processedFrame)")
                         do {
-                            processedFrame.url = try store.process(imageUrl: url, prompt: store.video.frames[frameIndex-1].processed.prompt, strength: store.video.frames[frameIndex-1].processed.strength, seed: store.video.frames[frameIndex-1].processed.seed)
+                            processedFrame.url = try store.process(imageUrl: url, prompt: processedFrame.prompt, strength: processedFrame.strength, seed: processedFrame.seed)
                             store.video.frames[frameIndex-1].processed = processedFrame
+                            print("PROCESSED: \(store.video.frames[frameIndex-1].processed)")
                             showProcessed = true
                         } catch let error {
                             print(error)
