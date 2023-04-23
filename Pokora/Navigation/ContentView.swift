@@ -15,8 +15,8 @@ struct ContentView: View {
             // TODO: There is some way to make this placeholder work automatically
             if !store.video.frames.isEmpty {
                 List {
-                    ForEach(store.video.frames) { frame in
-                        FrameCell(frameIndex: frame.index, store: store)
+                    ForEach($store.video.frames) { frame in
+                        FrameCell(frame: frame, store: store)
                     }
                 }
             } else {
@@ -37,8 +37,8 @@ struct ContentView: View {
                 }
             }
         } detail: {
-            if !store.video.frames.isEmpty {
-                FrameDetail(frameIndex: 1, store: store)
+            if let frame = $store.video.frames.first {
+                FrameDetail(frame: frame, store: store)
             }
         }
     }

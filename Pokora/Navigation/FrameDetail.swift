@@ -7,10 +7,8 @@
 
 import SwiftUI
 
-// ok so, pass in a binding to the frame
-// i have a mock processed frame
 struct FrameDetail: View {
-    var frameIndex: Int
+    @Binding var frame: Frame
     @ObservedObject var store: VideoStore
     @State private var showProcessed = false
     
@@ -18,14 +16,14 @@ struct FrameDetail: View {
     @State private var seedString = "\(UInt32.random(in: 0...UInt32.max))"
 
     var body: some View {
-        let url = showProcessed ? store.video.frames[frameIndex-1].processed.url ?? store.video.frames[frameIndex-1].url : store.video.frames[frameIndex-1].url
+        let url = showProcessed ? frame.processed.url ?? frame.url : frame.url
         VStack {
             FrameImageView(imageUrl: url, emptyStateString: "No frame loaded")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             HStack {
                 Text("Prompt: ")
                     .fixedSize()
-                TextField("Enter prompt here...", text: $store.video.frames[frameIndex-1].processed.prompt)
+                TextField("Enter prompt here...", text: $frame.processed.prompt)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
             HStack {
@@ -35,10 +33,10 @@ struct FrameDetail: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .onSubmit {
                         if let strength = Float(strengthString) {
-                            store.video.frames[frameIndex-1].processed.strength = strength
+                            frame.processed.strength = strength
                         }
                     }
-                    .onChange(of: store.video.frames[frameIndex-1].processed.strength, perform: { newValue in
+                    .onChange(of: frame.processed.strength, perform: { newValue in
                         strengthString = "\(newValue)"
                     })
             }
@@ -49,10 +47,10 @@ struct FrameDetail: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .onSubmit {
                         if let seed = UInt32(seedString) {
-                            store.video.frames[frameIndex-1].processed.seed = seed
+                            frame.processed.seed = seed
                         }
                     }
-                    .onChange(of: store.video.frames[frameIndex-1].processed.seed, perform: { newValue in
+                    .onChange(of: frame.processed.seed, perform: { newValue in
                         seedString = "\(newValue)"
                     })
             }
@@ -64,7 +62,7 @@ struct FrameDetail: View {
                     Label("Show Processed Image", systemImage: "sparkles")
                 }
                 .toggleStyle(.button)
-                .disabled(store.video.frames[frameIndex-1].processed.url == nil)
+                .disabled(frame.processed.url == nil)
                 Menu("Process") {
                     Button("Process All") {
                     }
@@ -76,13 +74,13 @@ struct FrameDetail: View {
                             print("ERROR INIT PIPELINE: \(error)")
                         }
                     }
-                    if let url = store.video.frames[frameIndex-1].url {
-                        var processedFrame = ProcessedFrame(seed: store.video.frames[frameIndex-1].processed.seed, prompt: store.video.frames[frameIndex-1].processed.prompt, strength: store.video.frames[frameIndex-1].processed.strength)
+                    if let url = frame.url {
+                        var processedFrame = ProcessedFrame(seed: frame.processed.seed, prompt: frame.processed.prompt, strength: frame.processed.strength)
                         print("PRE-PROCESSED: \(processedFrame)")
                         do {
                             processedFrame.url = try store.process(imageUrl: url, prompt: processedFrame.prompt, strength: processedFrame.strength, seed: processedFrame.seed)
-                            store.video.frames[frameIndex-1].processed = processedFrame
-                            print("PROCESSED: \(store.video.frames[frameIndex-1].processed)")
+                            frame.processed = processedFrame
+                            print("PROCESSED: \(frame.processed)")
                             showProcessed = true
                         } catch let error {
                             print(error)
@@ -98,7 +96,9 @@ struct FrameDetail: View {
 }
 
 struct FrameDetail_Previews: PreviewProvider {
+    @State static private var placeholderFrame = Frame.placeholder
+
     static var previews: some View {
-        FrameDetail(frameIndex: 1, store: VideoStore(video: Video()))
+        FrameDetail(frame: $placeholderFrame, store: VideoStore(video: Video()))
     }
 }

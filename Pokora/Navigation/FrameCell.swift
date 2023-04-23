@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct FrameCell: View {
-    var frameIndex: Int
+    @Binding var frame: Frame
     @ObservedObject var store: VideoStore
 
     var body: some View {
         NavigationLink {
-            FrameDetail(frameIndex: frameIndex, store: store)
+            FrameDetail(frame: $frame, store: store)
         } label: {
-            Label("Frame #\(frameIndex)", systemImage: "video.square.fill")
-            if store.video.frames[frameIndex-1].processed.url == nil {
+            Label("Frame #\(frame.index)", systemImage: "video.square.fill")
+            if frame.processed.url == nil {
                 Image(systemName: "square")
             } else {
                 Image(systemName: "checkmark.square.fill")
@@ -28,7 +28,9 @@ struct FrameCell: View {
 }
 
 struct FrameCell_Previews: PreviewProvider {
+    @State static private var placeholderFrame = Frame.placeholder
+
     static var previews: some View {
-        FrameCell(frameIndex: 1, store: VideoStore(video: Video()))
+        FrameCell(frame: $placeholderFrame, store: VideoStore(video: Video()))
     }
 }
