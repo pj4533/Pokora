@@ -15,9 +15,6 @@ struct FrameDetail: View {
     @State private var processingStatus = "Loading..."
     @State private var timingStatus = ""
     
-    @State private var strength = 0.2
-    @State private var seedString = "\(UInt32.random(in: 0...UInt32.max))"
-
     var body: some View {
         let url = showProcessed ? frame.processed.url ?? frame.url : frame.url
         ZStack {
@@ -29,16 +26,8 @@ struct FrameDetail: View {
                         TextField("Prompt", text: $frame.processed.prompt)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Stepper("Strength", value: $frame.processed.strength, step: 0.1, format: .number)
-                        TextField("Seed", text: $seedString)
+                        TextField("Seed", value: $frame.processed.seed, format: .number.grouping(.never))
                             .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .onSubmit {
-                                if let seed = UInt32(seedString) {
-                                    frame.processed.seed = seed
-                                }
-                            }
-                            .onChange(of: frame.processed.seed, perform: { newValue in
-                                seedString = "\(newValue)"
-                            })
                     }
                 }
                 .formStyle(.grouped)
