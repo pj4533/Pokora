@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Video: Identifiable {
+struct Video: Identifiable, Equatable {
     var id = UUID()
     var url: URL?
     var frames: [Frame] = []

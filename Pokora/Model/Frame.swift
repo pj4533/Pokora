@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Frame: Identifiable {
+struct Frame: Identifiable, Hashable {
     var id = UUID()
     var index: Int
     var url: URL?
     var processed: ProcessedFrame = ProcessedFrame(seed: 123, prompt: "A cyberpunk cityscape", strength: 0.2)
 }
 
-struct ProcessedFrame {
+struct ProcessedFrame: Hashable {
     var url: URL?
     var seed: UInt32
     var prompt: String

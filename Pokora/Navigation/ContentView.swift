@@ -9,12 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var store: VideoStore
+    @State var selectedFrame: Frame?
     
     var body: some View {
         NavigationSplitView {
             // TODO: There is some way to make this placeholder work automatically
             if !store.video.frames.isEmpty {
-                List {
+                List(selection: $selectedFrame) {
                     ForEach($store.video.frames) { frame in
                         FrameCell(frame: frame, store: store)
                     }
@@ -26,7 +27,9 @@ struct ContentView: View {
                         panel.allowsMultipleSelection = false
                         panel.canChooseDirectories = false
                         if panel.runModal() == .OK, let url = panel.url {
-                            store.loadVideo(url: url)
+                            Task {
+                                await store.loadVideo(url: url)
+                            }
                         }
                     }
                     Text("Please select a video above to load frames.")
