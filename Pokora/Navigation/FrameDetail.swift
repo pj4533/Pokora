@@ -12,7 +12,7 @@ struct FrameDetail: View {
     @ObservedObject var store: VideoStore
     @State private var showProcessed = false
     
-    @State private var strengthString = "0.2"
+    @State private var strength = 0.2
     @State private var seedString = "\(UInt32.random(in: 0...UInt32.max))"
 
     var body: some View {
@@ -20,40 +20,25 @@ struct FrameDetail: View {
         VStack {
             FrameImageView(imageUrl: url, emptyStateString: "No frame loaded")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            HStack {
-                Text("Prompt: ")
-                    .fixedSize()
-                TextField("Enter prompt here...", text: $frame.processed.prompt)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }
-            HStack {
-                Text("Strength: ")
-                    .fixedSize()
-                TextField("0.0 to 1.0", text: $strengthString)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .onSubmit {
-                        if let strength = Float(strengthString) {
-                            frame.processed.strength = strength
+            Form {
+                Section {
+                    TextField("Prompt", text: $frame.processed.prompt)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Stepper("Strength", value: $frame.processed.strength, step: 0.1, format: .number)
+                    TextField("Seed", text: $seedString)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .onSubmit {
+                            if let seed = UInt32(seedString) {
+                                frame.processed.seed = seed
+                            }
                         }
-                    }
-                    .onChange(of: frame.processed.strength, perform: { newValue in
-                        strengthString = "\(newValue)"
-                    })
+                        .onChange(of: frame.processed.seed, perform: { newValue in
+                            seedString = "\(newValue)"
+                        })
+                }
             }
-            HStack {
-                Text("Seed: ")
-                    .fixedSize()
-                TextField("", text: $seedString)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .onSubmit {
-                        if let seed = UInt32(seedString) {
-                            frame.processed.seed = seed
-                        }
-                    }
-                    .onChange(of: frame.processed.seed, perform: { newValue in
-                        seedString = "\(newValue)"
-                    })
-            }
+            .formStyle(.grouped)
+            .frame(maxHeight: 160.0)
         }
         .padding()
         .toolbar {
