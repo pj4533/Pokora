@@ -11,7 +11,7 @@ struct Frame: Identifiable {
     var id = UUID()
     var index: Int
     var url: URL?
-    var processed: ProcessedFrame = ProcessedFrame(seed: 123, prompt: "", strength: 0.2)
+    var processed: ProcessedFrame = ProcessedFrame(seed: 123, prompt: "A cyberpunk cityscape", strength: 0.2)
 }
 
 struct ProcessedFrame {
