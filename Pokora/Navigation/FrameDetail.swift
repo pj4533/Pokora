@@ -13,6 +13,7 @@ struct FrameDetail: View {
     @State private var showProcessed = false
     @State private var isProcessing = false
     @State private var processingStatus = "Loading..."
+    @State private var timingStatus = ""
     
     @State private var strength = 0.2
     @State private var seedString = "\(UInt32.random(in: 0...UInt32.max))"
@@ -44,7 +45,7 @@ struct FrameDetail: View {
                 .frame(maxHeight: 160.0)
             }
             if isProcessing {
-                ProcessingView(statusText: $processingStatus)
+                ProcessingView(statusText: $processingStatus, additionalStatusText: $timingStatus)
             }
         }
         .padding()
@@ -54,7 +55,8 @@ struct FrameDetail: View {
                                    store: store,
                                    showProcessedFrame: $showProcessed,
                                    isProcessing: $isProcessing,
-                                   processingStatus: $processingStatus)
+                                   processingStatus: $processingStatus,
+                                   timingStatus: $timingStatus)
             }
         }
     }

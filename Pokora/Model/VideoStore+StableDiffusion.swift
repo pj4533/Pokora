@@ -26,7 +26,7 @@ extension VideoStore {
         try self.pipeline?.loadResources()
     }
     
-    func process(imageUrl: URL, prompt: String, strength: Float, seed: UInt32) throws -> URL? {
+    func process(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
@@ -40,7 +40,7 @@ extension VideoStore {
             
             print("Calling generateImages()")
             do {
-                if let images = try pipeline?.generateImages(configuration: pipelineConfig) {
+                if let images = try pipeline?.generateImages(configuration: pipelineConfig, progressHandler: progressHandler) {
                     for i in 0 ..< images.count {
                         if let image = images[i] {
                             let name = (imageUrl.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")

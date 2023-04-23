@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StableDiffusion
 
 struct FrameDetailToolbar: View {
     @Binding var frame: Frame
@@ -13,6 +14,7 @@ struct FrameDetailToolbar: View {
     @Binding var showProcessedFrame: Bool
     @Binding var isProcessing: Bool
     @Binding var processingStatus: String
+    @Binding var timingStatus: String
 
     var body: some View {
         Toggle(isOn: $showProcessedFrame) {
@@ -35,11 +37,31 @@ struct FrameDetailToolbar: View {
                     }
                 }
                 if let url = frame.url {
+                    // TODO: The timing stuff here creates a dependency on StableDiffusion directly
+                    // I'd rather have this abstracted behind a generic interface so other types
+                    // of filters would work easily, and still be able to provide timing information.
+                    // Added to Issue #35
+                    let sampleTimer = SampleTimer()
+                    sampleTimer.start()
+
                     var processedFrame = ProcessedFrame(seed: frame.processed.seed, prompt: frame.processed.prompt, strength: frame.processed.strength)
                     print("PRE-PROCESSED: \(processedFrame)")
                     processingStatus = "Processing Frame..."
                     do {
-                        processedFrame.url = try store.process(imageUrl: url, prompt: processedFrame.prompt, strength: processedFrame.strength, seed: processedFrame.seed)
+                        processedFrame.url = try store.process(imageUrl: url,
+                                                               prompt: processedFrame.prompt,
+                                                               strength: processedFrame.strength,
+                                                               seed: processedFrame.seed,
+                                                               progressHandler: { progress in
+                            sampleTimer.stop()
+                            processingStatus = "Step #\(progress.step) of #\(progress.stepCount)"
+                            timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
+
+                            if progress.stepCount != progress.step {
+                                sampleTimer.start()
+                            }
+                            return true
+                        })
                         DispatchQueue.main.async {
                             isProcessing = false
                             frame.processed = processedFrame
@@ -65,6 +87,6 @@ struct FrameDetailToolbar_Previews: PreviewProvider {
     @State static private var placeholderFrame = Frame.placeholder
 
     static var previews: some View {
-        FrameDetailToolbar(frame: $placeholderFrame, store: testStore, showProcessedFrame: .constant(false), isProcessing: .constant(false), processingStatus: .constant("Loading"))
+        FrameDetailToolbar(frame: $placeholderFrame, store: testStore, showProcessedFrame: .constant(false), isProcessing: .constant(false), processingStatus: .constant("Loading"), timingStatus: .constant("Timing Data"))
     }
 }
