@@ -10,6 +10,7 @@ import SwiftUI
 struct FrameDetail: View {
     @Binding var frame: Frame
     @ObservedObject var store: VideoStore
+    @State private var shouldProcess = true
     @State private var showProcessed = false
     @State private var isProcessing = false
     @State private var processingStatus = "Loading..."
@@ -34,13 +35,14 @@ struct FrameDetail: View {
                 .frame(maxHeight: 160.0)
             }
             if isProcessing {
-                ProcessingView(statusText: $processingStatus, additionalStatusText: $timingStatus)
+                ProcessingView(statusText: $processingStatus, additionalStatusText: $timingStatus, shouldProcess: $shouldProcess)
             }
         }
         .padding()
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 FrameDetailToolbar(frame: $frame,
+                                   shouldProcess: $shouldProcess,
                                    store: store,
                                    showProcessedFrame: $showProcessed,
                                    isProcessing: $isProcessing,
