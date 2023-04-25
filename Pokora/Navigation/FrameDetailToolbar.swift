@@ -29,8 +29,11 @@ struct FrameDetailToolbar: View {
                 processingStatus = "Initializing Pipeline..."
                 isProcessing = true
                 DispatchQueue.global().async {
+                    let thisProcessedFrameValues = frame.processed
                     for (index, frame) in store.video.frames.enumerated() {
-                        process(frame: frame, atIndex: index)
+                        var newFrame = frame
+                        newFrame.processed = thisProcessedFrameValues
+                        process(frame: newFrame, atIndex: index)
                         if !shouldProcess { break }
                     }
                     
@@ -56,6 +59,27 @@ struct FrameDetailToolbar: View {
             }
         }
         .menuStyle(.button)
+        Button("Export") {
+            let panel = NSSavePanel()
+            panel.nameFieldStringValue = "exported.mov"
+            panel.canCreateDirectories = true
+            panel.prompt = "Export"
+            
+            panel.begin { response in
+                if response == .OK, let outputUrl = panel.url {
+                    Task {
+                        do {
+                            if let url = store.video.url, let pngs = store.video.frames.map({$0.processed.url}) as? [URL] {
+                                let outputUrl = try await store.exportVideoWithPNGs(videoURL: url, pngURLs: pngs, outputURL: outputUrl)
+                                print("OUTPUT: \(outputUrl)")
+                            }
+                        } catch let error {
+                            print("ERROR EXPORTING: \(error)")
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func process(frame: Frame, atIndex index: Int) {

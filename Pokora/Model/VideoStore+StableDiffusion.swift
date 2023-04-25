@@ -54,6 +54,7 @@ extension VideoStore {
                             if !CGImageDestinationFinalize(dest) {
                                 throw RunError.saving("Failed to save \(fileURL)")
                             }
+                            
                             return fileURL
                         }
                     }
