@@ -1,17 +1,49 @@
 # Pokora
-AI Video Editing Platform built using SwiftUI
 
-![Early concept drawing of Pokora interface](pokora_concept.png)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-macOS-lightgrey)](https://www.apple.com/macos)
 
 Pokora is a video editing and creation platform that combines existing video clips with AI generated video clips.
 
-- Loading source clips decomposes them into source frames
-- Each frame can be part of an image 2 image AI process based on a text prompt, with a given strength
-- The strength can change (in forward or reverse) to go closer to the original or further away
-  - this will give the effect of 'fading in' or 'fading out' from AI to the source clip
-- AI clips can be generated image 2 image based on the previous frame, rather than a source frame
-  - this will create a more 'latent' imagery based solely on the prompt
-  - the strength setting here would be different than the source frame image 2 image
-- The resulting output can be played back with sound from the original source clip
-- Sections be reprocessed without having to reprocess the entire output
-- Uprezzing can be done with RealESRGAN to get output larger than 512x512 (and other aspect ratios)
+![Project Screenshot](./screenshot.png)
+
+## Table of Contents
+- [Features](#features)
+- [Requirements](#requirements)
+- [Limitations](#limitations)
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+
+## Features
+
+- Load video from disk ✅
+- Process frames using Stable Diffusion (prompt, seed, strength) ✅
+- Export video including audio from original video ✅
+- Adjust strength over the course of the video [#7](https://github.com/pj4533/Pokora/issues/7)
+- Playback video in app [#9](https://github.com/pj4533/Pokora/issues/9)
+- Add up rezzing using RealESRGAN [#8](https://github.com/pj4533/Pokora/issues/8)
+- Persist between launches [#16](https://github.com/pj4533/Pokora/issues/16)
+- Update to use ControlNET [#10](https://github.com/pj4533/Pokora/issues/10)
+- Show preview while processing [#34](https://github.com/pj4533/Pokora/issues/34)
+- Multiselect [#36](https://github.com/pj4533/Pokora/issues/36)
+
+## Limitations
+
+- Requires square video as input
+
+## Requirements
+
+Built using below, but haven't tested elsewhere yet.
+
+- macOS 13.3.1+
+- Xcode 14.3+
+
+## Installation
+
+(FIGURE OUT)
+
+## License
+
+This project is licensed under the MIT License - see the ![LICENSE](./LICENSE) file for details.
+
