@@ -21,6 +21,7 @@ Pokora is a video editing and creation platform that combines existing video cli
 - Update to use ControlNET [#10](https://github.com/pj4533/Pokora/issues/10)
 - Show preview while processing [#34](https://github.com/pj4533/Pokora/issues/34)
 - Multiselect [#36](https://github.com/pj4533/Pokora/issues/36)
+- Need icon [#38](https://github.com/pj4533/Pokora/issues/38)
 
 ## Limitations
 
