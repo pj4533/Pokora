@@ -5,7 +5,7 @@
 
 Pokora is a video editing and creation platform that combines existing video clips with AI generated video clips.
 
-![Project Screenshot](./screenshot.png)
+![pokora gif](./pokora.gif)
 
 ## Table of Contents
 - [Features](#features)
