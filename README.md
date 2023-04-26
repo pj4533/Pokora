@@ -7,14 +7,6 @@ Pokora is a video editing and creation platform that combines existing video cli
 
 ![pokora gif](./pokora.gif)
 
-## Table of Contents
-- [Features](#features)
-- [Requirements](#requirements)
-- [Limitations](#limitations)
-- [Installation](#installation)
-- [Usage](#usage)
-- [License](#license)
-
 ## Features
 
 - Load video from disk ✅
