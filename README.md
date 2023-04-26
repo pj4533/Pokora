@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey)](https://www.apple.com/macos)
 
-Pokora is a video editing and creation platform that combines existing video clips with AI generated video clips.
+Pokora is a video editing and creation platform that combines existing video clips with AI generated video clips, using Stable Diffusion, with a native SwiftUI interface. Check out [ml-stable-diffusion](https://github.com/apple/ml-stable-diffusion) for the latest changes and how to convert models.
 
 ![pokora gif](./pokora.gif)
 
@@ -23,6 +23,8 @@ Pokora is a video editing and creation platform that combines existing video cli
 ## Limitations
 
 - Requires square video as input
+- Requires models converted to CoreML
+- Currently using [ml-stable-diffusion](https://github.com/apple/ml-stable-diffusion) v0.3.0
 
 ## Requirements
 
