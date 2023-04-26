@@ -7,7 +7,7 @@ Pokora is a video editing and creation platform that combines existing video cli
 
 ![pokora gif](./pokora.gif)
 
-🧙‍♂️ Pokora is named after Hans Pokora, author of many books on psychedelic music.
+🧙‍♂️ Pokora is named after Hans Pokora, author of many books on collectable psychedelic vinyl.
 
 ## Features
 
