@@ -69,7 +69,7 @@ struct FrameDetailToolbar: View {
                 if response == .OK, let outputUrl = panel.url {
                     Task {
                         do {
-                            if let url = store.video.url, let pngs = store.video.frames.map({$0.processed.url}) as? [URL] {
+                            if let url = store.video.url, let pngs = store.video.frames.map({$0.processed.url ?? $0.url}) as? [URL] {
                                 let outputUrl = try await store.exportVideoWithPNGs(videoURL: url, pngURLs: pngs, outputURL: outputUrl)
                                 print("OUTPUT: \(outputUrl)")
                             }

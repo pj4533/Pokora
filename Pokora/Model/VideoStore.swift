@@ -121,6 +121,17 @@ class VideoStore: ObservableObject {
             var currentFrameTime = CMTime.zero
             
             for (index, pngURL) in pngURLs.enumerated() {
+                // This was hard to figure out...interleaving this audio/video stuff, wow. 😵‍💫
+                while !videoWriterInput.isReadyForMoreMediaData {
+                    if audioWriterInput.isReadyForMoreMediaData {
+                        if let audioSampleBuffer = audioReaderOutput.copyNextSampleBuffer() {
+                            audioWriterInput.append(audioSampleBuffer)
+                        } else {
+                            audioWriterInput.markAsFinished()
+                        }
+                    }
+                }
+
                 guard let image = NSImage(contentsOf: pngURL) else {
                     throw NSError(domain: "Image not found", code: -1, userInfo: nil)
                 }
@@ -131,11 +142,7 @@ class VideoStore: ObservableObject {
                 if !success {
                     throw NSError(domain: "Failed to append pixel buffer", code: -1, userInfo: nil)
                 }
-                
-                while audioWriterInput.isReadyForMoreMediaData, let audioSampleBuffer = audioReaderOutput.copyNextSampleBuffer() {
-                    audioWriterInput.append(audioSampleBuffer)
-                }
-                
+                                
                 currentFrameTime = CMTimeAdd(currentFrameTime, frameDuration)
                 
                 if index == pngURLs.count - 1 {
@@ -143,7 +150,6 @@ class VideoStore: ObservableObject {
                 }
             }
             
-            audioWriterInput.markAsFinished()
             await assetWriter.finishWriting()
         } catch let error {
             throw error
