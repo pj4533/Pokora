@@ -38,10 +38,6 @@ Built using below, but haven't tested elsewhere yet.
 - macOS 13.3.1+
 - Xcode 14.3+
 
-## Installation
-
-(FIGURE OUT)
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
