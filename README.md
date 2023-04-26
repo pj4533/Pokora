@@ -22,12 +22,14 @@ Pokora is a video editing and creation platform that combines existing video cli
 - Show preview while processing [#34](https://github.com/pj4533/Pokora/issues/34)
 - Multiselect [#36](https://github.com/pj4533/Pokora/issues/36)
 - Need icon [#38](https://github.com/pj4533/Pokora/issues/38)
+- Need easier install of models [#39](https://github.com/pj4533/Pokora/issues/39)
 
 ## Limitations
 
 - Requires square video as input
 - Requires models converted to CoreML
 - Currently using [ml-stable-diffusion](https://github.com/apple/ml-stable-diffusion) v0.3.0
+- Requires manual install of models into `model_output/Resources`
 
 ## Requirements
 
