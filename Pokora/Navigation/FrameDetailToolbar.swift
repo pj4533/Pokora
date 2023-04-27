@@ -16,6 +16,7 @@ struct FrameDetailToolbar: View {
     @Binding var isProcessing: Bool
     @Binding var processingStatus: String
     @Binding var timingStatus: String
+    @Binding var modelURL: URL?
 
     var body: some View {
         Toggle(isOn: $showProcessedFrame) {
@@ -85,7 +86,11 @@ struct FrameDetailToolbar: View {
     func process(frame: Frame, atIndex index: Int) {
         if store.pipeline == nil {
             do {
-                try store.initializePipeline()
+                if let url = modelURL {
+                    try store.initializePipeline(resourceURL: url)
+                } else {
+                    try store.initializePipeline()
+                }
             } catch let error {
                 print("ERROR INIT PIPELINE: \(error)")
             }
@@ -135,6 +140,6 @@ struct FrameDetailToolbar_Previews: PreviewProvider {
     @State static private var placeholderFrame = Frame.placeholder
 
     static var previews: some View {
-        FrameDetailToolbar(frame: $placeholderFrame, shouldProcess: .constant(true), store: testStore, showProcessedFrame: .constant(false), isProcessing: .constant(false), processingStatus: .constant("Loading"), timingStatus: .constant("Timing Data"))
+        FrameDetailToolbar(frame: $placeholderFrame, shouldProcess: .constant(true), store: testStore, showProcessedFrame: .constant(false), isProcessing: .constant(false), processingStatus: .constant("Loading"), timingStatus: .constant("Timing Data"), modelURL: .constant(nil))
     }
 }

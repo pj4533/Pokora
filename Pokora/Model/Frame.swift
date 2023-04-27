@@ -21,7 +21,7 @@ struct ProcessedFrame: Hashable {
     var seed: UInt32
     var prompt: String
     var strength: Float
-    
+
     var seedString: String {
         get {
             String(seed)

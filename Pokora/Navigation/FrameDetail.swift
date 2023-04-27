@@ -15,7 +15,9 @@ struct FrameDetail: View {
     @State private var isProcessing = false
     @State private var processingStatus = "Loading..."
     @State private var timingStatus = ""
-    
+
+    @AppStorage("modelURL") private var modelURL: URL?
+
     var body: some View {
         let url = showProcessed ? frame.processed.url ?? frame.url : frame.url
         ZStack {
@@ -23,7 +25,19 @@ struct FrameDetail: View {
                 FrameImageView(imageUrl: url, emptyStateString: "No frame loaded")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 Form {
-                    Section {
+                    Section("Model") {
+                        Button("\(modelURL?.lastPathComponent ?? "<choose model>")") {
+                            let panel = NSOpenPanel()
+                            panel.allowsMultipleSelection = false
+                            panel.canChooseDirectories = true
+                            panel.canChooseFiles = false
+                            if panel.runModal() == .OK, let url = panel.url {
+                                modelURL = url
+                                store.pipeline = nil
+                            }
+                        }
+                    }
+                    Section("Frame") {
                         TextField("Prompt", text: $frame.processed.prompt)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Stepper("Strength", value: $frame.processed.strength, step: 0.1, format: .number)
@@ -32,7 +46,7 @@ struct FrameDetail: View {
                     }
                 }
                 .formStyle(.grouped)
-                .frame(maxHeight: 160.0)
+                .frame(maxHeight: 300.0)
             }
             if isProcessing {
                 ProcessingView(statusText: $processingStatus, additionalStatusText: $timingStatus, shouldProcess: $shouldProcess)
@@ -47,7 +61,8 @@ struct FrameDetail: View {
                                    showProcessedFrame: $showProcessed,
                                    isProcessing: $isProcessing,
                                    processingStatus: $processingStatus,
-                                   timingStatus: $timingStatus)
+                                   timingStatus: $timingStatus,
+                                   modelURL: $modelURL)
             }
         }
     }

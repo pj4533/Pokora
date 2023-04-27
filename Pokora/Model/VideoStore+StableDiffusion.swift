@@ -13,10 +13,9 @@ import UniformTypeIdentifiers
 
 extension VideoStore {
     
-    func initializePipeline() throws {
+    func initializePipeline(resourceURL: URL = URL(filePath: "model_output/Resources")) throws {
         let config = MLModelConfiguration()
         config.computeUnits = .cpuAndNeuralEngine
-        let resourceURL = URL(filePath: "model_output/Resources")
 
         print("Initializing pipeline...")
         self.pipeline = try StableDiffusionPipeline(resourcesAt: resourceURL,
@@ -59,8 +58,8 @@ extension VideoStore {
                         }
                     }
                 }
-            } catch {
-                print("CAUGHT ERROR IN GENERATE IMAGES...")
+            } catch let error {
+                print("generateImages(): \(error)")
             }
         }
         return nil
