@@ -38,6 +38,10 @@ Built using below, but haven't tested elsewhere yet.
 - macOS 13.3.1+
 - Xcode 14.3+
 
+## Models
+
+You will need to convert or download models in CoreML format. You can download from the HuggingFace org [here](https://huggingface.co/coreml).
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
