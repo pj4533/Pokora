@@ -149,7 +149,16 @@ class VideoStore: ObservableObject {
                     videoWriterInput.markAsFinished()
                 }
             }
-            
+
+            // After video finished, check for remaining audio -- short clips?
+            while audioWriterInput.isReadyForMoreMediaData {
+                if let audioSampleBuffer = audioReaderOutput.copyNextSampleBuffer() {
+                    audioWriterInput.append(audioSampleBuffer)
+                } else {
+                    audioWriterInput.markAsFinished()
+                }
+            }
+
             await assetWriter.finishWriting()
         } catch let error {
             throw error
