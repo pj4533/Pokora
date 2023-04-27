@@ -1,9 +1,9 @@
+<p align="center">
 # Pokora
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey)](https://www.apple.com/macos)
 
-<p align="center">
   <img src="Pokora/Assets.xcassets/AppIcon.appiconset/icon-256.png" alt="Pokora icon" />
 </p>
 
