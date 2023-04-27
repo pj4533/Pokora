@@ -42,6 +42,8 @@ Built using below, but haven't tested elsewhere yet.
 
 You will need to convert or download models in CoreML format. You can download from the HuggingFace org [here](https://huggingface.co/coreml).
 
+NOTE: I had trouble with the v2.1 model, I think it doesn't like the 768x768. I verified this model works [here](https://huggingface.co/coreml/coreml-stable-diffusion-v1-5/blob/main/split-einsum/v1-5_split-einsum.zip), however I have had better speeds with a model I converted myself. 
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
