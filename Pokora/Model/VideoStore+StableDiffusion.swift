@@ -38,28 +38,24 @@ extension VideoStore {
             pipelineConfig.guidanceScale = 7.5
             
             print("Calling generateImages()")
-            do {
-                if let images = try pipeline?.generateImages(configuration: pipelineConfig, progressHandler: progressHandler) {
-                    for i in 0 ..< images.count {
-                        if let image = images[i] {
-                            let name = (imageUrl.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
-                            let fileURL = imageUrl.deletingLastPathComponent().appending(path:name)
+            if let images = try pipeline?.generateImages(configuration: pipelineConfig, progressHandler: progressHandler) {
+                for i in 0 ..< images.count {
+                    if let image = images[i] {
+                        let name = (imageUrl.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
+                        let fileURL = imageUrl.deletingLastPathComponent().appending(path:name)
 
-                            guard let dest = CGImageDestinationCreateWithURL(fileURL as CFURL, UTType.png.identifier as CFString, 1, nil) else {
-                                throw RunError.saving("Failed to create destination for \(fileURL)")
-                            }
-
-                            CGImageDestinationAddImage(dest, image, nil)
-                            if !CGImageDestinationFinalize(dest) {
-                                throw RunError.saving("Failed to save \(fileURL)")
-                            }
-                            
-                            return fileURL
+                        guard let dest = CGImageDestinationCreateWithURL(fileURL as CFURL, UTType.png.identifier as CFString, 1, nil) else {
+                            throw RunError.saving("Failed to create destination for \(fileURL)")
                         }
+
+                        CGImageDestinationAddImage(dest, image, nil)
+                        if !CGImageDestinationFinalize(dest) {
+                            throw RunError.saving("Failed to save \(fileURL)")
+                        }
+                        
+                        return fileURL
                     }
                 }
-            } catch let error {
-                print("generateImages(): \(error)")
             }
         }
         return nil

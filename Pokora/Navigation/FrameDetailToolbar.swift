@@ -17,6 +17,9 @@ struct FrameDetailToolbar: View {
     @Binding var processingStatus: String
     @Binding var timingStatus: String
     @Binding var modelURL: URL?
+    
+    @State private var showErrorDialog: Bool = false
+    @State private var errorMessage: String = ""
 
     var body: some View {
         Toggle(isOn: $showProcessedFrame) {
@@ -34,13 +37,20 @@ struct FrameDetailToolbar: View {
                     for (index, frame) in store.video.frames.enumerated() {
                         var newFrame = frame
                         newFrame.processed = thisProcessedFrameValues
-                        process(frame: newFrame, atIndex: index)
+                        do {
+                            try process(frame: newFrame, atIndex: index)
+                            DispatchQueue.main.async {
+                                showProcessedFrame = true
+                                isProcessing = false
+                            }
+                        } catch let error {
+                            DispatchQueue.main.async {
+                                showProcessedFrame = true
+                                isProcessing = false
+                                self.showErrorDialog(with: error)
+                            }
+                        }
                         if !shouldProcess { break }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        showProcessedFrame = true
-                        isProcessing = false
                     }
                 }
             }
@@ -50,11 +60,18 @@ struct FrameDetailToolbar: View {
             isProcessing = true
             DispatchQueue.global().async {
                 if let index = store.video.frames.firstIndex(of: frame) {
-                    process(frame: frame, atIndex: index)
-
-                    DispatchQueue.main.async {
-                        showProcessedFrame = true
-                        isProcessing = false
+                    do {
+                        try process(frame: frame, atIndex: index)
+                        DispatchQueue.main.async {
+                            showProcessedFrame = true
+                            isProcessing = false
+                        }
+                    } catch let error {
+                        DispatchQueue.main.async {
+                            showProcessedFrame = true
+                            isProcessing = false
+                            self.showErrorDialog(with: error)
+                        }
                     }
                 }
             }
@@ -81,18 +98,28 @@ struct FrameDetailToolbar: View {
                 }
             }
         }
+        .alert(isPresented: $showErrorDialog) {
+            Alert(
+                title: Text("Error"),
+                message: Text(errorMessage),
+                dismissButton: .default(Text("OK")) {
+                    // Handle the dismiss action if needed
+                }
+            )
+        }
     }
     
-    func process(frame: Frame, atIndex index: Int) {
+    func showErrorDialog(with error: Error) {
+        self.errorMessage = error.localizedDescription
+        self.showErrorDialog = true
+    }
+    
+    func process(frame: Frame, atIndex index: Int) throws {
         if store.pipeline == nil {
-            do {
-                if let url = modelURL {
-                    try store.initializePipeline(resourceURL: url)
-                } else {
-                    try store.initializePipeline()
-                }
-            } catch let error {
-                print("ERROR INIT PIPELINE: \(error)")
+            if let url = modelURL {
+                try store.initializePipeline(resourceURL: url)
+            } else {
+                try store.initializePipeline()
             }
         }
         // TODO: The timing stuff here creates a dependency on StableDiffusion directly
@@ -106,29 +133,23 @@ struct FrameDetailToolbar: View {
 
             var processedFrame = ProcessedFrame(seed: frame.processed.seed, prompt: frame.processed.prompt, strength: frame.processed.strength)
             processingStatus = "Processing Frame #\(index + 1) of #\(store.video.frames.count)..."
-            do {
-                processedFrame.url = try store.process(imageUrl: url,
-                                                       prompt: processedFrame.prompt,
-                                                       strength: processedFrame.strength,
-                                                       seed: processedFrame.seed,
-                                                       progressHandler: { progress in
-                    sampleTimer.stop()
-                    processingStatus = "Frame #\(index + 1) - Step #\(progress.step) of #\(progress.stepCount)"
-                    timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
+            processedFrame.url = try store.process(imageUrl: url,
+                                                   prompt: processedFrame.prompt,
+                                                   strength: processedFrame.strength,
+                                                   seed: processedFrame.seed,
+                                                   progressHandler: { progress in
+                sampleTimer.stop()
+                processingStatus = "Frame #\(index + 1) - Step #\(progress.step) of #\(progress.stepCount)"
+                timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
 
-                    if progress.stepCount != progress.step {
-                        sampleTimer.start()
-                    }
-                    return shouldProcess
-                })
+                if progress.stepCount != progress.step {
+                    sampleTimer.start()
+                }
+                return shouldProcess
+            })
 
-                DispatchQueue.main.async {
-                    store.video.frames[index].processed = processedFrame
-                }
-            } catch let error {
-                DispatchQueue.main.async {
-                    print(error)
-                }
+            DispatchQueue.main.async {
+                store.video.frames[index].processed = processedFrame
             }
         } else {
             print("Error during processing")
