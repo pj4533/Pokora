@@ -41,7 +41,6 @@ struct FrameDetailToolbar: View {
                             try process(frame: newFrame, atIndex: index)
                             DispatchQueue.main.async {
                                 showProcessedFrame = true
-                                isProcessing = false
                             }
                         } catch let error {
                             DispatchQueue.main.async {
@@ -52,6 +51,7 @@ struct FrameDetailToolbar: View {
                         }
                         if !shouldProcess { break }
                     }
+                    isProcessing = false
                 }
             }
         } primaryAction: {
