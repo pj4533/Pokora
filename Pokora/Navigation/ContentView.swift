@@ -12,26 +12,57 @@ struct ContentView: View {
 
     var body: some View {
         NavigationSplitView {
-            VStack {
-                Button("Select File") {
-                    let panel = NSOpenPanel()
-                    panel.allowsMultipleSelection = false
-                    panel.canChooseDirectories = false
-                    if panel.runModal() == .OK, let url = panel.url {
-                        Task {
-                            await store.loadVideo(url: url)
+            if store.video.url != nil {
+                VStack {
+                    if store.effects.isEmpty {
+                        Button("Add Effect") {
+                            Task {
+                                await store.addEffect()
+                            }
+                        }
+                    } else {
+                        List {
+                            ForEach(store.effects) { effect in
+                                Text("Start: \(effect.startFrame) End: \(effect.endFrame)")
+                            }
                         }
                     }
                 }
-                Text("Please select a video above")
-                    .foregroundColor(.secondary)
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding()
+                .navigationTitle("Effects")
+            } else {
+                VStack {
+                    Button("Select File") {
+                        let panel = NSOpenPanel()
+                        panel.allowsMultipleSelection = false
+                        panel.canChooseDirectories = false
+                        if panel.runModal() == .OK, let url = panel.url {
+                            Task {
+                                await store.loadVideo(url: url)
+                            }
+                        }
+                    }
+                    Text("Please select a video above")
+                        .foregroundColor(.secondary)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding()
+                }
             }
         } detail: {
-            if let url = store.video.url {
-                VideoPlayerView(videoPlayer: VideoPlayerModel(url: url))
+            if store.player != nil {
+                VideoPlayerView(store: store)
+                .toolbar {
+                    ToolbarItem {
+                        Button {
+                            Task {
+                                await store.addEffect()
+                            }
+                        } label: {
+                            Label("Add Effect", systemImage: "plus")
+                        }
+                    }
+                }
+
             }
         }
     }
