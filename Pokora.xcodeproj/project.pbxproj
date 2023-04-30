@@ -13,6 +13,8 @@
 		0A0B113D29A94F22003CD29A /* VideoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B113C29A94F22003CD29A /* VideoStore.swift */; };
 		0A0D439529F5993E00904EAD /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D439429F5993E00904EAD /* ProcessingView.swift */; };
 		0A0D439729F5A30100904EAD /* FrameDetailToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D439629F5A30100904EAD /* FrameDetailToolbar.swift */; };
+		0A191D3329FEFCB50011A439 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A191D3229FEFCB50011A439 /* VideoPlayerView.swift */; };
+		0A191D3529FEFF9B0011A439 /* VideoPlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A191D3429FEFF9B0011A439 /* VideoPlayerModel.swift */; };
 		0A48554129A6949800BA1614 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554029A6949800BA1614 /* ContentView.swift */; };
 		0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554229A694AD00BA1614 /* FrameDetail.swift */; };
 		0A81798329A80BA600C513F2 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81798229A80BA600C513F2 /* Video.swift */; };
@@ -30,6 +32,8 @@
 		0A0B113C29A94F22003CD29A /* VideoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoStore.swift; sourceTree = "<group>"; };
 		0A0D439429F5993E00904EAD /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
 		0A0D439629F5A30100904EAD /* FrameDetailToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetailToolbar.swift; sourceTree = "<group>"; };
+		0A191D3229FEFCB50011A439 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		0A191D3429FEFF9B0011A439 /* VideoPlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerModel.swift; sourceTree = "<group>"; };
 		0A48554029A6949800BA1614 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0A48554229A694AD00BA1614 /* FrameDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetail.swift; sourceTree = "<group>"; };
 		0A81798229A80BA600C513F2 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
@@ -62,6 +66,7 @@
 				0A09872D29F1827F00056DA8 /* FrameImageView.swift */,
 				0A09872F29F1845F00056DA8 /* FrameCell.swift */,
 				0A0D439429F5993E00904EAD /* ProcessingView.swift */,
+				0A191D3229FEFCB50011A439 /* VideoPlayerView.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -110,6 +115,7 @@
 				0A81798229A80BA600C513F2 /* Video.swift */,
 				0A0B113C29A94F22003CD29A /* VideoStore.swift */,
 				0A09873529F193EB00056DA8 /* VideoStore+StableDiffusion.swift */,
+				0A191D3429FEFF9B0011A439 /* VideoPlayerModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -193,6 +199,7 @@
 				0A09872E29F1827F00056DA8 /* FrameImageView.swift in Sources */,
 				0A0D439729F5A30100904EAD /* FrameDetailToolbar.swift in Sources */,
 				0A0D439529F5993E00904EAD /* ProcessingView.swift in Sources */,
+				0A191D3529FEFF9B0011A439 /* VideoPlayerModel.swift in Sources */,
 				0A09873029F1845F00056DA8 /* FrameCell.swift in Sources */,
 				0A0B113D29A94F22003CD29A /* VideoStore.swift in Sources */,
 				0AB185AA29A68C3F00BCC57C /* Frame.swift in Sources */,
@@ -201,6 +208,7 @@
 				0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */,
 				0A09873629F193EB00056DA8 /* VideoStore+StableDiffusion.swift in Sources */,
 				0A48554329A694AD00BA1614 /* FrameDetail.swift in Sources */,
+				0A191D3329FEFCB50011A439 /* VideoPlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -43,8 +43,9 @@ struct ContentView: View {
                 }
             }
         } detail: {
-            if let frame = $store.video.frames.first {
-                FrameDetail(frame: frame, selectedFrames: $selectedFrames, store: store)
+            if let url = store.video.url {
+//                FrameDetail(frame: frame, selectedFrames: $selectedFrames, store: store)
+                VideoPlayerView(videoPlayer: VideoPlayerModel(url: url))
             }
         }
     }
