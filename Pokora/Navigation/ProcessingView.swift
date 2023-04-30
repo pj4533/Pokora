@@ -11,6 +11,7 @@ struct ProcessingView: View {
     @Binding var statusText: String
     @Binding var additionalStatusText: String
     @Binding var shouldProcess: Bool
+    var showCancel: Bool = true
     var body: some View {
         VStack {
             Text("🧠🧠🧠🧠🧠")
@@ -25,8 +26,10 @@ struct ProcessingView: View {
             Text(additionalStatusText)
                 .foregroundStyle(.tertiary)
                 .font(.title3)
-            Button("Cancel") {
-                shouldProcess = false
+            if showCancel {
+                Button("Cancel") {
+                    shouldProcess = false
+                }
             }
         }
         .padding()

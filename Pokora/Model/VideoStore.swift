@@ -14,6 +14,8 @@ let emptyStore = VideoStore(video: Video())
 
 class VideoStore: ObservableObject {
     @Published var video: Video
+    @Published var isLoading: Bool = false
+    @Published var isExporting: Bool = false
     var pipeline: StableDiffusionPipeline?
     
     enum RunError: Error {
@@ -26,6 +28,9 @@ class VideoStore: ObservableObject {
     }
     
     func loadVideo(url: URL) async {
+        await MainActor.run {
+            isLoading = true
+        }
         let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         do {
             
@@ -65,13 +70,18 @@ class VideoStore: ObservableObject {
             let localVideo = Video(url: url, frames: frames)
             await MainActor.run {
                 self.video = localVideo
+                isLoading = false
             }
         } catch let error {
             print(error.localizedDescription)
+            isLoading = false
         }
     }
     
     func exportVideoWithPNGs(videoURL: URL, pngURLs: [URL], outputURL: URL) async throws -> URL {
+        await MainActor.run {
+            isExporting = true
+        }
         do {
             guard pngURLs.count > 0 else {
                 throw NSError(domain: "Empty PNG URLs array", code: -1, userInfo: nil)
@@ -164,6 +174,10 @@ class VideoStore: ObservableObject {
             throw error
         }
         
+        await MainActor.run {
+            isExporting = false
+        }
+
         return outputURL
     }
 
