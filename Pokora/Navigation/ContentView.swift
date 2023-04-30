@@ -60,6 +60,7 @@ struct ContentView: View {
                         } label: {
                             Label("Add Effect", systemImage: "plus")
                         }
+                        .keyboardShortcut("i", modifiers: [.command])
                     }
                 }
 
