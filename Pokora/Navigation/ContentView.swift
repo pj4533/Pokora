@@ -23,7 +23,7 @@ struct ContentView: View {
                         }
                     }
                 }
-                Text("Please select a video above to load frames.")
+                Text("Please select a video above")
                     .foregroundColor(.secondary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
