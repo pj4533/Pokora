@@ -10,10 +10,11 @@ import SwiftUI
 struct FrameCell: View {
     @Binding var frame: Frame
     @ObservedObject var store: VideoStore
+    @Binding var selectedFrames: Set<UUID>
 
     var body: some View {
         NavigationLink {
-            FrameDetail(frame: $frame, store: store)
+            FrameDetail(frame: $frame, selectedFrames: $selectedFrames, store: store)
         } label: {
             Label("Frame #\(frame.index)", systemImage: "video.square.fill")
             if frame.processed.url == nil {
@@ -31,6 +32,6 @@ struct FrameCell_Previews: PreviewProvider {
     @State static private var placeholderFrame = Frame.placeholder
 
     static var previews: some View {
-        FrameCell(frame: $placeholderFrame, store: VideoStore(video: Video()))
+        FrameCell(frame: $placeholderFrame, store: VideoStore(video: Video()), selectedFrames: .constant([]))
     }
 }

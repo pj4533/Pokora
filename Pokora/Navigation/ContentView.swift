@@ -9,17 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var store: VideoStore
-    @State var selectedFrame: Frame?
-    
+    @State private var selectedFrames = Set<UUID>()
+
     var body: some View {
         NavigationSplitView {
-            // TODO: There is some way to make this placeholder work automatically
             if !store.video.frames.isEmpty {
-                List(selection: $selectedFrame) {
-                    ForEach($store.video.frames) { frame in
-                        FrameCell(frame: frame, store: store)
+                List($store.video.frames, selection: $selectedFrames) {
+                    FrameCell(frame: $0, store: store, selectedFrames: $selectedFrames)
+                }
+                .onAppear() {
+                    if let frameId = $store.video.frames.first?.id {
+                        selectedFrames.insert(frameId)
                     }
                 }
+                Text("\(selectedFrames.count) selections")
             } else {
                 VStack {
                     Button("Select File") {
@@ -41,7 +44,7 @@ struct ContentView: View {
             }
         } detail: {
             if let frame = $store.video.frames.first {
-                FrameDetail(frame: frame, store: store)
+                FrameDetail(frame: frame, selectedFrames: $selectedFrames, store: store)
             }
         }
     }

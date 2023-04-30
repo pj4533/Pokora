@@ -10,6 +10,7 @@ import StableDiffusion
 
 struct FrameDetailToolbar: View {
     @Binding var frame: Frame
+    @Binding var selectedFrames: Set<UUID>
     @Binding var shouldProcess: Bool
     @ObservedObject var store: VideoStore
     @Binding var showProcessedFrame: Bool
@@ -33,12 +34,9 @@ struct FrameDetailToolbar: View {
                 processingStatus = "Initializing Pipeline..."
                 isProcessing = true
                 DispatchQueue.global().async {
-                    let thisProcessedFrameValues = frame.processed
                     for (index, frame) in store.video.frames.enumerated() {
-                        var newFrame = frame
-                        newFrame.processed = thisProcessedFrameValues
                         do {
-                            try process(frame: newFrame, atIndex: index)
+                            try process(frame: frame, atIndex: index)
                             DispatchQueue.main.async {
                                 showProcessedFrame = true
                             }
@@ -50,6 +48,7 @@ struct FrameDetailToolbar: View {
                             }
                         }
                         if !shouldProcess { break }
+                        selectedFrames = Set([frame.id])
                     }
                     isProcessing = false
                 }
@@ -161,6 +160,6 @@ struct FrameDetailToolbar_Previews: PreviewProvider {
     @State static private var placeholderFrame = Frame.placeholder
 
     static var previews: some View {
-        FrameDetailToolbar(frame: $placeholderFrame, shouldProcess: .constant(true), store: testStore, showProcessedFrame: .constant(false), isProcessing: .constant(false), processingStatus: .constant("Loading"), timingStatus: .constant("Timing Data"), modelURL: .constant(nil))
+        FrameDetailToolbar(frame: $placeholderFrame, selectedFrames: .constant([]), shouldProcess: .constant(true), store: testStore, showProcessedFrame: .constant(false), isProcessing: .constant(false), processingStatus: .constant("Loading"), timingStatus: .constant("Timing Data"), modelURL: .constant(nil))
     }
 }
