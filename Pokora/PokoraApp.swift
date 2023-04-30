@@ -15,12 +15,6 @@ struct PokoraApp: App {
         WindowGroup {
             ZStack {
                 ContentView(store: store)
-                if store.isLoading {
-                    ProcessingView(statusText: .constant("Loading..."), additionalStatusText: .constant(""), shouldProcess: .constant(true), showCancel: false)
-                }
-                if store.isExporting {
-                    ProcessingView(statusText: .constant("Exporting..."), additionalStatusText: .constant(""), shouldProcess: .constant(true), showCancel: false)
-                }
             }
         }
     }
