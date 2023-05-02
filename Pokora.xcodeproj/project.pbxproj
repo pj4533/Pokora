@@ -13,6 +13,8 @@
 		0A191D3D29FF25B50011A439 /* Effect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A191D3C29FF25B50011A439 /* Effect.swift */; };
 		0A191D3F29FF2B230011A439 /* VideoStore+Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A191D3E29FF2B230011A439 /* VideoStore+Player.swift */; };
 		0A191D4129FF2D370011A439 /* VideoStore+Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A191D4029FF2D370011A439 /* VideoStore+Effects.swift */; };
+		0A3B463D2A0086910066F462 /* EffectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B463C2A0086910066F462 /* EffectCell.swift */; };
+		0A3B463F2A00914C0066F462 /* VideoStore+TimeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */; };
 		0A48554129A6949800BA1614 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554029A6949800BA1614 /* ContentView.swift */; };
 		0AAC1D6629CCBD53009C1402 /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAC1D6529CCBD53009C1402 /* StableDiffusion */; };
 		0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1859729A6873200BCC57C /* PokoraApp.swift */; };
@@ -27,6 +29,8 @@
 		0A191D3C29FF25B50011A439 /* Effect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effect.swift; sourceTree = "<group>"; };
 		0A191D3E29FF2B230011A439 /* VideoStore+Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Player.swift"; sourceTree = "<group>"; };
 		0A191D4029FF2D370011A439 /* VideoStore+Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Effects.swift"; sourceTree = "<group>"; };
+		0A3B463C2A0086910066F462 /* EffectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectCell.swift; sourceTree = "<group>"; };
+		0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+TimeObserver.swift"; sourceTree = "<group>"; };
 		0A48554029A6949800BA1614 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0AB1859429A6873200BCC57C /* Pokora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokora.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB1859729A6873200BCC57C /* PokoraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokoraApp.swift; sourceTree = "<group>"; };
@@ -52,6 +56,7 @@
 			children = (
 				0A48554029A6949800BA1614 /* ContentView.swift */,
 				0A191D3229FEFCB50011A439 /* VideoPlayerView.swift */,
+				0A3B463C2A0086910066F462 /* EffectCell.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -101,6 +106,7 @@
 				0A191D3829FF08750011A439 /* VideoStore.swift */,
 				0A191D3E29FF2B230011A439 /* VideoStore+Player.swift */,
 				0A191D4029FF2D370011A439 /* VideoStore+Effects.swift */,
+				0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -184,10 +190,12 @@
 				0A191D3929FF08750011A439 /* VideoStore.swift in Sources */,
 				0A191D3D29FF25B50011A439 /* Effect.swift in Sources */,
 				0A191D4129FF2D370011A439 /* VideoStore+Effects.swift in Sources */,
+				0A3B463D2A0086910066F462 /* EffectCell.swift in Sources */,
 				0A191D3B29FF08C10011A439 /* Video.swift in Sources */,
 				0A48554129A6949800BA1614 /* ContentView.swift in Sources */,
 				0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */,
 				0A191D3F29FF2B230011A439 /* VideoStore+Player.swift in Sources */,
+				0A3B463F2A00914C0066F462 /* VideoStore+TimeObserver.swift in Sources */,
 				0A191D3329FEFCB50011A439 /* VideoPlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

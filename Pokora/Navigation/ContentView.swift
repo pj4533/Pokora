@@ -23,7 +23,8 @@ struct ContentView: View {
                     } else {
                         List {
                             ForEach(store.effects) { effect in
-                                Text("Start: \(effect.startFrame) End: \(effect.endFrame)")
+                                EffectCell(effect: effect)
+                                Divider()
                             }
                         }
                     }
@@ -37,7 +38,11 @@ struct ContentView: View {
                         panel.canChooseDirectories = false
                         if panel.runModal() == .OK, let url = panel.url {
                             Task {
-                                await store.loadVideo(url: url)
+                                do {
+                                    try await store.loadVideo(url: url)
+                                } catch let error {
+                                    print("ERROR LOADING VIDEO: \(error)")
+                                }
                             }
                         }
                     }
@@ -61,6 +66,7 @@ struct ContentView: View {
                             Label("Add Effect", systemImage: "plus")
                         }
                         .keyboardShortcut("i", modifiers: [.command])
+                        .disabled(store.hasEffect(atFrameIndex: store.currentFrameNumber ?? 0))
                     }
                 }
 
@@ -72,6 +78,5 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(store: testStore)
-        ContentView(store: VideoStore(video: Video()))
     }
 }

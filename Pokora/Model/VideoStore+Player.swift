@@ -9,27 +9,19 @@ import Foundation
 import AVFoundation
 
 extension VideoStore {
-    func currentFrameNumber() async -> Int? {
-        do {
-            guard let player = player, let currentItem = player.currentItem, let frameRate = try await currentItem.asset.loadTracks(withMediaType: .video).first?.load(.nominalFrameRate) else {
-                return nil
-            }
-            let currentTime = CMTimeGetSeconds(player.currentTime())
-            return Int(round(currentTime * Double(frameRate)))
-        } catch {
+    var lastFrameIndex: Int? {
+        guard let frameRate = video.framerate, let duration = video.duration else {
             return nil
         }
+        return Int(round(duration * Double(frameRate))) - 1
     }
     
-    func lastFrameIndex() async -> Int? {
-        do {
-            guard let player = player, let currentItem = player.currentItem, let frameRate = try await currentItem.asset.loadTracks(withMediaType: .video).first?.load(.nominalFrameRate) else {
-                return nil
-            }
-            let duration = try await CMTimeGetSeconds(currentItem.asset.load(.duration))
-            return Int(round(duration * Double(frameRate))) - 1
-        } catch {
-            return nil
-        }
-    }
+    internal func updateCurrentFrameNumber() {
+         guard let player = player, let frameRate = video.framerate else {
+             currentFrameNumber = nil
+             return
+         }
+         let currentTime = CMTimeGetSeconds(player.currentTime())
+         currentFrameNumber = Int(round(currentTime * Double(frameRate)))
+     }
 }

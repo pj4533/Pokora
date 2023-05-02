@@ -10,8 +10,8 @@ import Foundation
 extension VideoStore {
     
     func addEffect() async {
-        let currentFrame = await currentFrameNumber() ?? 0
-        let lastFrame = await lastFrameIndex() ?? currentFrame
+        let currentFrame = currentFrameNumber ?? 0
+        let lastFrame = lastFrameIndex ?? currentFrame
         let newEffect = Effect(startFrame: currentFrame, endFrame: lastFrame)
 
         await MainActor.run {
@@ -36,5 +36,14 @@ extension VideoStore {
                 effects.append(newEffect)
             }
         }
+    }
+    
+    func hasEffect(atFrameIndex frameIndex: Int) -> Bool {
+        for effect in effects {
+            if effect.startFrame == frameIndex {
+                return true
+            }
+        }
+        return false
     }
 }
