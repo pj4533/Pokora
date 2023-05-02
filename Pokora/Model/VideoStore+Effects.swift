@@ -9,12 +9,11 @@ import Foundation
 
 extension VideoStore {
     
-    func addEffect() async {
+    func addEffect() async -> UUID {
         let currentFrame = currentFrameNumber ?? 0
         let lastFrame = lastFrameIndex ?? currentFrame
         let newEffect = Effect(startFrame: currentFrame, endFrame: lastFrame)
-
-        await MainActor.run {
+        return await MainActor.run {
             // Find the index of the next effect in the array
             if let nextEffectIndex = effects.firstIndex(where: { $0.startFrame > currentFrame }) {
                 // Update the endFrame of the previous effect if it exists
@@ -27,6 +26,7 @@ extension VideoStore {
                 let updatedNewEffect = Effect(id: newEffect.id, startFrame: newEffect.startFrame, endFrame: effects[nextEffectIndex].startFrame - 1)
                 // Insert the new effect at the correct position
                 effects.insert(updatedNewEffect, at: nextEffectIndex)
+                return updatedNewEffect.id
             } else {
                 // If there's no next effect, add the new effect to the end of the array
                 if let lastEffect = effects.last {
@@ -34,6 +34,7 @@ extension VideoStore {
                     effects[effects.count - 1] = updatedLastEffect
                 }
                 effects.append(newEffect)
+                return newEffect.id
             }
         }
     }

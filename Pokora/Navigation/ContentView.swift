@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var store: VideoStore
-
+    @State var selectedEffect: UUID?
+    
     var body: some View {
         NavigationSplitView {
             if store.video.url != nil {
@@ -17,15 +18,12 @@ struct ContentView: View {
                     if store.effects.isEmpty {
                         Button("Add Effect") {
                             Task {
-                                await store.addEffect()
+                                selectedEffect = await store.addEffect()
                             }
                         }
                     } else {
-                        List {
-                            ForEach(store.effects) { effect in
-                                EffectCell(effect: effect)
-                                Divider()
-                            }
+                        List($store.effects, selection: $selectedEffect) {
+                            EffectCell(effect: $0)
                         }
                     }
                 }
@@ -55,12 +53,12 @@ struct ContentView: View {
             }
         } detail: {
             if store.player != nil {
-                VideoPlayerView(store: store)
+                VideoPlayerView(store: store, selectedEffect: store.effects.first(where: {$0.id == selectedEffect}))
                 .toolbar {
                     ToolbarItem {
                         Button {
                             Task {
-                                await store.addEffect()
+                                selectedEffect = await store.addEffect()
                             }
                         } label: {
                             Label("Add Effect", systemImage: "plus")
@@ -71,6 +69,9 @@ struct ContentView: View {
                 }
 
             }
+        }
+        .onChange(of: store.currentFrameNumber) { newValue in
+            selectedEffect = nil
         }
     }
 }

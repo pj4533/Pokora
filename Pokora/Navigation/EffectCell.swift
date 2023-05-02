@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EffectCell: View {
-    var effect: Effect
+    @Binding var effect: Effect
     var body: some View {
         VStack(alignment: .leading) {
             Text("Start: \(effect.startFrame)")
@@ -19,6 +19,6 @@ struct EffectCell: View {
 
 struct EffectCell_Previews: PreviewProvider {
     static var previews: some View {
-        EffectCell(effect: Effect(startFrame: 0, endFrame: 999))
+        EffectCell(effect: .constant(Effect(startFrame: 0, endFrame: 999)))
     }
 }
