@@ -11,6 +11,9 @@ struct EffectCell: View {
     @Binding var effect: Effect
     var body: some View {
         VStack(alignment: .leading) {
+            Text(effect.prompt)
+            Text("Strength: \(effect.strength)")
+            Text("Seed: \(effect.seed)")
             Text("Start: \(effect.startFrame)")
             Text("End: \(effect.endFrame)")
         }

@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var store: VideoStore
     @State var selectedEffect: UUID?
+    @State private var showNewEffectSheet = false
     
     var body: some View {
         NavigationSplitView {
@@ -17,9 +18,7 @@ struct ContentView: View {
                 VStack {
                     if store.effects.isEmpty {
                         Button("Add Effect") {
-                            Task {
-                                selectedEffect = await store.addEffect()
-                            }
+                            showNewEffectSheet = true
                         }
                     } else {
                         List($store.effects, selection: $selectedEffect) {
@@ -57,9 +56,7 @@ struct ContentView: View {
                 .toolbar {
                     ToolbarItem {
                         Button {
-                            Task {
-                                selectedEffect = await store.addEffect()
-                            }
+                            showNewEffectSheet = true
                         } label: {
                             Label("Add Effect", systemImage: "plus")
                         }
@@ -72,6 +69,9 @@ struct ContentView: View {
         }
         .onChange(of: store.currentFrameNumber) { newValue in
             selectedEffect = nil
+        }
+        .sheet(isPresented: $showNewEffectSheet) {
+            NewEffectView(store: store)
         }
     }
 }

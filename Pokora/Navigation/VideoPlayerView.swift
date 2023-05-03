@@ -17,18 +17,6 @@ struct VideoPlayerView: View {
             VideoPlayer(player: store.player)
                 .cornerRadius(10)
                 .padding()
-            if let promptValue = selectedEffect?.prompt, let seedValue = selectedEffect?.seed, let strengthValue = selectedEffect?.strength {
-                Form {
-                    LabeledContent("Prompt", value: promptValue)
-                    LabeledContent("Strength", value: String(strengthValue))
-                    LabeledContent("Seed", value: String(seedValue))
-                }
-                .formStyle(.grouped)
-                .frame(maxHeight: 170.0)
-            } else {
-                Text("(no effect selected)")
-                    .frame(maxHeight: 170.0)
-            }
         }
     }
 }
