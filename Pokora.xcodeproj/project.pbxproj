@@ -16,6 +16,9 @@
 		0A3B463D2A0086910066F462 /* EffectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B463C2A0086910066F462 /* EffectCell.swift */; };
 		0A3B463F2A00914C0066F462 /* VideoStore+TimeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */; };
 		0A48554129A6949800BA1614 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554029A6949800BA1614 /* ContentView.swift */; };
+		0A7FBC552A031F80008DFFAC /* VideoStore+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FBC542A031F80008DFFAC /* VideoStore+Video.swift */; };
+		0A7FBC572A03201F008DFFAC /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FBC562A03201F008DFFAC /* Frame.swift */; };
+		0A7FBC592A0321A3008DFFAC /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FBC582A0321A3008DFFAC /* ProcessingView.swift */; };
 		0A8014522A01ECA3001BEB1B /* NewEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8014512A01ECA3001BEB1B /* NewEffectView.swift */; };
 		0AAC1D6629CCBD53009C1402 /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAC1D6529CCBD53009C1402 /* StableDiffusion */; };
 		0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1859729A6873200BCC57C /* PokoraApp.swift */; };
@@ -33,6 +36,9 @@
 		0A3B463C2A0086910066F462 /* EffectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectCell.swift; sourceTree = "<group>"; };
 		0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+TimeObserver.swift"; sourceTree = "<group>"; };
 		0A48554029A6949800BA1614 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0A7FBC542A031F80008DFFAC /* VideoStore+Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Video.swift"; sourceTree = "<group>"; };
+		0A7FBC562A03201F008DFFAC /* Frame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
+		0A7FBC582A0321A3008DFFAC /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
 		0A8014512A01ECA3001BEB1B /* NewEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEffectView.swift; sourceTree = "<group>"; };
 		0AB1859429A6873200BCC57C /* Pokora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokora.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB1859729A6873200BCC57C /* PokoraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokoraApp.swift; sourceTree = "<group>"; };
@@ -60,6 +66,7 @@
 				0A191D3229FEFCB50011A439 /* VideoPlayerView.swift */,
 				0A3B463C2A0086910066F462 /* EffectCell.swift */,
 				0A8014512A01ECA3001BEB1B /* NewEffectView.swift */,
+				0A7FBC582A0321A3008DFFAC /* ProcessingView.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -110,6 +117,8 @@
 				0A191D3E29FF2B230011A439 /* VideoStore+Player.swift */,
 				0A191D4029FF2D370011A439 /* VideoStore+Effects.swift */,
 				0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */,
+				0A7FBC542A031F80008DFFAC /* VideoStore+Video.swift */,
+				0A7FBC562A03201F008DFFAC /* Frame.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -197,10 +206,13 @@
 				0A3B463D2A0086910066F462 /* EffectCell.swift in Sources */,
 				0A191D3B29FF08C10011A439 /* Video.swift in Sources */,
 				0A48554129A6949800BA1614 /* ContentView.swift in Sources */,
+				0A7FBC552A031F80008DFFAC /* VideoStore+Video.swift in Sources */,
 				0AB1859829A6873200BCC57C /* PokoraApp.swift in Sources */,
 				0A191D3F29FF2B230011A439 /* VideoStore+Player.swift in Sources */,
 				0A3B463F2A00914C0066F462 /* VideoStore+TimeObserver.swift in Sources */,
+				0A7FBC592A0321A3008DFFAC /* ProcessingView.swift in Sources */,
 				0A191D3329FEFCB50011A439 /* VideoPlayerView.swift in Sources */,
+				0A7FBC572A03201F008DFFAC /* Frame.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

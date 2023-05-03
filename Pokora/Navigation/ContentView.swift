@@ -55,6 +55,36 @@ struct ContentView: View {
                 VideoPlayerView(store: store, selectedEffect: store.effects.first(where: {$0.id == selectedEffect}))
                 .toolbar {
                     ToolbarItem {
+                        Button("Render") {
+                            Task {
+                                await store.extractFrames()
+                            }
+//                            shouldProcess = true
+//                            processingStatus = "Initializing Pipeline..."
+//                            isProcessing = true
+//                            DispatchQueue.global().async {
+//                                for (index, frame) in store.video.frames.enumerated() {
+//                                    do {
+//                                        try process(frame: frame, atIndex: index)
+//                                        DispatchQueue.main.async {
+//                                            showProcessedFrame = true
+//                                        }
+//                                    } catch let error {
+//                                        DispatchQueue.main.async {
+//                                            showProcessedFrame = true
+//                                            isProcessing = false
+//                                            self.showErrorDialog(with: error)
+//                                        }
+//                                    }
+//                                    if !shouldProcess { break }
+//                                    selectedFrames = Set([frame.id])
+//                                }
+//                                isProcessing = false
+//                            }
+                        }
+                        .disabled(store.effects.isEmpty)
+                    }
+                    ToolbarItem {
                         Button {
                             showNewEffectSheet = true
                         } label: {

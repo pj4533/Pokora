@@ -16,7 +16,9 @@ class VideoStore: ObservableObject {
     @Published var effects: [Effect] = []
     @Published var player: AVPlayer?
     @Published var currentFrameNumber: Int?
-    
+    @Published var isExtracting: Bool = false
+    @Published var isExporting: Bool = false
+
     internal var timeObserverToken: Any?
     
     init(video: Video) {
@@ -25,24 +27,6 @@ class VideoStore: ObservableObject {
     
     deinit {
         removeTimeObserver()
-    }
-        
-    func loadVideo(url: URL) async throws {
-        let localVideo = Video(url: url)
-        let player = AVPlayer(url: url)
-        let framerate = try await player.currentItem?.asset.loadTracks(withMediaType: .video).first?.load(.nominalFrameRate)
-        if let durationTime = try await player.currentItem?.asset.load(.duration) {
-            let duration = CMTimeGetSeconds(durationTime)
-
-            await MainActor.run {
-                self.player = player
-                self.video = localVideo
-                self.video.framerate = framerate
-                self.video.duration = duration
-            }
-            
-            addTimeObserver()
-        }
-    }
+    }        
 }
 

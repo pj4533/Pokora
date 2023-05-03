@@ -15,6 +15,9 @@ struct PokoraApp: App {
         WindowGroup {
             ZStack {
                 ContentView(store: store)
+                if store.isExtracting {
+                    ProcessingView(statusText: .constant("Extracting frames..."), additionalStatusText: .constant(""), shouldProcess: .constant(true), showCancel: false)
+                }
             }
         }
     }
