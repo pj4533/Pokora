@@ -12,8 +12,7 @@ import UniformTypeIdentifiers
 
 extension VideoStore {
     
-    // TODO: Model picker
-    private func initializePipeline(resourceURL: URL = URL(filePath: "/Users/pgray/Downloads/models/stable-diffusion-v2__peejcompiled_512x512")) throws {
+    private func initializePipeline(resourceURL: URL = URL(filePath: "model_output/Resources")) throws {
         let config = MLModelConfiguration()
         config.computeUnits = .cpuAndNeuralEngine
 
@@ -61,17 +60,16 @@ extension VideoStore {
         return nil
     }
 
-    internal func process(frame: Frame, atIndex index: Int) async throws {
+    internal func process(frame: Frame, atIndex index: Int, modelURL: URL?) async throws {
         if pipeline == nil {
             await MainActor.run {
                 self.processingStatus = "Initializing Pipeline..."
             }
-            // TODO: add model picker
-//            if let url = modelURL {
-//                try store.initializePipeline(resourceURL: url)
-//            } else {
+            if let url = modelURL {
+                try initializePipeline(resourceURL: url)
+            } else {
                 try initializePipeline()
-//            }
+            }
         }
         // TODO: The timing stuff here creates a dependency on StableDiffusion directly
         // I'd rather have this abstracted behind a generic interface so other types

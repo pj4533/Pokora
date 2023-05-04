@@ -11,7 +11,8 @@ struct ContentView: View {
     @ObservedObject var store: VideoStore
     @State var selectedEffect: UUID?
     @State private var showNewEffectSheet = false
-    
+    @AppStorage("modelURL") private var modelURL: URL?
+
     var body: some View {
         NavigationSplitView {
             if store.video.url != nil {
@@ -52,13 +53,13 @@ struct ContentView: View {
             }
         } detail: {
             if store.player != nil {
-                VideoPlayerView(store: store, selectedEffect: store.effects.first(where: {$0.id == selectedEffect}))
+                VideoPlayerView(store: store, modelURL: $modelURL, selectedEffect: store.effects.first(where: {$0.id == selectedEffect}))
                 .toolbar {
                     ToolbarItem {
                         Button("Render") {
                             Task {
                                 await store.extractFrames()
-                                await store.processFrames()
+                                await store.processFrames(modelURL: modelURL)
                             }
                         }
                         .disabled(store.effects.isEmpty)

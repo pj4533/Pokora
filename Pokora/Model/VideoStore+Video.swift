@@ -28,14 +28,14 @@ extension VideoStore {
         }
     }
 
-    func processFrames() async {
+    func processFrames(modelURL: URL?) async {
         await MainActor.run {
             self.shouldProcess = true
             self.isProcessing = true
         }
         for (index, frame) in (self.video.frames ?? []).enumerated() {
             do {
-                try await self.process(frame: frame, atIndex: index)
+                try await self.process(frame: frame, atIndex: index, modelURL: modelURL)
             } catch {
                 await MainActor.run {
                     self.isProcessing = false
