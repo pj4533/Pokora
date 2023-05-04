@@ -24,7 +24,6 @@ Pokora is a video creation platform that combines existing video clips with AI g
 - Persist between launches [#16](https://github.com/pj4533/Pokora/issues/16)
 - Update to use ControlNET [#10](https://github.com/pj4533/Pokora/issues/10)
 - Show preview while processing [#34](https://github.com/pj4533/Pokora/issues/34)
-- Multiselect [#36](https://github.com/pj4533/Pokora/issues/36)
 
 ## Limitations
 
