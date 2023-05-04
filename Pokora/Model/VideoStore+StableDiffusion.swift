@@ -61,9 +61,9 @@ extension VideoStore {
         return nil
     }
 
-    internal func process(frame: Frame, atIndex index: Int) throws {
+    internal func process(frame: Frame, atIndex index: Int) async throws {
         if pipeline == nil {
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.processingStatus = "Initializing Pipeline..."
             }
             // TODO: add model picker
@@ -82,8 +82,8 @@ extension VideoStore {
             let sampleTimer = SampleTimer()
             sampleTimer.start()
 
-            DispatchQueue.main.async {
-                self.processingStatus = "Processing Frame #\(index + 1) of #\(self.video.frames?.count ?? 0)..."
+            await MainActor.run {
+                self.processingStatus = "Processing Frame #\(index) of #\((self.video.frames?.count ?? 0)-1)..."
             }
             let processedUrl = try process(imageUrl: url,
                                                prompt: effect.prompt,
@@ -92,7 +92,7 @@ extension VideoStore {
                                                progressHandler: { progress in
                 sampleTimer.stop()
                 DispatchQueue.main.async {
-                    self.processingStatus = "Frame #\(index + 1) - Step #\(progress.step) of #\(progress.stepCount)"
+                    self.processingStatus = "Frame #\(index) - Step #\(progress.step) of #\(progress.stepCount)"
                     self.timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
                 }
 
@@ -102,7 +102,7 @@ extension VideoStore {
                 return shouldProcess
             })
 
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.video.frames?[index].processedUrl = processedUrl
             }
         } else {

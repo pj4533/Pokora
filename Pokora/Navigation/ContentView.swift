@@ -64,6 +64,30 @@ struct ContentView: View {
                         .disabled(store.effects.isEmpty)
                     }
                     ToolbarItem {
+                        Button("Export") {
+                            let panel = NSSavePanel()
+                            panel.nameFieldStringValue = "exported.mov"
+                            panel.canCreateDirectories = true
+                            panel.prompt = "Export"
+                            
+                            panel.begin { response in
+                                if response == .OK, let outputUrl = panel.url {
+                                    Task {
+                                        do {
+                                            if let url = store.video.url, let pngs = store.video.frames?.map({ $0.processedUrl ?? $0.url }) as? [URL] {
+                                                let outputUrl = try await store.exportVideoWithPNGs(videoURL: url, pngURLs: pngs, outputURL: outputUrl)
+                                                print("OUTPUT: \(outputUrl)")
+                                            }
+                                        } catch let error {
+                                            print("ERROR EXPORTING: \(error)")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .disabled((store.video.frames?.compactMap({ $0.processedUrl }).count ?? 0) == 0)
+                    }
+                    ToolbarItem {
                         Button {
                             showNewEffectSheet = true
                         } label: {

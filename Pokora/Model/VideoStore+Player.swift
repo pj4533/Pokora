@@ -13,7 +13,7 @@ extension VideoStore {
         guard let frameRate = video.framerate, let duration = video.duration else {
             return nil
         }
-        return Int(round(duration * Double(frameRate))) - 1
+        return Int(round(duration * Double(frameRate)))
     }
     
     internal func updateCurrentFrameNumber() {

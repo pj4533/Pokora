@@ -29,15 +29,15 @@ extension VideoStore {
     }
 
     func processFrames() async {
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.shouldProcess = true
             self.isProcessing = true
         }
         for (index, frame) in (self.video.frames ?? []).enumerated() {
             do {
-                try self.process(frame: frame, atIndex: index)
+                try await self.process(frame: frame, atIndex: index)
             } catch {
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isProcessing = false
                     // TODO: throw error here and use error dialog code
 //                        self.showErrorDialog(with: error)
@@ -45,7 +45,7 @@ extension VideoStore {
             }
             if !self.shouldProcess { break }
         }
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.isProcessing = false
         }
     }
@@ -69,7 +69,7 @@ extension VideoStore {
                 reader.startReading()
                 
                 var frames: [Frame] = []
-                var index = 1
+                var index = 0
                 
                 // this is how you get the number of frames, but the non async version is deprecated.
                 //                        print("TRACK: \(Int(videoTrack.timeRange.duration.seconds * Double(videoTrack.nominalFrameRate)))")
