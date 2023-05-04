@@ -9,7 +9,7 @@ import Foundation
 
 extension VideoStore {
     
-    func addEffect(prompt: String, strength: Double, seed: UInt32) async {
+    func addEffect(prompt: String, strength: Float, seed: UInt32) async {
         let currentFrame = currentFrameNumber ?? 0
         let lastFrame = lastFrameIndex ?? currentFrame
         let newEffect = Effect(startFrame: currentFrame, endFrame: lastFrame, strength: strength, seed: seed, prompt: prompt)

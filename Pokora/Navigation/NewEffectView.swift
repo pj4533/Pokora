@@ -11,7 +11,7 @@ struct NewEffectView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var store: VideoStore
     @State private var prompt = "A cyberpunk cityscape"
-    @State private var strength = 0.2
+    @State private var strength: Float = 0.2
     @State private var seed = globalSeed
     var body: some View {
         Form {

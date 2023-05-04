@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import StableDiffusion
 
 let testStore = VideoStore(video: testvideo)
 let emptyStore = VideoStore(video: Video())
@@ -18,9 +19,21 @@ class VideoStore: ObservableObject {
     @Published var currentFrameNumber: Int?
     @Published var isExtracting: Bool = false
     @Published var isExporting: Bool = false
+    @Published var isProcessing: Bool = false
+    @Published var shouldProcess = true
+    @Published var showProcessed = false
+    @Published var processingStatus = ""
+    @Published var timingStatus = ""
 
+    internal var pipeline: StableDiffusionPipeline?
     internal var timeObserverToken: Any?
     
+    enum RunError: Error {
+        case resources(String)
+        case saving(String)
+        case processing(String)
+    }
+
     init(video: Video) {
         self.video = video
     }

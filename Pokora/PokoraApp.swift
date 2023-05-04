@@ -18,6 +18,9 @@ struct PokoraApp: App {
                 if store.isExtracting {
                     ProcessingView(statusText: .constant("Extracting frames..."), additionalStatusText: .constant(""), shouldProcess: .constant(true), showCancel: false)
                 }
+                if store.isProcessing {
+                    ProcessingView(statusText: $store.processingStatus, additionalStatusText: $store.timingStatus, shouldProcess: $store.shouldProcess)
+                }
             }
         }
     }

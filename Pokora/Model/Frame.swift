@@ -11,4 +11,5 @@ struct Frame: Identifiable {
     var id = UUID()
     var index: Int
     var url: URL?
+    var processedUrl: URL?
 }

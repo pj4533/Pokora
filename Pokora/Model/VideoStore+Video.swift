@@ -28,6 +28,28 @@ extension VideoStore {
         }
     }
 
+    func processFrames() async {
+        DispatchQueue.main.async {
+            self.shouldProcess = true
+            self.isProcessing = true
+        }
+        for (index, frame) in (self.video.frames ?? []).enumerated() {
+            do {
+                try self.process(frame: frame, atIndex: index)
+            } catch {
+                DispatchQueue.main.async {
+                    self.isProcessing = false
+                    // TODO: throw error here and use error dialog code
+//                        self.showErrorDialog(with: error)
+                }
+            }
+            if !self.shouldProcess { break }
+        }
+        DispatchQueue.main.async {
+            self.isProcessing = false
+        }
+    }
+    
     func extractFrames() async {
         await MainActor.run {
             isExtracting = true

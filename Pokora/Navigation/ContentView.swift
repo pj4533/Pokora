@@ -58,29 +58,8 @@ struct ContentView: View {
                         Button("Render") {
                             Task {
                                 await store.extractFrames()
+                                await store.processFrames()
                             }
-//                            shouldProcess = true
-//                            processingStatus = "Initializing Pipeline..."
-//                            isProcessing = true
-//                            DispatchQueue.global().async {
-//                                for (index, frame) in store.video.frames.enumerated() {
-//                                    do {
-//                                        try process(frame: frame, atIndex: index)
-//                                        DispatchQueue.main.async {
-//                                            showProcessedFrame = true
-//                                        }
-//                                    } catch let error {
-//                                        DispatchQueue.main.async {
-//                                            showProcessedFrame = true
-//                                            isProcessing = false
-//                                            self.showErrorDialog(with: error)
-//                                        }
-//                                    }
-//                                    if !shouldProcess { break }
-//                                    selectedFrames = Set([frame.id])
-//                                }
-//                                isProcessing = false
-//                            }
                         }
                         .disabled(store.effects.isEmpty)
                     }
