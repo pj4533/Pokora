@@ -9,20 +9,25 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var store: VideoStore
-    @State private var selectedFrames = Set<UUID>()
+    @State var selectedEffect: UUID?
+    @State private var showNewEffectSheet = false
+    @AppStorage("modelURL") private var modelURL: URL?
 
     var body: some View {
         NavigationSplitView {
-            if !store.video.frames.isEmpty {
-                List($store.video.frames, selection: $selectedFrames) {
-                    FrameCell(frame: $0, store: store, selectedFrames: $selectedFrames)
-                }
-                .onAppear() {
-                    if let frameId = $store.video.frames.first?.id {
-                        selectedFrames.insert(frameId)
+            if store.video.url != nil {
+                VStack {
+                    if store.effects.isEmpty {
+                        Button("Add Effect") {
+                            showNewEffectSheet = true
+                        }
+                    } else {
+                        List($store.effects, selection: $selectedEffect) {
+                            EffectCell(effect: $0)
+                        }
                     }
                 }
-                Text("\(selectedFrames.count) selections")
+                .navigationTitle("Effects")
             } else {
                 VStack {
                     Button("Select File") {
@@ -31,11 +36,15 @@ struct ContentView: View {
                         panel.canChooseDirectories = false
                         if panel.runModal() == .OK, let url = panel.url {
                             Task {
-                                await store.loadVideo(url: url)
+                                do {
+                                    try await store.loadVideo(url: url)
+                                } catch let error {
+                                    print("ERROR LOADING VIDEO: \(error)")
+                                }
                             }
                         }
                     }
-                    Text("Please select a video above to load frames.")
+                    Text("Please select a video above")
                         .foregroundColor(.secondary)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
@@ -43,9 +52,60 @@ struct ContentView: View {
                 }
             }
         } detail: {
-            if let frame = $store.video.frames.first {
-                FrameDetail(frame: frame, selectedFrames: $selectedFrames, store: store)
+            if store.player != nil {
+                VideoPlayerView(store: store, modelURL: $modelURL, selectedEffect: store.effects.first(where: {$0.id == selectedEffect}))
+                .toolbar {
+                    ToolbarItem {
+                        Button("Render") {
+                            Task {
+                                await store.extractFrames()
+                                await store.processFrames(modelURL: modelURL)
+                            }
+                        }
+                        .disabled(store.effects.isEmpty)
+                    }
+                    ToolbarItem {
+                        Button("Export") {
+                            let panel = NSSavePanel()
+                            panel.nameFieldStringValue = "exported.mov"
+                            panel.canCreateDirectories = true
+                            panel.prompt = "Export"
+                            
+                            panel.begin { response in
+                                if response == .OK, let outputUrl = panel.url {
+                                    Task {
+                                        do {
+                                            if let url = store.video.url, let pngs = store.video.frames?.map({ $0.processedUrl ?? $0.url }) as? [URL] {
+                                                let outputUrl = try await store.exportVideoWithPNGs(videoURL: url, pngURLs: pngs, outputURL: outputUrl)
+                                                print("OUTPUT: \(outputUrl)")
+                                            }
+                                        } catch let error {
+                                            print("ERROR EXPORTING: \(error)")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .disabled((store.video.frames?.compactMap({ $0.processedUrl }).count ?? 0) == 0)
+                    }
+                    ToolbarItem {
+                        Button {
+                            showNewEffectSheet = true
+                        } label: {
+                            Label("Add Effect", systemImage: "plus")
+                        }
+                        .keyboardShortcut("i", modifiers: [.command])
+                        .disabled(store.hasEffect(atFrameIndex: store.currentFrameNumber ?? 0))
+                    }
+                }
+
             }
+        }
+        .onChange(of: store.currentFrameNumber) { newValue in
+            selectedEffect = nil
+        }
+        .sheet(isPresented: $showNewEffectSheet) {
+            NewEffectView(store: store)
         }
     }
 }
@@ -53,6 +113,5 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(store: testStore)
-        ContentView(store: VideoStore(video: Video()))
     }
 }
