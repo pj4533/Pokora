@@ -37,7 +37,7 @@ Pokora is a video creation platform that combines existing video clips with AI g
 
 ## Limitations
 
-- Requires square video as input ([#58](https://github.com/pj4533/Pokora/issues/58)
+- Requires square video as input ([#58](https://github.com/pj4533/Pokora/issues/58))
 - Requires models converted to CoreML (see below)
 - Currently using [ml-stable-diffusion](https://github.com/apple/ml-stable-diffusion) v0.3.0
 
