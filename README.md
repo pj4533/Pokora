@@ -18,8 +18,8 @@ Pokora is a video creation platform that combines existing video clips with AI g
 - Export video including audio from original video ✅
 - Need icon ✅
 - Need easier install of models ✅
+- Playback video in app ✅
 - Adjust strength over the course of the video [#7](https://github.com/pj4533/Pokora/issues/7)
-- Playback video in app [#9](https://github.com/pj4533/Pokora/issues/9)
 - Add up rezzing using RealESRGAN [#8](https://github.com/pj4533/Pokora/issues/8)
 - Persist between launches [#16](https://github.com/pj4533/Pokora/issues/16)
 - Update to use ControlNET [#10](https://github.com/pj4533/Pokora/issues/10)
