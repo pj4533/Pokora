@@ -48,4 +48,23 @@ extension VideoStore {
         }
         return false
     }
+    
+    func getUrls(from effect: Effect) -> [URL] {
+        guard let frames = video.frames else {
+            return []
+        }
+        
+        let startFrame = effect.startFrame
+        let endFrame = effect.endFrame
+        
+        var urls: [URL] = []
+        
+        for frame in frames where frame.index >= startFrame && frame.index <= endFrame {
+            if let url = frame.processedUrl {
+                urls.append(url)
+            }
+        }
+        
+        return urls
+    }
 }

@@ -23,7 +23,7 @@ struct ContentView: View {
                         }
                     } else {
                         List($store.effects, selection: $selectedEffect) {
-                            EffectCell(effect: $0)
+                            EffectCell(effect: $0, store: store)
                         }
                     }
                 }

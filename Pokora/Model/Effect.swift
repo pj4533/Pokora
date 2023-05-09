@@ -13,7 +13,6 @@ struct Effect: Identifiable {
     var id = UUID()
     var startFrame: Int
     var endFrame: Int
-    var processedFrames: [URL] = []
     
     var strength: Float = 0.2
     var seed: UInt32 = globalSeed
