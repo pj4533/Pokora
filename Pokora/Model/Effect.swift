@@ -13,9 +13,9 @@ struct Effect: Identifiable {
     var id = UUID()
     var startFrame: Int
     var endFrame: Int
-
-    // for now all effects are Stable Diffusion, but I could refactor this
-    var strength: Float = 0.0
+    var processedFrames: [URL] = []
+    
+    var strength: Float = 0.2
     var seed: UInt32 = globalSeed
     var prompt: String = "a cyberpunk cityscape"
 }

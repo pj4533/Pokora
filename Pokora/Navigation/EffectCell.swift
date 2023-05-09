@@ -9,14 +9,59 @@ import SwiftUI
 
 struct EffectCell: View {
     @Binding var effect: Effect
+    
+    let numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .none
+        return formatter
+    }()
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(effect.prompt)
-            Text("Strength: \(effect.strength)")
-            Text("Seed: \(effect.seed)")
-            Text("Start: \(effect.startFrame)")
-            Text("End: \(effect.endFrame)")
+        HStack {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(effect.prompt)
+                    .font(.title)
+                    .foregroundColor(.primary)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
+                
+                HStack {
+                    Image(systemName: "arrow.right.square.fill")
+                    Text("Strength: \(String(format: "%.3f", effect.strength))")
+                }
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                
+                HStack {
+                    Image(systemName: "number.square.fill")
+                    Text("Seed: \(numberFormatter.string(from: NSNumber(value: effect.seed))!)")
+                }
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                
+                HStack {
+                    Image(systemName: "film.fill")
+                    Text("Start: \(numberFormatter.string(from: NSNumber(value: effect.startFrame))!)")
+                    Spacer()
+                    Text("End: \(numberFormatter.string(from: NSNumber(value: effect.endFrame))!)")
+                    Image(systemName: "film.fill")
+                }
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                
+                let totalFrames = effect.endFrame - effect.startFrame
+                let progress = totalFrames > 0 ? Double(effect.processedFrames.count) / Double(totalFrames) : 0.0
+                let progressTintColor = progress >= 1 ? Color.green : Color.blue
+                ProgressView(value: progress)
+                    .progressViewStyle(LinearProgressViewStyle(tint: progressTintColor))
+                    .frame(height: 8)
+                
+            }
+            Spacer()
         }
+        .padding()
+        .cornerRadius(10)
+        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
     }
 }
 
