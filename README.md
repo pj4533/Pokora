@@ -25,9 +25,19 @@ Pokora is a video creation platform that combines existing video clips with AI g
 - Update to use ControlNET [#10](https://github.com/pj4533/Pokora/issues/10)
 - Show preview while processing [#34](https://github.com/pj4533/Pokora/issues/34)
 
+## Getting Started
+
+- Any video size will work, but it must be square (see limitations below)
+- Any video length will work
+- Once you have added some effects, hit 'Render'
+- Render will first extract all the frames from your source video (this can take a while)
+- Once extracted, the rendering of your applied effects will start, this can take hours
+- Tapping export creates a new movie with rendered frames from your effects, original frames where there were no effects, and the audio track from the original movie
+- Save, share and enjoy!
+
 ## Limitations
 
-- Requires square video as input
+- Requires square video as input ([#58](https://github.com/pj4533/Pokora/issues/58))
 - Requires models converted to CoreML (see below)
 - Currently using [ml-stable-diffusion](https://github.com/apple/ml-stable-diffusion) v0.3.0
 
