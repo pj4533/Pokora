@@ -112,6 +112,12 @@ extension VideoStore {
                         // this is how you get the number of frames, but the non async version is deprecated.
                         //                        print("TRACK: \(Int(videoTrack.timeRange.duration.seconds * Double(videoTrack.nominalFrameRate)))")
                         while let sampleBuffer = trackReaderOutput.copyNextSampleBuffer() {
+                            // see below. Duuurrrrr, what is this.
+                            let ughIndex = index
+                            await MainActor.run {
+                                self.timingStatus = "[ \(ughIndex) of \(project.video.lastFrameIndex ?? 0) ]"
+                            }
+
                             if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
                                 let ciimage = CIImage(cvImageBuffer: imageBuffer)
                                 let scaleFactor = 512.0 / ciimage.extent.width

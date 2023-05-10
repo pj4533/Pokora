@@ -63,6 +63,7 @@ extension VideoStore {
     internal func process(frame: Frame, atIndex index: Int, modelURL: URL?) async throws {
         if pipeline == nil {
             await MainActor.run {
+                self.timingStatus = ""
                 self.processingStatus = "Initializing Pipeline..."
             }
             if let url = modelURL {
