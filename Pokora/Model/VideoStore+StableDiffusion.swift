@@ -84,8 +84,8 @@ extension VideoStore {
                 self.processingStatus = "Processing Frame #\(index) of #\((self.video.frames?.count ?? 0)-1)..."
             }
             let processedUrl = try process(imageUrl: url,
-                                               prompt: effect.prompt,
-                                               strength: effect.strength,
+                                             prompt: effect.prompt,
+                                           strength: effect.strength(forFrameIndex: index),
                                                seed: effect.seed,
                                                progressHandler: { progress in
                 sampleTimer.stop()

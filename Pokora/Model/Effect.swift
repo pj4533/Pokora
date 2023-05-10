@@ -14,7 +14,21 @@ struct Effect: Identifiable {
     var startFrame: Int
     var endFrame: Int
     
-    var strength: Float = 0.2
+    var startStrength: Float = 0.2
+    var endStrength: Float = 0.2
     var seed: UInt32 = globalSeed
     var prompt: String = "a cyberpunk cityscape"
+    
+    func strength(forFrameIndex index: Int) -> Float {
+        if startStrength == endStrength {
+            return startStrength
+        } else {
+            if endFrame == startFrame {
+                // To avoid division by zero
+                return startStrength
+            }
+            let progress = Float(index - startFrame) / Float(endFrame - startFrame)
+            return startStrength + progress * (endStrength - startStrength)
+        }
+    }
 }

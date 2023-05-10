@@ -27,8 +27,16 @@ struct EffectCell: View {
                     .truncationMode(.tail)
                 
                 HStack {
-                    Image(systemName: "arrow.right.square.fill")
-                    Text("Strength: \(String(format: "%.3f", effect.strength))")
+                    if effect.startStrength == effect.endStrength {
+                        Image(systemName: "arrow.right.square.fill")
+                        Text("Strength: \(String(format: "%.3f", effect.startStrength))")
+                    } else if effect.startStrength < effect.endStrength {
+                        Image(systemName: "arrow.up.right.square.fill")
+                        Text("Strength: \(String(format: "%.3f ↗ %.3f", effect.startStrength, effect.endStrength))")
+                    } else {
+                        Image(systemName: "arrow.down.right.square.fill")
+                        Text("Strength: \(String(format: "%.3f ↘ %.3f", effect.startStrength, effect.endStrength))")
+                    }
                 }
                 .font(.subheadline)
                 .foregroundColor(.secondary)

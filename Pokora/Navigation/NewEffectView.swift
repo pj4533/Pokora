@@ -11,13 +11,15 @@ struct NewEffectView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var store: VideoStore
     @State private var prompt = "A cyberpunk cityscape"
-    @State private var strength: Float = 0.2
+    @State private var startStrength: Float = 0.2
+    @State private var endStrength: Float = 0.2
     @State private var seed = globalSeed
     var body: some View {
         Form {
             TextField("Prompt", text: $prompt)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-            Stepper("Strength", value: $strength, step: 0.1, format: .number)
+            Stepper("Start Strength", value: $startStrength, step: 0.1, format: .number)
+            Stepper("End Strength", value: $endStrength, step: 0.1, format: .number)
             TextField("Seed", value: $seed, format: .number.grouping(.never))
                 .textFieldStyle(RoundedBorderTextFieldStyle())
         }
@@ -28,7 +30,7 @@ struct NewEffectView: View {
             ToolbarItem {
                 Button("Save") {
                     Task {
-                        await store.addEffect(prompt: prompt, strength: strength, seed: seed)
+                        await store.addEffect(prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed)
                     }
                     dismiss()
                 }
