@@ -60,11 +60,12 @@ struct EffectCell: View {
                 
                 let totalFrames = (effect.endFrame - effect.startFrame) + 1
                 let progress = totalFrames > 0 ? Double(store.project.getUrls(from: effect).count) / Double(totalFrames) : 0.0
-                let progressTintColor = progress >= 1 ? Color.green : Color.blue
-                ProgressView(value: progress)
-                    .progressViewStyle(LinearProgressViewStyle(tint: progressTintColor))
-                    .frame(height: 8)
-                
+                if progress > 0 {
+                    let progressTintColor = progress >= 1 ? Color.green : Color.blue
+                    ProgressView(value: progress)
+                        .progressViewStyle(LinearProgressViewStyle(tint: progressTintColor))
+                        .frame(height: 8)
+                }
             }
             Spacer()
         }
