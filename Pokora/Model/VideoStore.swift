@@ -8,13 +8,18 @@
 import Foundation
 import AVFoundation
 import StableDiffusion
-
-let testStore = VideoStore(video: testvideo)
-let emptyStore = VideoStore(video: Video())
+import SwiftUI
 
 class VideoStore: ObservableObject {
-    @Published var video: Video
-    @Published var effects: [Effect] = []
+    @Published var project: PokoraProject
+//    @Binding var project: PokoraProject
+//    var projectBinding: Binding<PokoraProject> {
+//        Binding<PokoraProject>(
+//            get: { self.project },
+//            set: { self.project = $0 }
+//        )
+//    }
+    
     @Published var player: AVPlayer?
     
     // This is the current frame the player is parked on
@@ -49,8 +54,8 @@ class VideoStore: ObservableObject {
         case processing(String)
     }
 
-    init(video: Video) {
-        self.video = video
+    init(project: PokoraProject) {
+        self.project = project
     }
     
     deinit {

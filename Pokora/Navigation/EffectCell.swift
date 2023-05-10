@@ -59,7 +59,7 @@ struct EffectCell: View {
                 .foregroundColor(.secondary)
                 
                 let totalFrames = (effect.endFrame - effect.startFrame) + 1
-                let progress = totalFrames > 0 ? Double(store.getUrls(from: effect).count) / Double(totalFrames) : 0.0
+                let progress = totalFrames > 0 ? Double(store.project.getUrls(from: effect).count) / Double(totalFrames) : 0.0
                 let progressTintColor = progress >= 1 ? Color.green : Color.blue
                 ProgressView(value: progress)
                     .progressViewStyle(LinearProgressViewStyle(tint: progressTintColor))
@@ -76,6 +76,6 @@ struct EffectCell: View {
 
 struct EffectCell_Previews: PreviewProvider {
     static var previews: some View {
-        EffectCell(effect: .constant(Effect(startFrame: 0, endFrame: 999)), store: emptyStore)
+        EffectCell(effect: .constant(Effect(startFrame: 0, endFrame: 999)), store: VideoStore(project: PokoraProject(video: Video())))
     }
 }

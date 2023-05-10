@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Frame: Identifiable {
+struct Frame: Identifiable, Codable {
     var id = UUID()
     var index: Int
     var url: URL?

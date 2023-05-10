@@ -15,6 +15,8 @@
 		0A191D4129FF2D370011A439 /* VideoStore+Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A191D4029FF2D370011A439 /* VideoStore+Effects.swift */; };
 		0A3B463D2A0086910066F462 /* EffectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B463C2A0086910066F462 /* EffectCell.swift */; };
 		0A3B463F2A00914C0066F462 /* VideoStore+TimeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */; };
+		0A42206D2A0BFA9900274EF0 /* PokoraProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42206C2A0BFA9900274EF0 /* PokoraProject.swift */; };
+		0A42206F2A0C035D00274EF0 /* PokoraProject+Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42206E2A0C035D00274EF0 /* PokoraProject+Effects.swift */; };
 		0A48554129A6949800BA1614 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48554029A6949800BA1614 /* ContentView.swift */; };
 		0A5C06112A03590B001525D0 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A5C06102A03590B001525D0 /* AVKit.framework */; };
 		0A7FBC552A031F80008DFFAC /* VideoStore+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FBC542A031F80008DFFAC /* VideoStore+Video.swift */; };
@@ -38,6 +40,8 @@
 		0A191D4029FF2D370011A439 /* VideoStore+Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Effects.swift"; sourceTree = "<group>"; };
 		0A3B463C2A0086910066F462 /* EffectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectCell.swift; sourceTree = "<group>"; };
 		0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+TimeObserver.swift"; sourceTree = "<group>"; };
+		0A42206C2A0BFA9900274EF0 /* PokoraProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokoraProject.swift; sourceTree = "<group>"; };
+		0A42206E2A0C035D00274EF0 /* PokoraProject+Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PokoraProject+Effects.swift"; sourceTree = "<group>"; };
 		0A48554029A6949800BA1614 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0A5C06102A03590B001525D0 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		0A7FBC542A031F80008DFFAC /* VideoStore+Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Video.swift"; sourceTree = "<group>"; };
@@ -46,6 +50,7 @@
 		0A7FBC5A2A0325E2008DFFAC /* VideoStore+StableDiffusion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+StableDiffusion.swift"; sourceTree = "<group>"; };
 		0A7FBC5C2A034664008DFFAC /* VideoStore+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Export.swift"; sourceTree = "<group>"; };
 		0A8014512A01ECA3001BEB1B /* NewEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEffectView.swift; sourceTree = "<group>"; };
+		0AACA29B2A0BF851006DB3BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0AB1859429A6873200BCC57C /* Pokora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokora.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB1859729A6873200BCC57C /* PokoraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokoraApp.swift; sourceTree = "<group>"; };
 		0AB1859B29A6873300BCC57C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -106,6 +111,7 @@
 		0AB1859629A6873200BCC57C /* Pokora */ = {
 			isa = PBXGroup;
 			children = (
+				0AACA29B2A0BF851006DB3BE /* Info.plist */,
 				0A48553F29A6949800BA1614 /* Navigation */,
 				0AB185A629A68BDC00BCC57C /* Model */,
 				0AB1859729A6873200BCC57C /* PokoraApp.swift */,
@@ -137,6 +143,8 @@
 				0A7FBC542A031F80008DFFAC /* VideoStore+Video.swift */,
 				0A7FBC5A2A0325E2008DFFAC /* VideoStore+StableDiffusion.swift */,
 				0A7FBC5C2A034664008DFFAC /* VideoStore+Export.swift */,
+				0A42206C2A0BFA9900274EF0 /* PokoraProject.swift */,
+				0A42206E2A0C035D00274EF0 /* PokoraProject+Effects.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -220,8 +228,10 @@
 				0A191D3929FF08750011A439 /* VideoStore.swift in Sources */,
 				0A191D3D29FF25B50011A439 /* Effect.swift in Sources */,
 				0A191D4129FF2D370011A439 /* VideoStore+Effects.swift in Sources */,
+				0A42206D2A0BFA9900274EF0 /* PokoraProject.swift in Sources */,
 				0A7FBC5D2A034664008DFFAC /* VideoStore+Export.swift in Sources */,
 				0A8014522A01ECA3001BEB1B /* NewEffectView.swift in Sources */,
+				0A42206F2A0C035D00274EF0 /* PokoraProject+Effects.swift in Sources */,
 				0A3B463D2A0086910066F462 /* EffectCell.swift in Sources */,
 				0A191D3B29FF08C10011A439 /* Video.swift in Sources */,
 				0A48554129A6949800BA1614 /* ContentView.swift in Sources */,
@@ -367,6 +377,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pokora/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -396,6 +407,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pokora/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (

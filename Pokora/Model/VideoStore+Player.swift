@@ -9,15 +9,8 @@ import Foundation
 import AVFoundation
 
 extension VideoStore {
-    var lastFrameIndex: Int? {
-        guard let frameRate = video.framerate, let duration = video.duration else {
-            return nil
-        }
-        return Int(round(duration * Double(frameRate)))
-    }
-    
     internal func updateCurrentFrameNumber() {
-         guard let player = player, let frameRate = video.framerate else {
+        guard let player = player, let frameRate = project.video.framerate else {
              currentFrameNumber = nil
              return
          }

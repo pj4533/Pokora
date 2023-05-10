@@ -19,9 +19,9 @@ extension VideoStore {
 
             await MainActor.run {
                 self.player = player
-                self.video = localVideo
-                self.video.framerate = framerate
-                self.video.duration = duration
+                project.video = localVideo
+                project.video.framerate = framerate
+                project.video.duration = duration
             }
             
             addTimeObserver()
@@ -33,7 +33,7 @@ extension VideoStore {
             self.shouldProcess = true
             self.isProcessing = true
         }
-        for (index, frame) in (self.video.frames ?? []).enumerated() {
+        for (index, frame) in (project.video.frames ?? []).enumerated() {
             do {
                 try await self.process(frame: frame, atIndex: index, modelURL: modelURL)
             } catch {
@@ -56,7 +56,7 @@ extension VideoStore {
         }
         let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         do {
-            if let url = video.url {
+            if let url = project.video.url {
                 let asset = AVAsset(url: url)
                 let reader = try AVAssetReader(asset: asset)
                 
@@ -94,7 +94,7 @@ extension VideoStore {
                 // wat - i dont get this
                 let letFrames = frames
                 await MainActor.run {
-                    video.frames = letFrames
+                    project.video.frames = letFrames
                     isExtracting = false
                 }
             }

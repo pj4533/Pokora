@@ -76,12 +76,12 @@ extension VideoStore {
         // of filters would work easily, and still be able to provide timing information.
         //
         // Added to Issue #35
-        if let url = frame.url, let effect = effects.first(where: { index >= $0.startFrame && index <= $0.endFrame }) {
+        if let url = frame.url, let effect = project.effects.first(where: { index >= $0.startFrame && index <= $0.endFrame }) {
             let sampleTimer = SampleTimer()
             sampleTimer.start()
 
             await MainActor.run {
-                self.processingStatus = "Processing Frame #\(index) of #\((self.video.frames?.count ?? 0)-1)..."
+                self.processingStatus = "Processing Frame #\(index) of #\((project.video.frames?.count ?? 0)-1)..."
             }
             let processedUrl = try process(imageUrl: url,
                                              prompt: effect.prompt,
@@ -101,7 +101,7 @@ extension VideoStore {
             })
 
             await MainActor.run {
-                self.video.frames?[index].processedUrl = processedUrl
+                project.video.frames?[index].processedUrl = processedUrl
             }
         } else {
             print("No effect on frame \(index)")

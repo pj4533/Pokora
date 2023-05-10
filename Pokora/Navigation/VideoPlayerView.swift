@@ -41,6 +41,6 @@ struct VideoPlayerView: View {
 
 struct VideoPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        VideoPlayerView(store: emptyStore, modelURL: .constant(nil), selectedEffect: nil)
+        VideoPlayerView(store: VideoStore(project: PokoraProject(video: Video())), modelURL: .constant(nil), selectedEffect: nil)
     }
 }

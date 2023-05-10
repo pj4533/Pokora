@@ -29,9 +29,7 @@ struct NewEffectView: View {
         .toolbar {
             ToolbarItem {
                 Button("Save") {
-                    Task {
-                        await store.addEffect(prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed)
-                    }
+                    store.project.addEffect(startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed)
                     dismiss()
                 }
             }
@@ -41,6 +39,6 @@ struct NewEffectView: View {
 
 struct NewEffectView_Previews: PreviewProvider {
     static var previews: some View {
-        NewEffectView(store: emptyStore)
+        NewEffectView(store: VideoStore(project: PokoraProject(video: Video())))
     }
 }
