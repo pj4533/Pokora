@@ -29,6 +29,8 @@ Pokora is a video creation platform that combines existing video clips with AI g
 
 - Any video size will work, but it must be square (see limitations below)
 - Any video length will work
+- Is a document-based app, so choose 'New Document' when you first start
+- If you Save the project before rendering, you can restart if you get an error during long renders
 - Once you have added some effects, hit 'Render'
 - Render will first extract all the frames from your source video (this can take a while)
 - Once extracted, the rendering of your applied effects will start, this can take hours
