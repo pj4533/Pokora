@@ -30,6 +30,7 @@ struct ContentView: View {
                         }
                     }
                     .navigationTitle("Effects")
+                    .frame(minWidth: 320.0)
                     .onAppear {
                         if store.player == nil {
                             Task {
@@ -139,6 +140,9 @@ struct ContentView: View {
                 NewEffectView()
             }
 
+            if store.isExporting {
+                ProcessingView(statusText: .constant("Exporting..."), additionalStatusText: .constant(""), shouldProcess: .constant(true), showCancel: false)
+            }
             if store.isExtracting {
                 ProcessingView(statusText: .constant("Extracting frames..."), additionalStatusText: .constant(""), shouldProcess: .constant(true), showCancel: false)
             }

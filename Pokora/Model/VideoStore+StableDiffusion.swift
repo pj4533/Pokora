@@ -83,26 +83,36 @@ extension VideoStore {
             await MainActor.run {
                 self.processingStatus = "Processing Frame #\(index) of #\((project.video.frames?.count ?? 0)-1)..."
             }
-            let processedUrl = try process(imageUrl: url,
-                                             prompt: effect.prompt,
-                                           strength: effect.strength(forFrameIndex: index),
-                                               seed: effect.seed,
-                                               progressHandler: { progress in
-                sampleTimer.stop()
-                DispatchQueue.main.async {
-                    self.processingStatus = "Frame #\(index) - Step #\(progress.step) of #\(progress.stepCount)"
-                    self.timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
-                }
+            
+            // kind of a hack, should pre-load this
+            let name = (url.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
+            let fileURL = url.deletingLastPathComponent().appending(path:name)
+            if !FileManager().fileExists(atPath: fileURL.path) {
+                let processedUrl = try process(imageUrl: url,
+                                                 prompt: effect.prompt,
+                                               strength: effect.strength(forFrameIndex: index),
+                                                   seed: effect.seed,
+                                                   progressHandler: { progress in
+                    sampleTimer.stop()
+                    DispatchQueue.main.async {
+                        self.processingStatus = "Frame #\(index) - Step #\(progress.step) of #\(progress.stepCount)"
+                        self.timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
+                    }
 
-                if progress.stepCount != progress.step {
-                    sampleTimer.start()
+                    if progress.stepCount != progress.step {
+                        sampleTimer.start()
+                    }
+                    return shouldProcess
+                })
+                await MainActor.run {
+                    project.video.frames?[index].processedUrl = processedUrl
                 }
-                return shouldProcess
-            })
-
-            await MainActor.run {
-                project.video.frames?[index].processedUrl = processedUrl
+            } else {
+                await MainActor.run {
+                    project.video.frames?[index].processedUrl = fileURL
+                }
             }
+
         } else {
             print("No effect on frame \(index)")
         }

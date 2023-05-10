@@ -119,10 +119,12 @@ extension VideoStore {
                                 
                                 let path = cachesDirectory.appendingPathComponent("out\(String(format: "%05d", index)).png")
                                 print("\(path.absoluteString)")
-                                if let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) {
-                                    let format = CIFormat.RGBA8
-                                    let context = CIContext()
-                                    try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
+                                if !FileManager().fileExists(atPath: path.path) {
+                                    if let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) {
+                                        let format = CIFormat.RGBA8
+                                        let context = CIContext()
+                                        try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
+                                    }
                                 }
                                 frames.append(Frame(index: index, url: path))
                             }
