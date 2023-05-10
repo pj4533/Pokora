@@ -9,7 +9,7 @@ import Foundation
 
 struct Video: Identifiable, Codable {
     var id = UUID()
-    var url: URL?
+    var bookmarkData: Data?
     var duration: Float64?
     var framerate: Float?
     var frames: [Frame]?
@@ -22,4 +22,4 @@ struct Video: Identifiable, Codable {
     }
 }
 
-let testvideo = Video(url: nil)
+let testvideo = Video(bookmarkData: nil)

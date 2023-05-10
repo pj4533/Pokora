@@ -17,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             NavigationSplitView {
-                if store.project.video.url != nil {
+                if store.project.video.bookmarkData != nil {
                     VStack {
                         if store.project.effects.isEmpty {
                             Button("Add Effect") {
@@ -88,9 +88,27 @@ struct ContentView: View {
                                     if response == .OK, let outputUrl = panel.url {
                                         Task {
                                             do {
-                                                if let url = store.project.video.url, let pngs = store.project.video.frames?.map({ $0.processedUrl ?? $0.url }) as? [URL] {
-                                                    let outputUrl = try await store.exportVideoWithPNGs(videoURL: url, pngURLs: pngs, outputURL: outputUrl)
-                                                    print("OUTPUT: \(outputUrl)")
+                                                if let bookmarkData = store.project.video.bookmarkData {
+                                                    var isStale = false
+                                                    let bookmarkedURL = try URL(resolvingBookmarkData: bookmarkData,
+                                                                                options: .withSecurityScope,
+                                                                                relativeTo: nil,
+                                                                                bookmarkDataIsStale: &isStale)
+                                                    
+                                                    if isStale {
+                                                        // The bookmarked data is stale, handle this error appropriately in your app
+                                                    } else {
+                                                        if bookmarkedURL.startAccessingSecurityScopedResource() {
+                                                            // You have access to the file, you can perform your file operations here
+                                                            if let pngs = store.project.video.frames?.map({ $0.processedUrl ?? $0.url }) as? [URL] {
+                                                                let outputUrl = try await store.exportVideoWithPNGs(videoURL: bookmarkedURL, pngURLs: pngs, outputURL: outputUrl)
+                                                                print("OUTPUT: \(outputUrl)")
+                                                            }
+
+                                                            // Make sure to stop accessing the resource when you're done
+                                                            bookmarkedURL.stopAccessingSecurityScopedResource()
+                                                        }
+                                                    }
                                                 }
                                             } catch let error {
                                                 print("ERROR EXPORTING: \(error)")
