@@ -89,6 +89,10 @@ extension VideoStore {
                 if index == pngURLs.count - 1 {
                     videoWriterInput.markAsFinished()
                 }
+                
+                await MainActor.run {
+                    self.timingStatus = "[ \(index) of \(pngURLs.count) ]"
+                }
             }
 
             // After video finished, check for remaining audio -- short clips?

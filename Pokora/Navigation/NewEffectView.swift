@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewEffectView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var store: VideoStore
+    @EnvironmentObject var store: VideoStore
     @State private var prompt = "A cyberpunk cityscape"
     @State private var startStrength: Float = 0.2
     @State private var endStrength: Float = 0.2
@@ -29,9 +29,7 @@ struct NewEffectView: View {
         .toolbar {
             ToolbarItem {
                 Button("Save") {
-                    Task {
-                        await store.addEffect(prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed)
-                    }
+                    store.project.addEffect(startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed)
                     dismiss()
                 }
             }
@@ -41,6 +39,7 @@ struct NewEffectView: View {
 
 struct NewEffectView_Previews: PreviewProvider {
     static var previews: some View {
-        NewEffectView(store: emptyStore)
+        NewEffectView()
+            .environmentObject(VideoStore())
     }
 }

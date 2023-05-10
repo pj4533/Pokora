@@ -8,13 +8,16 @@
 import Foundation
 import AVFoundation
 import StableDiffusion
+import SwiftUI
+import UniformTypeIdentifiers
 
-let testStore = VideoStore(video: testvideo)
-let emptyStore = VideoStore(video: Video())
+extension UTType {
+    static let pokoraProject = UTType(exportedAs: "com.saygoodnight.Pokora.project")
+}
 
-class VideoStore: ObservableObject {
-    @Published var video: Video
-    @Published var effects: [Effect] = []
+final class VideoStore: ReferenceFileDocument {
+    @Published var project: PokoraProject
+    
     @Published var player: AVPlayer?
     
     // This is the current frame the player is parked on
@@ -49,10 +52,31 @@ class VideoStore: ObservableObject {
         case processing(String)
     }
 
-    init(video: Video) {
-        self.video = video
+    typealias Snapshot = PokoraProject
+
+    static var readableContentTypes: [UTType] { [.pokoraProject] }
+    
+    func snapshot(contentType: UTType) throws -> PokoraProject {
+        project
     }
     
+    init() {
+        project = PokoraProject(video: Video())
+    }
+
+    init(configuration: ReadConfiguration) throws {
+        guard let data = configuration.file.regularFileContents
+        else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        self.project = try JSONDecoder().decode(PokoraProject.self, from: data)
+    }
+
+    func fileWrapper(snapshot: PokoraProject, configuration: WriteConfiguration) throws -> FileWrapper {
+        let data = try JSONEncoder().encode(snapshot)
+        return FileWrapper(regularFileWithContents: data)
+    }
+
     deinit {
         removeTimeObserver()
     }        
