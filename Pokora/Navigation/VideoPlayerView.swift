@@ -9,7 +9,7 @@ import SwiftUI
 import AVKit
 
 struct VideoPlayerView: View {
-    @ObservedObject var store: VideoStore
+    @EnvironmentObject var store: VideoStore
     @Binding var modelURL: URL?
     
     var selectedEffect: Effect?
@@ -41,6 +41,7 @@ struct VideoPlayerView: View {
 
 struct VideoPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        VideoPlayerView(store: VideoStore(project: PokoraProject(video: Video())), modelURL: .constant(nil), selectedEffect: nil)
+        VideoPlayerView(modelURL: .constant(nil), selectedEffect: nil)
+            .environmentObject(VideoStore())
     }
 }

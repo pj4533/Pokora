@@ -10,8 +10,8 @@ import SwiftUI
 @main
 struct PokoraApp: App {
     var body: some Scene {
-        DocumentGroup(newDocument: PokoraProject(video: Video())) { file in
-            ContentView(store: VideoStore(project: file.document))
+        DocumentGroup(newDocument: { VideoStore() }) { configuration in
+            ContentView()
         }
     }
 }

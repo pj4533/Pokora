@@ -10,6 +10,12 @@ import AVFoundation
 import AVKit
 
 extension VideoStore {
+    func loadVideo() async throws {
+        if let url = project.video.url {
+            try await loadVideo(url: url)
+        }
+    }
+    
     func loadVideo(url: URL) async throws {
         let localVideo = Video(url: url)
         let player = AVPlayer(url: url)

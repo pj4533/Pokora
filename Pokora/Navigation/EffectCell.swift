@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EffectCell: View {
     @Binding var effect: Effect
-    @ObservedObject var store: VideoStore
+    @EnvironmentObject var store: VideoStore
     
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -76,6 +76,7 @@ struct EffectCell: View {
 
 struct EffectCell_Previews: PreviewProvider {
     static var previews: some View {
-        EffectCell(effect: .constant(Effect(startFrame: 0, endFrame: 999)), store: VideoStore(project: PokoraProject(video: Video())))
+        EffectCell(effect: .constant(Effect(startFrame: 0, endFrame: 999)))
+            .environmentObject(VideoStore())
     }
 }

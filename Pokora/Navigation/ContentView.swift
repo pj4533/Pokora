@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var store: VideoStore
+    @EnvironmentObject var store: VideoStore
 
     @State var selectedEffect: UUID?
     @State private var showNewEffectSheet = false
@@ -25,11 +25,22 @@ struct ContentView: View {
                             }
                         } else {
                             List($store.project.effects, selection: $selectedEffect) {
-                                EffectCell(effect: $0, store: store)
+                                EffectCell(effect: $0)
                             }
                         }
                     }
                     .navigationTitle("Effects")
+                    .onAppear {
+                        if store.player == nil {
+                            Task {
+                                do {
+                                    try await store.loadVideo()
+                                } catch let error {
+                                    print("ERROR LOADING VIDEO: \(error)")
+                                }
+                            }
+                        }
+                    }
                 } else {
                     VStack {
                         Button("Select File") {
@@ -55,7 +66,7 @@ struct ContentView: View {
                 }
             } detail: {
                 if store.player != nil {
-                    VideoPlayerView(store: store, modelURL: $modelURL, selectedEffect: store.project.effects.first(where: {$0.id == selectedEffect}))
+                    VideoPlayerView(modelURL: $modelURL, selectedEffect: store.project.effects.first(where: {$0.id == selectedEffect}))
                     .toolbar {
                         ToolbarItem {
                             Button("Render") {
@@ -107,7 +118,7 @@ struct ContentView: View {
                 selectedEffect = nil
             }
             .sheet(isPresented: $showNewEffectSheet) {
-                NewEffectView(store: store)
+                NewEffectView()
             }
 
             if store.isExtracting {
@@ -122,6 +133,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(store: VideoStore(project: PokoraProject(video: Video())))
+        ContentView()
+            .environmentObject(VideoStore())
     }
 }

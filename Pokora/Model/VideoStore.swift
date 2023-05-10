@@ -9,16 +9,14 @@ import Foundation
 import AVFoundation
 import StableDiffusion
 import SwiftUI
+import UniformTypeIdentifiers
 
-class VideoStore: ObservableObject {
+extension UTType {
+    static let pokoraProject = UTType(exportedAs: "com.saygoodnight.Pokora.project")
+}
+
+final class VideoStore: ReferenceFileDocument {
     @Published var project: PokoraProject
-//    @Binding var project: PokoraProject
-//    var projectBinding: Binding<PokoraProject> {
-//        Binding<PokoraProject>(
-//            get: { self.project },
-//            set: { self.project = $0 }
-//        )
-//    }
     
     @Published var player: AVPlayer?
     
@@ -54,10 +52,31 @@ class VideoStore: ObservableObject {
         case processing(String)
     }
 
-    init(project: PokoraProject) {
-        self.project = project
+    typealias Snapshot = PokoraProject
+
+    static var readableContentTypes: [UTType] { [.pokoraProject] }
+    
+    func snapshot(contentType: UTType) throws -> PokoraProject {
+        project
     }
     
+    init() {
+        project = PokoraProject(video: Video())
+    }
+
+    init(configuration: ReadConfiguration) throws {
+        guard let data = configuration.file.regularFileContents
+        else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        self.project = try JSONDecoder().decode(PokoraProject.self, from: data)
+    }
+
+    func fileWrapper(snapshot: PokoraProject, configuration: WriteConfiguration) throws -> FileWrapper {
+        let data = try JSONEncoder().encode(snapshot)
+        return FileWrapper(regularFileWithContents: data)
+    }
+
     deinit {
         removeTimeObserver()
     }        
