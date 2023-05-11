@@ -27,7 +27,14 @@ extension VideoStore {
             
             try await audioCompositionTrack?.insertTimeRange(CMTimeRange(start: .zero, duration: asset.load(.duration)), of: audioTrack, at: .zero)
             
-            let videoSize = try await videoTrack.load(.naturalSize)
+            guard let firstImageURL = pngURLs.first else {
+                throw NSError(domain: "Image not found", code: -1, userInfo: nil)
+            }
+
+            guard let videoSize = NSImage(contentsOf: firstImageURL)?.size else {
+                throw NSError(domain: "Error getting image size", code: -1, userInfo: nil)
+            }
+            
             let videoFPS = try await videoTrack.load(.nominalFrameRate)
             
             let videoSettings: [String: Any] = [
