@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var store: VideoStore
-
     @State var selectedEffect: UUID?
     @State private var showNewEffectSheet = false
     @AppStorage("modelURL") private var modelURL: URL?
@@ -24,8 +23,13 @@ struct ContentView: View {
                                 showNewEffectSheet = true
                             }
                         } else {
-                            List($store.project.effects, selection: $selectedEffect) {
-                                EffectCell(effect: $0)
+                            List($store.project.effects) { effect in
+                                EffectCell(effect: effect)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture(count: 2) {
+                                        selectedEffect = effect.id
+                                        showNewEffectSheet = true
+                                    }
                             }
                         }
                     }
@@ -67,7 +71,7 @@ struct ContentView: View {
                 }
             } detail: {
                 if store.player != nil {
-                    VideoPlayerView(modelURL: $modelURL, selectedEffect: store.project.effects.first(where: {$0.id == selectedEffect}))
+                    VideoPlayerView(modelURL: $modelURL)
                     .toolbar {
                         ToolbarItem {
                             Button("Render") {
@@ -122,6 +126,7 @@ struct ContentView: View {
                         }
                         ToolbarItem {
                             Button {
+                                selectedEffect = nil
                                 showNewEffectSheet = true
                             } label: {
                                 Label("Add Effect", systemImage: "plus")
@@ -133,11 +138,8 @@ struct ContentView: View {
 
                 }
             }
-            .onChange(of: store.currentFrameNumber) { newValue in
-                selectedEffect = nil
-            }
             .sheet(isPresented: $showNewEffectSheet) {
-                NewEffectView()
+                NewEffectView(selectedEffect: $selectedEffect)
             }
 
             if store.isExporting {

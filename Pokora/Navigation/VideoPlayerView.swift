@@ -12,8 +12,6 @@ struct VideoPlayerView: View {
     @EnvironmentObject var store: VideoStore
     @Binding var modelURL: URL?
     
-    var selectedEffect: Effect?
-
     var body: some View {
         VStack {
             VideoPlayer(player: store.player)
@@ -41,7 +39,7 @@ struct VideoPlayerView: View {
 
 struct VideoPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        VideoPlayerView(modelURL: .constant(nil), selectedEffect: nil)
+        VideoPlayerView(modelURL: .constant(nil))
             .environmentObject(VideoStore())
     }
 }
