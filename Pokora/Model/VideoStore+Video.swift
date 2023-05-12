@@ -80,8 +80,8 @@ extension VideoStore {
         await MainActor.run {
             isExtracting = true
         }
-        let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         do {
+            let cachesDirectory = try project.getProjectCacheDirectory()
             if let bookmarkData = project.video.bookmarkData {
                 var isStale = false
                 let bookmarkedURL = try URL(resolvingBookmarkData: bookmarkData,
