@@ -109,8 +109,6 @@ extension VideoStore {
                         var frames: [Frame] = []
                         var index = 0
                         
-                        // this is how you get the number of frames, but the non async version is deprecated.
-                        //                        print("TRACK: \(Int(videoTrack.timeRange.duration.seconds * Double(videoTrack.nominalFrameRate)))")
                         while let sampleBuffer = trackReaderOutput.copyNextSampleBuffer() {
                             // see below. Duuurrrrr, what is this.
                             let ughIndex = index
@@ -118,22 +116,31 @@ extension VideoStore {
                                 self.timingStatus = "[ \(ughIndex) of \(project.video.lastFrameIndex ?? 0) ]"
                             }
 
+                            let path = cachesDirectory.appendingPathComponent("out\(String(format: "%05d", index)).png")
+
+                            if FileManager().fileExists(atPath: path.path) {
+                                if let imageSize = NSImage(contentsOf: path)?.size, imageSize.width == 512 {
+                                    print("Skipped extracting: \(path.lastPathComponent)")
+                                    frames.append(Frame(index: index, url: path))
+                                    index += 1
+                                    continue
+                                }
+                            }
+                            
+                            print("Extracting: \(path.absoluteString)")
+
                             if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
                                 let ciimage = CIImage(cvImageBuffer: imageBuffer)
                                 let scaleFactor = 512.0 / ciimage.extent.width
                                 let resizedCIImage = ciimage.transformed(by: CGAffineTransform(scaleX: scaleFactor, y: scaleFactor))
                                 
-                                let path = cachesDirectory.appendingPathComponent("out\(String(format: "%05d", index)).png")
-                                print("\(path.absoluteString)")
-                                if !FileManager().fileExists(atPath: path.path) {
-                                    if let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) {
-                                        let format = CIFormat.RGBA8
-                                        let context = CIContext()
-                                        try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
-                                    }
+                                if let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) {
+                                    let format = CIFormat.RGBA8
+                                    let context = CIContext()
+                                    try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
                                 }
-                                frames.append(Frame(index: index, url: path))
                             }
+                            frames.append(Frame(index: index, url: path))
                             index += 1
                         }
                         
@@ -151,7 +158,9 @@ extension VideoStore {
             }
         } catch let error {
             print(error.localizedDescription)
-            isExtracting = false
+            await MainActor.run {
+                isExtracting = false
+            }
         }
     }
 }

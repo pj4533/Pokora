@@ -83,44 +83,12 @@ struct ContentView: View {
                             .disabled(store.project.effects.isEmpty)
                         }
                         ToolbarItem {
-                            Button("Export") {
-                                let panel = NSSavePanel()
-                                panel.nameFieldStringValue = "exported.mov"
-                                panel.canCreateDirectories = true
-                                panel.prompt = "Export"
-
-                                panel.begin { response in
-                                    if response == .OK, let outputUrl = panel.url {
-                                        Task {
-                                            do {
-                                                if let bookmarkData = store.project.video.bookmarkData {
-                                                    var isStale = false
-                                                    let bookmarkedURL = try URL(resolvingBookmarkData: bookmarkData,
-                                                                                options: .withSecurityScope,
-                                                                                relativeTo: nil,
-                                                                                bookmarkDataIsStale: &isStale)
-                                                    
-                                                    if isStale {
-                                                        // The bookmarked data is stale, handle this error appropriately in your app
-                                                    } else {
-                                                        if bookmarkedURL.startAccessingSecurityScopedResource() {
-                                                            // You have access to the file, you can perform your file operations here
-                                                            if let pngs = store.project.video.frames?.map({ $0.processedUrl ?? $0.url }) as? [URL] {
-                                                                let outputUrl = try await store.exportVideoWithPNGs(videoURL: bookmarkedURL, pngURLs: pngs, outputURL: outputUrl)
-                                                                print("OUTPUT: \(outputUrl)")
-                                                            }
-
-                                                            // Make sure to stop accessing the resource when you're done
-                                                            bookmarkedURL.stopAccessingSecurityScopedResource()
-                                                        }
-                                                    }
-                                                }
-                                            } catch let error {
-                                                print("ERROR EXPORTING: \(error)")
-                                            }
-                                        }
-                                    }
+                            Menu("Export") {
+                                Button("Export without Uprez") {
+                                    self.export(shouldUprez: false)
                                 }
+                            } primaryAction: {
+                                self.export(shouldUprez: true)
                             }
                             .disabled((store.project.video.frames?.compactMap({ $0.processedUrl }).count ?? 0) == 0)
                         }
@@ -142,6 +110,9 @@ struct ContentView: View {
                 NewEffectView(selectedEffect: $selectedEffect)
             }
 
+            if store.isUprezzing {
+                ProcessingView(statusText: .constant("Uprezzing..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showCancel: false)
+            }
             if store.isExporting {
                 ProcessingView(statusText: .constant("Exporting..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showCancel: false)
             }
@@ -150,6 +121,49 @@ struct ContentView: View {
             }
             if store.isProcessing {
                 ProcessingView(statusText: $store.processingStatus, additionalStatusText: $store.timingStatus, shouldProcess: $store.shouldProcess)
+            }
+        }
+    }
+    
+    func export(shouldUprez: Bool) {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "exported.mov"
+        panel.canCreateDirectories = true
+        panel.prompt = "Export"
+
+        panel.begin { response in
+            if response == .OK, let outputUrl = panel.url {
+                Task {
+                    do {
+                        if let bookmarkData = store.project.video.bookmarkData {
+                            var isStale = false
+                            let bookmarkedURL = try URL(resolvingBookmarkData: bookmarkData,
+                                                        options: .withSecurityScope,
+                                                        relativeTo: nil,
+                                                        bookmarkDataIsStale: &isStale)
+                            
+                            if isStale {
+                                // The bookmarked data is stale, handle this error appropriately in your app
+                            } else {
+                                if bookmarkedURL.startAccessingSecurityScopedResource() {
+                                    // You have access to the file, you can perform your file operations here
+                                    if let pngs = store.project.video.frames?.map({ $0.processedUrl ?? $0.url }) as? [URL] {
+                                        if shouldUprez {
+                                            try await store.uprez(pngURLs: pngs)
+                                        }
+                                        let outputUrl = try await store.exportVideoWithPNGs(videoURL: bookmarkedURL, pngURLs: pngs, outputURL: outputUrl)
+                                        print("OUTPUT: \(outputUrl)")
+                                    }
+
+                                    // Make sure to stop accessing the resource when you're done
+                                    bookmarkedURL.stopAccessingSecurityScopedResource()
+                                }
+                            }
+                        }
+                    } catch let error {
+                        print("ERROR EXPORTING: \(error)")
+                    }
+                }
             }
         }
     }

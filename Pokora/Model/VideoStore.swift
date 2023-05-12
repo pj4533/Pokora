@@ -23,6 +23,9 @@ final class VideoStore: ReferenceFileDocument {
     // This is the current frame the player is parked on
     @Published var currentFrameNumber: Int?
     
+    // This is whether we are currently uprezzing frames
+    @Published var isUprezzing: Bool = false
+    
     // This is whether we are currently extracting frames
     @Published var isExtracting: Bool = false
     
@@ -50,6 +53,8 @@ final class VideoStore: ReferenceFileDocument {
         case resources(String)
         case saving(String)
         case processing(String)
+        case uprezzing(String)
+        case extracting(String)
     }
 
     typealias Snapshot = PokoraProject
