@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PokoraProject: Codable {
+    var id: UUID? = UUID()
     var video: Video
     var effects: [Effect] = []
 
@@ -17,7 +18,7 @@ struct PokoraProject: Codable {
     
     func getProjectCacheDirectory() throws -> URL {
         let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        let projectDirectory = cacheDirectory.appendingPathComponent(video.id.uuidString)
+        let projectDirectory = cacheDirectory.appendingPathComponent(id?.uuidString ?? "")
 
         // If the directory does not exist, this method creates it.
         // This method is only available in macOS 10.7 and iOS 5.0 or later.

@@ -75,6 +75,9 @@ final class VideoStore: ReferenceFileDocument {
             throw CocoaError(.fileReadCorruptFile)
         }
         self.project = try JSONDecoder().decode(PokoraProject.self, from: data)
+        if self.project.id == nil {
+            self.project.id = UUID()
+        }
     }
 
     func fileWrapper(snapshot: PokoraProject, configuration: WriteConfiguration) throws -> FileWrapper {
