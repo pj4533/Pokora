@@ -27,7 +27,7 @@ Pokora is a video creation platform that combines existing video clips with AI g
 
 ## Getting Started
 
-- Any video size will work, but it must be square (see limitations below)
+- Any video size will work, but the OUTPUT video will be square (for now)
 - Any video length will work
 - Is a document-based app, so choose 'New Document' when you first start
 - If you Save the project before rendering, you can restart if you get an error during long renders
@@ -39,7 +39,6 @@ Pokora is a video creation platform that combines existing video clips with AI g
 
 ## Limitations
 
-- Requires square video as input ([#58](https://github.com/pj4533/Pokora/issues/58))
 - Requires models converted to CoreML (see below)
 - Currently using [ml-stable-diffusion](https://github.com/apple/ml-stable-diffusion) v0.3.0
 
