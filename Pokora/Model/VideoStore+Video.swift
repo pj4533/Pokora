@@ -131,15 +131,37 @@ extension VideoStore {
 
                             if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
                                 let ciimage = CIImage(cvImageBuffer: imageBuffer)
-                                let scaleFactor = 512.0 / ciimage.extent.width
+                                let scaleFactor = min(512.0 / ciimage.extent.width, 512.0 / ciimage.extent.height)
                                 let resizedCIImage = ciimage.transformed(by: CGAffineTransform(scaleX: scaleFactor, y: scaleFactor))
                                 
+                                // Create a new CIImage with the desired size and a black background.
+                                let blackBackground = CIImage(color: CIColor(red: 0, green: 0, blue: 0)).cropped(to: CGRect(x: 0, y: 0, width: 512, height: 512))
+                                
+                                // Calculate the position at which to place the resized image (centered within the new image).
+                                let targetX = (512 - resizedCIImage.extent.width) / 2
+                                let targetY = (512 - resizedCIImage.extent.height) / 2
+                                
+                                // Composite the resized image on top of the black background.
+                                let finalImage = resizedCIImage.transformed(by: CGAffineTransform(translationX: targetX, y: targetY)).composited(over: blackBackground)
+
                                 if let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) {
                                     let format = CIFormat.RGBA8
                                     let context = CIContext()
-                                    try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
+                                    try context.writePNGRepresentation(of: finalImage, to: path, format: format, colorSpace: colorSpace)
                                 }
                             }
+
+//                            if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+//                                let ciimage = CIImage(cvImageBuffer: imageBuffer)
+//                                let scaleFactor = 512.0 / ciimage.extent.width
+//                                let resizedCIImage = ciimage.transformed(by: CGAffineTransform(scaleX: scaleFactor, y: scaleFactor))
+//
+//                                if let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) {
+//                                    let format = CIFormat.RGBA8
+//                                    let context = CIContext()
+//                                    try context.writePNGRepresentation(of: resizedCIImage, to: path, format: format, colorSpace: colorSpace)
+//                                }
+//                            }
                             frames.append(Frame(index: index, url: path))
                             index += 1
                         }
