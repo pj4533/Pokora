@@ -76,7 +76,9 @@ struct ContentView: View {
                         ToolbarItem {
                             Button("Render") {
                                 Task {
-                                    await store.extractFrames()
+                                    if (store.project.video.frames?.count ?? 0) == 0 {
+                                        await store.extractFrames()
+                                    }
                                     await store.processFrames(modelURL: modelURL)
                                 }
                             }
@@ -107,7 +109,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showNewEffectSheet) {
-                NewEffectView(selectedEffect: $selectedEffect)
+                NewEffectView(selectedEffect: $selectedEffect, modelURL: $modelURL)
             }
 
             if store.isUprezzing {
