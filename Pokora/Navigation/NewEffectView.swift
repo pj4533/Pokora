@@ -59,7 +59,7 @@ struct NewEffectView: View {
                                     cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, modelURL: modelURL)
                                 }
                             } else {
-                                if let url = store.project.video.frames?[ store.project.effects[store.currentFrameNumber ?? 0].startFrame ].url {
+                                if let url = store.project.video.frames?[ store.currentFrameNumber ?? 0 ].url {
                                     cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, modelURL: modelURL)
                                 }
                             }
