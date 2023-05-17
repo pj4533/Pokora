@@ -122,7 +122,7 @@ struct ContentView: View {
                 ProcessingView(statusText: .constant("Extracting frames..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showCancel: false)
             }
             if store.isProcessing {
-                ProcessingView(statusText: $store.processingStatus, additionalStatusText: $store.timingStatus, shouldProcess: $store.shouldProcess)
+                ProcessingView(statusText: $store.processingStatus, additionalStatusText: $store.timingStatus, shouldProcess: $store.shouldProcess, showCancel: true, showThumbnails: true)
             }
         }
     }

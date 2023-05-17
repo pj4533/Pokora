@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ProcessingView: View {
+    @EnvironmentObject var store: VideoStore
     @Binding var statusText: String
     @Binding var additionalStatusText: String
     @Binding var shouldProcess: Bool
     var showCancel: Bool = true
+    var showThumbnails: Bool = false
     var body: some View {
         VStack {
             Text("🧠🧠🧠🧠🧠")
@@ -26,6 +28,10 @@ struct ProcessingView: View {
             Text(additionalStatusText)
                 .foregroundStyle(.tertiary)
                 .font(.title3)
+            if showThumbnails {
+                ThumbnailScrollView(imageUrls: store.project.video.frames?.compactMap { ($0.processedUrl, $0.index) }.sorted(by: { $0.1 > $1.1 }).compactMap { $0.0 } ?? [])
+                    .padding()
+            }
             if showCancel {
                 Button("Cancel") {
                     shouldProcess = false
