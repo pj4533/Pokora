@@ -62,6 +62,7 @@ extension VideoStore {
 
     func processPreview(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, modelURL: URL?) async throws -> CGImage? {
         await MainActor.run {
+            self.showThumbnails = false
             self.shouldProcess = true
             self.isProcessing = true
         }
@@ -69,7 +70,6 @@ extension VideoStore {
         if pipeline == nil {
             await MainActor.run {
                 self.timingStatus = ""
-                self.showThumbnails = false
                 self.processingStatus = "Initializing Pipeline..."
             }
             if let url = modelURL {
@@ -83,7 +83,7 @@ extension VideoStore {
         sampleTimer.start()
 
         await MainActor.run {
-            self.processingStatus = ""
+            self.processingStatus = "Generating preview..."
         }
         
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
