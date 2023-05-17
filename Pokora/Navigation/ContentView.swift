@@ -113,16 +113,16 @@ struct ContentView: View {
             }
 
             if store.isUprezzing {
-                ProcessingView(statusText: .constant("Uprezzing..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showCancel: false)
+                ProcessingView(statusText: .constant("Uprezzing..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showThumbnails: .constant(false), showCancel: false)
             }
             if store.isExporting {
-                ProcessingView(statusText: .constant("Exporting..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showCancel: false)
+                ProcessingView(statusText: .constant("Exporting..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showThumbnails: .constant(false), showCancel: false)
             }
             if store.isExtracting {
-                ProcessingView(statusText: .constant("Extracting frames..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showCancel: false)
+                ProcessingView(statusText: .constant("Extracting frames..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showThumbnails: .constant(false), showCancel: false)
             }
             if store.isProcessing {
-                ProcessingView(statusText: $store.processingStatus, additionalStatusText: $store.timingStatus, shouldProcess: $store.shouldProcess, showCancel: true, showThumbnails: true)
+                ProcessingView(statusText: $store.processingStatus, additionalStatusText: $store.timingStatus, shouldProcess: $store.shouldProcess, showThumbnails: $store.showThumbnails, showCancel: true)
             }
         }
     }

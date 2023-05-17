@@ -27,6 +27,7 @@ struct ThumbnailView: View {
                     }
                 Text(imageURL.lastPathComponent.replacingOccurrences(of: "out", with: "").replacingOccurrences(of: "_processed.png", with: ""))
                     .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
         }
         .buttonStyle(.plain)

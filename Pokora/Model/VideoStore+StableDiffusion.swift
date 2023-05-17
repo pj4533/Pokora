@@ -69,6 +69,7 @@ extension VideoStore {
         if pipeline == nil {
             await MainActor.run {
                 self.timingStatus = ""
+                self.showThumbnails = false
                 self.processingStatus = "Initializing Pipeline..."
             }
             if let url = modelURL {
@@ -129,6 +130,7 @@ extension VideoStore {
         if pipeline == nil {
             await MainActor.run {
                 self.timingStatus = ""
+                self.showThumbnails = false
                 self.processingStatus = "Initializing Pipeline..."
             }
             if let url = modelURL {
@@ -161,6 +163,7 @@ extension VideoStore {
                                                    progressHandler: { progress in
                     sampleTimer.stop()
                     DispatchQueue.main.async {
+                        self.showThumbnails = true
                         self.processingStatus = "Frame #\(index) - Step #\(progress.step) of #\(progress.stepCount)"
                         self.timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
                     }

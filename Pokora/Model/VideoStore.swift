@@ -43,6 +43,9 @@ final class VideoStore: ReferenceFileDocument {
     
     // This is the secondary status display string
     @Published var timingStatus = ""
+    
+    // Whether we want to show the thumbnails or not on processing
+    @Published var showThumbnails = false
 
     internal var pipeline: StableDiffusionPipeline?
     

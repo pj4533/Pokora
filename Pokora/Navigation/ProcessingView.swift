@@ -12,8 +12,8 @@ struct ProcessingView: View {
     @Binding var statusText: String
     @Binding var additionalStatusText: String
     @Binding var shouldProcess: Bool
+    @Binding var showThumbnails: Bool
     var showCancel: Bool = true
-    var showThumbnails: Bool = false
     var body: some View {
         VStack {
             Text("🧠🧠🧠🧠🧠")
@@ -45,6 +45,6 @@ struct ProcessingView: View {
 
 struct ProcessingView_Previews: PreviewProvider {
     static var previews: some View {
-        ProcessingView(statusText: .constant("Loading"), additionalStatusText: .constant("Test"), shouldProcess: .constant(true))
+        ProcessingView(statusText: .constant("Loading"), additionalStatusText: .constant("Test"), shouldProcess: .constant(true), showThumbnails: .constant(false))
     }
 }

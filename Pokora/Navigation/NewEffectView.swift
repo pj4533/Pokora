@@ -98,10 +98,10 @@ struct NewEffectView: View {
                 }
             }
             if store.isExtracting {
-                ProcessingView(statusText: .constant("Extracting frames..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showCancel: false)
+                ProcessingView(statusText: .constant("Extracting frames..."), additionalStatusText: $store.timingStatus, shouldProcess: .constant(true), showThumbnails: .constant(false), showCancel: false)
             }
             if store.isProcessing {
-                ProcessingView(statusText: $store.processingStatus, additionalStatusText: $store.timingStatus, shouldProcess: $store.shouldProcess)
+                ProcessingView(statusText: $store.processingStatus, additionalStatusText: $store.timingStatus, shouldProcess: $store.shouldProcess, showThumbnails: .constant(false))
             }
         }
     }
