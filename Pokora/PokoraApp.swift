@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct PokoraApp: App {
+    @ObservedObject var store: VideoStore = VideoStore()
     var body: some Scene {
-        DocumentGroup(newDocument: { VideoStore() }) { configuration in
+        DocumentGroup(newDocument: { store }) { configuration in
             ContentView()
+        }
+        Settings {
+            SettingsView()
+                .environmentObject(store)
         }
     }
 }
