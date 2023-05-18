@@ -16,12 +16,18 @@ struct NewEffectView: View {
     @State private var endStrength: Float = 0.2
     @State private var seed = globalSeed
     @State private var cgImage: CGImage? = nil
+    @State private var effectType: Effect.EffectType = .direct
     @Binding var modelURL: URL?
 
     var body: some View {
         ZStack {
             HStack {
                 Form {
+                    Picker("Effect Type", selection: $effectType) {
+                        ForEach(Effect.EffectType.allCases, id: \.self) { effectType in
+                            Text(effectType.rawValue.capitalized).tag(effectType)
+                        }
+                    }
                     TextField("Prompt", text: $prompt)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     Stepper("Start Strength", value: $startStrength, step: 0.1, format: .number)
@@ -54,6 +60,7 @@ struct NewEffectView: View {
                             if (store.project.video.frames?.count ?? 0) == 0 {
                                 await store.extractFrames()
                             }
+                            // preview needs to take into account generative vs direct
                             if let id = selectedEffect {
                                 if let index = store.project.effects.firstIndex(where: { $0.id == id }), let url = store.project.video.frames?[ store.project.effects[index].startFrame ].url {
                                     cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, modelURL: modelURL)
@@ -81,9 +88,10 @@ struct NewEffectView: View {
                                 store.project.effects[index].startStrength = startStrength
                                 store.project.effects[index].endStrength = endStrength
                                 store.project.effects[index].seed = seed
+                                store.project.effects[index].effectType = effectType
                             }
                         } else {
-                            store.project.addEffect(startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed)
+                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed)
                         }
                         dismiss()
                     }
@@ -95,6 +103,7 @@ struct NewEffectView: View {
                     startStrength = effect.startStrength
                     endStrength = effect.endStrength
                     seed = effect.seed
+                    effectType = effect.effectType ?? .direct
                 }
             }
             if store.isExtracting {

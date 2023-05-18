@@ -8,10 +8,10 @@
 import Foundation
 
 extension PokoraProject {
-    @MainActor mutating func addEffect(startFrame: Int, prompt: String, startStrength: Float, endStrength: Float, seed: UInt32) {
+    @MainActor mutating func addEffect(effectType: Effect.EffectType, startFrame: Int, prompt: String, startStrength: Float, endStrength: Float, seed: UInt32) {
         let currentFrame = startFrame
         let lastFrame = video.lastFrameIndex ?? currentFrame
-        let newEffect = Effect(startFrame: currentFrame, endFrame: lastFrame, startStrength: startStrength, endStrength: endStrength, seed: seed, prompt: prompt)
+        let newEffect = Effect(effectType: effectType, startFrame: currentFrame, endFrame: lastFrame, startStrength: startStrength, endStrength: endStrength, seed: seed, prompt: prompt)
 
         // Find the index of the next effect in the array
         if let nextEffectIndex = effects.firstIndex(where: { $0.startFrame > newEffect.startFrame }) {

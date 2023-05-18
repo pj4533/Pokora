@@ -25,7 +25,18 @@ struct EffectCell: View {
                     .foregroundColor(.primary)
                     .lineLimit(2)
                     .truncationMode(.tail)
-                
+                HStack {
+                    if effect.effectType == .direct {
+                        Image(systemName: "leaf.circle")
+                        Text("Direct")
+                    } else if effect.effectType == .generative {
+                        Image(systemName: "leaf.arrow.triangle.circlepath")
+                        Text("Generative")
+                    }
+                }
+                .font(.title3)
+                .foregroundColor(.secondary)
+
                 HStack {
                     if effect.startStrength == effect.endStrength {
                         Image(systemName: "arrow.right.square.fill")
