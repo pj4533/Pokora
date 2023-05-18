@@ -24,7 +24,7 @@ extension VideoStore {
         try self.pipeline?.loadResources()
     }
     
-    internal func processImageToImage(withImageUrl imageUrl: URL, prompt: String, strength: Float, seed: UInt32, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
+    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
@@ -40,19 +40,16 @@ extension VideoStore {
             if let images = try pipeline?.generateImages(configuration: pipelineConfig, progressHandler: progressHandler) {
                 for i in 0 ..< images.count {
                     if let image = images[i] {
-                        let name = (imageUrl.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
-                        let fileURL = imageUrl.deletingLastPathComponent().appending(path:name)
-
-                        guard let dest = CGImageDestinationCreateWithURL(fileURL as CFURL, UTType.png.identifier as CFString, 1, nil) else {
-                            throw RunError.saving("Failed to create destination for \(fileURL)")
+                        guard let dest = CGImageDestinationCreateWithURL(outputUrl as CFURL, UTType.png.identifier as CFString, 1, nil) else {
+                            throw RunError.saving("Failed to create destination for \(outputUrl)")
                         }
 
                         CGImageDestinationAddImage(dest, image, nil)
                         if !CGImageDestinationFinalize(dest) {
-                            throw RunError.saving("Failed to save \(fileURL)")
+                            throw RunError.saving("Failed to save \(outputUrl)")
                         }
                         
-                        return fileURL
+                        return outputUrl
                     }
                 }
             }

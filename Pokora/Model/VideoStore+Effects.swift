@@ -44,7 +44,21 @@ extension VideoStore {
         }
 
         for frameIndex in effect.startFrame...effect.endFrame {
-            if let url = project.video.frames?[frameIndex].url {
+            var url: URL?
+            if effect.effectType == .direct {
+                url = project.video.frames?[frameIndex].url
+            } else if effect.effectType == .generative {
+                if frameIndex == 0 {
+                    url = project.video.frames?[frameIndex].url
+                } else if let previousProcessedUrl = project.video.frames?[frameIndex-1].processedUrl {
+                    url = previousProcessedUrl
+                } else if let previousUrl = project.video.frames?[frameIndex-1].url {
+                    url = previousUrl
+                } else {
+                    print("Could not find previous frame for generative processing at index \(frameIndex - 1)...")
+                }
+            }
+            if let url = url {
                 let sampleTimer = SampleTimer()
                 sampleTimer.start()
 
@@ -55,13 +69,14 @@ extension VideoStore {
                     self.processingStatus = "\(totalNumberFramesToProcess - framesProcessed) frames remaining..."
                 }
                 
-                let name = (url.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
-                let fileURL = url.deletingLastPathComponent().appending(path:name)
+                let cachesDirectory = try project.getProjectCacheDirectory()
+                let fileURL = cachesDirectory.appendingPathComponent("out\(String(format: "%05d", frameIndex))_processed.png")
                 if !FileManager().fileExists(atPath: fileURL.path) {
                     let processedUrl = try processImageToImage(withImageUrl: url,
+                                                               toOutputUrl: fileURL,
                                                      prompt: effect.prompt,
                                                    strength: effect.strength(forFrameIndex: frameIndex),
-                                                       seed: effect.seed,
+                                                               seed: effect.seed, //effect.effectType == .direct ? effect.seed : UInt32.random(in: 0...UInt32.max),
                                                        progressHandler: { progress in
                         sampleTimer.stop()
                         DispatchQueue.main.async {
