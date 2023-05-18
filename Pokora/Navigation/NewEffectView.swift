@@ -32,15 +32,17 @@ struct NewEffectView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     Stepper("Start Strength", value: $startStrength, step: 0.1, format: .number)
                     Stepper("End Strength", value: $endStrength, step: 0.1, format: .number)
-                    HStack {
-                        TextField("Seed", value: $seed, format: .number.grouping(.never))
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        Button {
-                            seed = UInt32.random(in: 0...UInt32.max)
-                        } label: {
-                            Label("", systemImage: "die.face.3.fill")
+                    if effectType == .direct {
+                        HStack {
+                            TextField("Seed", value: $seed, format: .number.grouping(.never))
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                            Button {
+                                seed = UInt32.random(in: 0...UInt32.max)
+                            } label: {
+                                Label("", systemImage: "die.face.3.fill")
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
                         }
-                        .buttonStyle(BorderlessButtonStyle())
                     }
                 }
                 .formStyle(.grouped)

@@ -27,14 +27,14 @@ struct EffectCell: View {
                     .truncationMode(.tail)
                 HStack {
                     if effect.effectType == .direct {
-                        Image(systemName: "leaf.circle")
+                        Image(systemName: "arrowtriangle.forward.square.fill")
                         Text("Direct")
                     } else if effect.effectType == .generative {
-                        Image(systemName: "leaf.arrow.triangle.circlepath")
+                        Image(systemName: "arrow.uturn.right.square.fill")
                         Text("Generative")
                     }
                 }
-                .font(.title3)
+                .font(.title2)
                 .foregroundColor(.secondary)
 
                 HStack {
@@ -52,12 +52,14 @@ struct EffectCell: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 
-                HStack {
-                    Image(systemName: "number.square.fill")
-                    Text("Seed: \(numberFormatter.string(from: NSNumber(value: effect.seed))!)")
+                if effect.effectType == .direct {
+                    HStack {
+                        Image(systemName: "number.square.fill")
+                        Text("Seed: \(numberFormatter.string(from: NSNumber(value: effect.seed))!)")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
                 }
-                .font(.subheadline)
-                .foregroundColor(.secondary)
                 
                 HStack {
                     Image(systemName: "film.fill")
