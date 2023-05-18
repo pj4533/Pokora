@@ -58,7 +58,7 @@ extension VideoStore {
                 let name = (url.lastPathComponent.components(separatedBy: ".").first ?? "").appending("_processed.png")
                 let fileURL = url.deletingLastPathComponent().appending(path:name)
                 if !FileManager().fileExists(atPath: fileURL.path) {
-                    let processedUrl = try process(imageUrl: url,
+                    let processedUrl = try processImageToImage(withImageUrl: url,
                                                      prompt: effect.prompt,
                                                    strength: effect.strength(forFrameIndex: frameIndex),
                                                        seed: effect.seed,

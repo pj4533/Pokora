@@ -24,7 +24,7 @@ extension VideoStore {
         try self.pipeline?.loadResources()
     }
     
-    internal func process(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
+    internal func processImageToImage(withImageUrl imageUrl: URL, prompt: String, strength: Float, seed: UInt32, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
