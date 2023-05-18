@@ -18,6 +18,9 @@ struct Effect: Identifiable, Codable {
     var endStrength: Float = 0.2
     var seed: UInt32 = globalSeed
     var prompt: String = "a cyberpunk cityscape"
+    var numberFramesToProcess: Int {
+        (endFrame - startFrame) + 1
+    }
     
     func strength(forFrameIndex index: Int) -> Float {
         if startStrength == endStrength {

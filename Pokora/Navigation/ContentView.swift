@@ -79,7 +79,7 @@ struct ContentView: View {
                                     if (store.project.video.frames?.count ?? 0) == 0 {
                                         await store.extractFrames()
                                     }
-                                    await store.processFrames(modelURL: modelURL)
+                                    await store.processEffects(modelURL: modelURL)
                                 }
                             }
                             .disabled(store.project.effects.isEmpty)

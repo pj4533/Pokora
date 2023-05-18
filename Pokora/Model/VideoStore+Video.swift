@@ -53,28 +53,6 @@ extension VideoStore {
             addTimeObserver()
         }
     }
-
-    func processFrames(modelURL: URL?) async {
-        await MainActor.run {
-            self.shouldProcess = true
-            self.isProcessing = true
-        }
-        for (index, frame) in (project.video.frames ?? []).enumerated() {
-            do {
-                try await self.process(frame: frame, atIndex: index, modelURL: modelURL)
-            } catch {
-                await MainActor.run {
-                    self.isProcessing = false
-                    // TODO: throw error here and use error dialog code
-//                        self.showErrorDialog(with: error)
-                }
-            }
-            if !self.shouldProcess { break }
-        }
-        await MainActor.run {
-            self.isProcessing = false
-        }
-    }
     
     func extractFrames() async {
         await MainActor.run {
