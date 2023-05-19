@@ -24,15 +24,17 @@ extension VideoStore {
         try self.pipeline?.loadResources()
     }
     
-    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, rotateDirection: CGFloat?, zoomScale: CGFloat?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
+    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, rotateDirection: CGFloat?, rotateAngle: CGFloat?, zoomScale: CGFloat?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
+            
             var startingImage = cgImage
-//            if let rotateDirection = rotateDirection, let rotatedImage = self.rotateImage(image: startingImage, rotateDirection: rotateDirection, rotateAngle: 0.2) {
-//                startingImage = rotatedImage
-//            }
-//            if let zoomScale = zoomScale, let zoomedImage = self.zoomInImage(image: startingImage, scale: zoomScale) {
-//                startingImage = zoomedImage
-//            }
+            if let rotateDirection = rotateDirection, let rotateAngle = rotateAngle, let rotatedImage = self.rotateImage(image: cgImage, rotateDirection: rotateDirection, rotateAngle: rotateAngle) {
+                if let zoomScale = zoomScale, let zoomedImage = self.zoomInImage(image: rotatedImage, scale: zoomScale) {
+                    startingImage = zoomedImage
+                }
+            }
+
+            
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
             pipelineConfig.negativePrompt = ""
@@ -50,7 +52,6 @@ extension VideoStore {
                         guard let dest = CGImageDestinationCreateWithURL(outputUrl as CFURL, UTType.png.identifier as CFString, 1, nil) else {
                             throw RunError.saving("Failed to create destination for \(outputUrl)")
                         }
-
                         CGImageDestinationAddImage(dest, image, nil)
                         if !CGImageDestinationFinalize(dest) {
                             throw RunError.saving("Failed to save \(outputUrl)")

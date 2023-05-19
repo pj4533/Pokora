@@ -78,7 +78,8 @@ extension VideoStore {
                                                    strength: effect.strength(forFrameIndex: frameIndex),
                                                                seed: effect.effectType == .direct ? effect.seed : UInt32.random(in: 0...UInt32.max),
                                                                rotateDirection: effect.effectType == .direct ? nil : 1.0,
-                                                               zoomScale: effect.effectType == .direct ? nil : 1.001,
+                                                               rotateAngle: effect.effectType == .direct ? nil : 0.5,
+                                                               zoomScale: effect.effectType == .direct ? nil : 1.005,
                                                        progressHandler: { progress in
                         sampleTimer.stop()
                         DispatchQueue.main.async {

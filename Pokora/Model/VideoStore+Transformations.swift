@@ -21,8 +21,8 @@ extension VideoStore {
 //        if promptIndex == 0 {
 //            rotateDirection = [1.0, -1.0].randomElement() ?? 1.0
 //        }
-        let rotateAngle: CGFloat = ((.pi / 180.0) * rotateAngle) * rotateDirection
-        context.rotate(by: rotateAngle)
+        let angleInRadians: CGFloat = ((.pi / 180.0) * rotateAngle) * rotateDirection
+        context.rotate(by: angleInRadians)
         context.translateBy(x: -CGFloat(height) / 2.0, y: -CGFloat(width) / 2.0)
         context.draw(image, in: CGRect(x: CGFloat((width - height)) / 2.0, y: CGFloat((height - width)) / 2.0, width: CGFloat(height), height: CGFloat(width)))
 
