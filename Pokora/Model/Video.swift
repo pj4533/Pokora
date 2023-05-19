@@ -18,7 +18,8 @@ struct Video: Identifiable, Codable {
         guard let frameRate = framerate, let duration = duration else {
             return nil
         }
-        return Int(round(duration * Double(frameRate)))
+        // I think this was the source of an off by one error
+        return Int(round(duration * Double(frameRate))) - 1
     }
 }
 

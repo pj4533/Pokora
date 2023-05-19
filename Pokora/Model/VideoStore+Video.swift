@@ -98,7 +98,7 @@ extension VideoStore {
 
                             if FileManager().fileExists(atPath: path.path) {
                                 if let imageSize = NSImage(contentsOf: path)?.size, imageSize.width == 512 {
-                                    print("Skipped extracting: \(path.lastPathComponent)")
+                                    print("Skipped extracting: \(path.lastPathComponent) INDEX: \(index)")
                                     frames.append(Frame(index: index, url: path))
                                     index += 1
                                     continue
@@ -141,6 +141,7 @@ extension VideoStore {
 //                                }
 //                            }
                             frames.append(Frame(index: index, url: path))
+                            print("APPENDED \(index)")
                             index += 1
                         }
                         

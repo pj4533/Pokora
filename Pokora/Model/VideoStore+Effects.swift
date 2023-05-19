@@ -78,7 +78,7 @@ extension VideoStore {
                                                    strength: effect.strength(forFrameIndex: frameIndex),
                                                                seed: effect.effectType == .direct ? effect.seed : UInt32.random(in: 0...UInt32.max),
                                                                rotateDirection: effect.effectType == .direct ? nil : 1.0,
-                                                               zoomScale: effect.effectType == .direct ? nil : 1.008,
+                                                               zoomScale: effect.effectType == .direct ? nil : 1.001,
                                                        progressHandler: { progress in
                         sampleTimer.stop()
                         DispatchQueue.main.async {
@@ -99,6 +99,7 @@ extension VideoStore {
                     }
                 } else {
                     await MainActor.run {
+                        print("INDEX: \(frameIndex)")
                         project.video.frames?[frameIndex].processedUrl = fileURL
                     }
                 }

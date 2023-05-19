@@ -10,7 +10,7 @@ import CoreGraphics
 import CoreImage
 
 extension VideoStore {
-    func rotateImage(image: CGImage, rotateDirection: CGFloat = 1.0) -> CGImage? {
+    func rotateImage(image: CGImage, rotateDirection: CGFloat = 1.0, rotateAngle: CGFloat = 0.333) -> CGImage? {
         let width = image.width
         let height = image.height
 
@@ -21,7 +21,7 @@ extension VideoStore {
 //        if promptIndex == 0 {
 //            rotateDirection = [1.0, -1.0].randomElement() ?? 1.0
 //        }
-        let rotateAngle: CGFloat = ((.pi / 180.0) * 0.333) * rotateDirection
+        let rotateAngle: CGFloat = ((.pi / 180.0) * rotateAngle) * rotateDirection
         context.rotate(by: rotateAngle)
         context.translateBy(x: -CGFloat(height) / 2.0, y: -CGFloat(width) / 2.0)
         context.draw(image, in: CGRect(x: CGFloat((width - height)) / 2.0, y: CGFloat((height - width)) / 2.0, width: CGFloat(height), height: CGFloat(width)))

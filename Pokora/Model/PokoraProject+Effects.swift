@@ -45,6 +45,22 @@ extension PokoraProject {
         return false
     }
     
+    mutating func clearProcessedFrames(withEffect effect: Effect) {
+        for index in 0...(video.lastFrameIndex ?? 0) {
+            if (index >= effect.startFrame) && (index <= effect.endFrame) {
+                let fileManager = FileManager.default
+                if let url = video.frames?[index].processedUrl {
+                    do {
+                        try fileManager.removeItem(atPath: url.path)
+                    } catch let error {
+                        print("ERROR: \(error.localizedDescription)")
+                    }
+                }
+                video.frames?[index].processedUrl = nil
+            }
+        }
+    }
+    
     func getUrls(from effect: Effect) -> [URL] {
         guard let frames = video.frames else {
             return []

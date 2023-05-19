@@ -30,6 +30,13 @@ struct ContentView: View {
                                         selectedEffect = effect.id
                                         showNewEffectSheet = true
                                     }
+                                    .contextMenu {
+                                        Button {
+                                            store.project.clearProcessedFrames(withEffect: effect.wrappedValue)
+                                        } label: {
+                                            Text("Clear Render")
+                                        }
+                                    }
                             }
                         }
                     }
