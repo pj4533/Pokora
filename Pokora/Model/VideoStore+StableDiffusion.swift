@@ -39,7 +39,7 @@ extension VideoStore {
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1
-            pipelineConfig.stepCount = 50
+            pipelineConfig.stepCount = 30
             pipelineConfig.seed = seed
             pipelineConfig.guidanceScale = 7.5
             
@@ -97,7 +97,7 @@ extension VideoStore {
             pipelineConfig.startingImage = cgImage
             pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1
-            pipelineConfig.stepCount = 50
+            pipelineConfig.stepCount = 30
             pipelineConfig.seed = seed
             pipelineConfig.guidanceScale = 7.5
             
