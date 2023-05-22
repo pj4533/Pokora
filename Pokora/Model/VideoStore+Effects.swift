@@ -46,6 +46,10 @@ extension VideoStore {
         for frameIndex in effect.startFrame...effect.endFrame {
             var url: URL?
             if effect.effectType == .direct {
+                // i dont think this is needed anymore, but for older files it is....?
+                if frameIndex >= project.video.frames?.count ?? 0 {
+                    break
+                }
                 url = project.video.frames?[frameIndex].url
             } else if effect.effectType == .generative {
                 if frameIndex == 0 {
