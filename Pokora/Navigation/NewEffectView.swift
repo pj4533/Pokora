@@ -15,6 +15,7 @@ struct NewEffectView: View {
     @State private var startStrength: Float = 0.2
     @State private var endStrength: Float = 0.2
     @State private var seed = globalSeed
+    @State private var stepCount: Double = 30
     @State private var cgImage: CGImage? = nil
     @State private var effectType: Effect.EffectType = .direct
     @State private var rotateAngle: Float = 0.5
@@ -35,6 +36,7 @@ struct NewEffectView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     Stepper("Start Strength", value: $startStrength, step: 0.1, format: .number)
                     Stepper("End Strength", value: $endStrength, step: 0.1, format: .number)
+                    Stepper("Step Count", value: $stepCount, step: 1.0, format: .number)
                     if effectType == .direct {
                         HStack {
                             TextField("Seed", value: $seed, format: .number.grouping(.never))
@@ -75,11 +77,11 @@ struct NewEffectView: View {
                             // preview needs to take into account generative vs direct
                             if let id = selectedEffect {
                                 if let index = store.project.effects.firstIndex(where: { $0.id == id }), let url = store.project.video.frames?[ store.project.effects[index].startFrame ].url {
-                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
+                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
                                 }
                             } else {
                                 if let url = store.project.video.frames?[ store.currentFrameNumber ?? 0 ].url {
-                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
+                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
                                 }
                             }
                         }
@@ -100,13 +102,14 @@ struct NewEffectView: View {
                                 store.project.effects[index].startStrength = startStrength
                                 store.project.effects[index].endStrength = endStrength
                                 store.project.effects[index].seed = seed
+                                store.project.effects[index].stepCount = Int(stepCount)
                                 store.project.effects[index].effectType = effectType
                                 store.project.effects[index].rotateDirection = effectType == .direct ? nil : rotateDirection
                                 store.project.effects[index].rotateAngle = effectType == .direct ? nil : rotateAngle
                                 store.project.effects[index].zoomScale = effectType == .direct ? nil : zoomScale
                             }
                         } else {
-                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed, rotateDirection: effectType == .direct ? nil : rotateDirection, rotateAngle: effectType == .direct ? nil : rotateAngle, zoomScale: effectType == .direct ? nil : zoomScale)
+                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: effectType == .direct ? nil : rotateDirection, rotateAngle: effectType == .direct ? nil : rotateAngle, zoomScale: effectType == .direct ? nil : zoomScale)
                         }
                         dismiss()
                     }
@@ -118,6 +121,7 @@ struct NewEffectView: View {
                     startStrength = effect.startStrength
                     endStrength = effect.endStrength
                     seed = effect.seed
+                    stepCount = Double(effect.stepCount ?? 30) 
                     effectType = effect.effectType ?? .direct
                     rotateAngle = effect.rotateAngle ?? 0.5
                     rotateDirection = effect.rotateDirection ?? .clockwise

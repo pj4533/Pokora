@@ -81,6 +81,7 @@ extension VideoStore {
                                                      prompt: effect.prompt,
                                                    strength: effect.strength(forFrameIndex: frameIndex),
                                                                seed: effect.effectType == .direct ? effect.seed : UInt32.random(in: 0...UInt32.max),
+                                                               stepCount: effect.stepCount ?? 30,
                                                                rotateDirection: effect.rotateDirection,
                                                                rotateAngle: effect.rotateAngle,
                                                                zoomScale: effect.zoomScale,

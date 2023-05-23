@@ -24,7 +24,7 @@ extension VideoStore {
         try self.pipeline?.loadResources()
     }
     
-    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
+    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
             
             var startingImage = cgImage
@@ -37,11 +37,11 @@ extension VideoStore {
             
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
-            pipelineConfig.negativePrompt = ""
+            pipelineConfig.negativePrompt = "watermark"
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1
-            pipelineConfig.stepCount = 50
+            pipelineConfig.stepCount = stepCount
             pipelineConfig.seed = seed
             pipelineConfig.guidanceScale = 7.5
             
@@ -65,7 +65,7 @@ extension VideoStore {
         return nil
     }
 
-    func processPreview(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, modelURL: URL?) async throws -> CGImage? {
+    func processPreview(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, modelURL: URL?) async throws -> CGImage? {
         await MainActor.run {
             self.showThumbnails = false
             self.shouldProcess = true
@@ -102,11 +102,11 @@ extension VideoStore {
 
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
-            pipelineConfig.negativePrompt = ""
+            pipelineConfig.negativePrompt = "watermark"
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1
-            pipelineConfig.stepCount = 50
+            pipelineConfig.stepCount = stepCount
             pipelineConfig.seed = seed
             pipelineConfig.guidanceScale = 7.5
             

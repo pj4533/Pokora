@@ -27,6 +27,7 @@ struct Effect: Identifiable, Codable {
     var startStrength: Float = 0.2
     var endStrength: Float = 0.2
     var seed: UInt32 = globalSeed
+    var stepCount: Int? = 30
     var prompt: String = "a cyberpunk cityscape"
     var effectType: EffectType? = .direct
     
@@ -56,7 +57,7 @@ struct Effect: Identifiable, Codable {
         self.endFrame = endFrame
     }
     
-    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, prompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil) {
+    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, prompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil) {
         self.id = UUID()
         self.effectType = effectType
         self.startFrame = startFrame
@@ -64,6 +65,7 @@ struct Effect: Identifiable, Codable {
         self.startStrength = startStrength
         self.endStrength = endStrength
         self.seed = seed
+        self.stepCount = stepCount
         self.prompt = prompt
         self.rotateAngle = rotateAngle
         self.rotateDirection = rotateDirection
@@ -79,6 +81,7 @@ struct Effect: Identifiable, Codable {
         self.startStrength = existingEffect.startStrength
         self.endStrength = existingEffect.endStrength
         self.seed = existingEffect.seed
+        self.stepCount = existingEffect.stepCount
         self.prompt = existingEffect.prompt
         self.rotateAngle = existingEffect.rotateAngle
         self.rotateDirection = existingEffect.rotateDirection
