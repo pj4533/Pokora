@@ -24,12 +24,12 @@ extension VideoStore {
         try self.pipeline?.loadResources()
     }
     
-    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, rotateDirection: CGFloat?, rotateAngle: CGFloat?, zoomScale: CGFloat?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
+    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
             
             var startingImage = cgImage
-            if let rotateDirection = rotateDirection, let rotateAngle = rotateAngle, let rotatedImage = self.rotateImage(image: cgImage, rotateDirection: rotateDirection, rotateAngle: rotateAngle) {
-                if let zoomScale = zoomScale, let zoomedImage = self.zoomInImage(image: rotatedImage, scale: zoomScale) {
+            if let rotateDirection = rotateDirection, let rotateAngle = rotateAngle, let rotatedImage = self.rotateImage(image: cgImage, rotateDirection: CGFloat(rotateDirection.rawValue), rotateAngle: CGFloat(rotateAngle)) {
+                if let zoomScale = zoomScale, let zoomedImage = self.zoomInImage(image: rotatedImage, scale: CGFloat(zoomScale)) {
                     startingImage = zoomedImage
                 }
             }
@@ -41,7 +41,7 @@ extension VideoStore {
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1
-            pipelineConfig.stepCount = 30
+            pipelineConfig.stepCount = 50
             pipelineConfig.seed = seed
             pipelineConfig.guidanceScale = 7.5
             
@@ -65,7 +65,7 @@ extension VideoStore {
         return nil
     }
 
-    func processPreview(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, modelURL: URL?) async throws -> CGImage? {
+    func processPreview(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, modelURL: URL?) async throws -> CGImage? {
         await MainActor.run {
             self.showThumbnails = false
             self.shouldProcess = true
@@ -92,13 +92,21 @@ extension VideoStore {
         }
         
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
+            
+            var startingImage = cgImage
+            if let rotateDirection = rotateDirection, let rotateAngle = rotateAngle, let rotatedImage = self.rotateImage(image: cgImage, rotateDirection: CGFloat(rotateDirection.rawValue), rotateAngle: CGFloat(rotateAngle)) {
+                if let zoomScale = zoomScale, let zoomedImage = self.zoomInImage(image: rotatedImage, scale: CGFloat(zoomScale)) {
+                    startingImage = zoomedImage
+                }
+            }
+
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
             pipelineConfig.negativePrompt = ""
-            pipelineConfig.startingImage = cgImage
+            pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1
-            pipelineConfig.stepCount = 30
+            pipelineConfig.stepCount = 50
             pipelineConfig.seed = seed
             pipelineConfig.guidanceScale = 7.5
             

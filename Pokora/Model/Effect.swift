@@ -14,6 +14,11 @@ struct Effect: Identifiable, Codable {
         case direct
         case generative
     }
+    
+    enum RotateDirection: Float, Codable {
+        case clockwise = 1.0
+        case counterclockwise = -1.0
+    }
 
     var id = UUID()
     var startFrame: Int
@@ -24,6 +29,10 @@ struct Effect: Identifiable, Codable {
     var seed: UInt32 = globalSeed
     var prompt: String = "a cyberpunk cityscape"
     var effectType: EffectType? = .direct
+    
+    var rotateDirection: RotateDirection? = nil
+    var rotateAngle: Float? = nil
+    var zoomScale: Float? = nil
     
     var numberFramesToProcess: Int {
         (endFrame - startFrame) + 1
@@ -47,7 +56,7 @@ struct Effect: Identifiable, Codable {
         self.endFrame = endFrame
     }
     
-    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, prompt: String) {
+    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, prompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil) {
         self.id = UUID()
         self.effectType = effectType
         self.startFrame = startFrame
@@ -56,6 +65,9 @@ struct Effect: Identifiable, Codable {
         self.endStrength = endStrength
         self.seed = seed
         self.prompt = prompt
+        self.rotateAngle = rotateAngle
+        self.rotateDirection = rotateDirection
+        self.zoomScale = zoomScale
     }
     
     // Ease of use for copying
@@ -68,5 +80,8 @@ struct Effect: Identifiable, Codable {
         self.endStrength = existingEffect.endStrength
         self.seed = existingEffect.seed
         self.prompt = existingEffect.prompt
+        self.rotateAngle = existingEffect.rotateAngle
+        self.rotateDirection = existingEffect.rotateDirection
+        self.zoomScale = existingEffect.zoomScale
     }
 }

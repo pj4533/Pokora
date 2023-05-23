@@ -59,6 +59,19 @@ struct EffectCell: View {
                     }
                     .font(.subheadline)
                     .foregroundColor(.secondary)
+                } else if effect.effectType == .generative {
+                    HStack {
+                        Image(systemName: "number.square.fill")
+                        Text("Rotate Angle: \(String(format: "%.3f", effect.rotateAngle ?? 0.0)) \(effect.rotateDirection == .clockwise ? "Clockwise" : "Counter Clockwise")")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    HStack {
+                        Image(systemName: "number.square.fill")
+                        Text("Zoom Scale: \(String(format: "%.5f", effect.zoomScale ?? 0.0))")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
                 }
                 
                 HStack {

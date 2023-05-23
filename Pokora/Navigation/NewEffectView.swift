@@ -17,6 +17,9 @@ struct NewEffectView: View {
     @State private var seed = globalSeed
     @State private var cgImage: CGImage? = nil
     @State private var effectType: Effect.EffectType = .direct
+    @State private var rotateAngle: Float = 0.5
+    @State private var rotateDirection: Effect.RotateDirection = .clockwise
+    @State private var zoomScale: Float = 1.005
     @Binding var modelURL: URL?
 
     var body: some View {
@@ -43,6 +46,13 @@ struct NewEffectView: View {
                             }
                             .buttonStyle(BorderlessButtonStyle())
                         }
+                    } else {
+                        Picker("Rotate Direction", selection: $rotateDirection) {
+                            Text("Clockwise").tag(Effect.RotateDirection.clockwise)
+                            Text("Counter Clockwise").tag(Effect.RotateDirection.counterclockwise)
+                        }
+                        Stepper("Rotate Angle", value: $rotateAngle, step: 0.1, format: .number)
+                        Stepper("Zoom Scale", value: $zoomScale, step: 0.001, format: .number)
                     }
                 }
                 .formStyle(.grouped)
@@ -65,11 +75,11 @@ struct NewEffectView: View {
                             // preview needs to take into account generative vs direct
                             if let id = selectedEffect {
                                 if let index = store.project.effects.firstIndex(where: { $0.id == id }), let url = store.project.video.frames?[ store.project.effects[index].startFrame ].url {
-                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, modelURL: modelURL)
+                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
                                 }
                             } else {
                                 if let url = store.project.video.frames?[ store.currentFrameNumber ?? 0 ].url {
-                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, modelURL: modelURL)
+                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
                                 }
                             }
                         }
@@ -91,9 +101,12 @@ struct NewEffectView: View {
                                 store.project.effects[index].endStrength = endStrength
                                 store.project.effects[index].seed = seed
                                 store.project.effects[index].effectType = effectType
+                                store.project.effects[index].rotateDirection = effectType == .direct ? nil : rotateDirection
+                                store.project.effects[index].rotateAngle = effectType == .direct ? nil : rotateAngle
+                                store.project.effects[index].zoomScale = effectType == .direct ? nil : zoomScale
                             }
                         } else {
-                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed)
+                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed, rotateDirection: effectType == .direct ? nil : rotateDirection, rotateAngle: effectType == .direct ? nil : rotateAngle, zoomScale: effectType == .direct ? nil : zoomScale)
                         }
                         dismiss()
                     }
@@ -106,6 +119,9 @@ struct NewEffectView: View {
                     endStrength = effect.endStrength
                     seed = effect.seed
                     effectType = effect.effectType ?? .direct
+                    rotateAngle = effect.rotateAngle ?? 0.5
+                    rotateDirection = effect.rotateDirection ?? .clockwise
+                    zoomScale = effect.zoomScale ?? 1.005
                 }
             }
             if store.isExtracting {
