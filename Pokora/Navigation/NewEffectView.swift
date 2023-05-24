@@ -18,7 +18,7 @@ struct NewEffectView: View {
     @State private var stepCount: Double = 30
     @State private var cgImage: CGImage? = nil
     @State private var effectType: Effect.EffectType = .direct
-    @State private var rotateAngle: Float = 0.5
+    @State private var rotateAngle: Float = 0.4
     @State private var rotateDirection: Effect.RotateDirection = .clockwise
     @State private var zoomScale: Float = 1.005
     @State private var startFrame: Int?
@@ -94,36 +94,6 @@ struct NewEffectView: View {
                             if let url = url {
                                 cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
                             }
-
-                            
-//                            // If we have an effect then use that, otherwise use the current frameIndex
-//                            if let id = selectedEffect {
-//                                if let index = store.project.effects.firstIndex(where: { $0.id == id }) {
-//                                    var url: URL?
-//                                    let effect = store.project.effects[index]
-//                                    let frameIndex = effect.startFrame
-//                                    if effect.effectType == .direct {
-//                                        url = store.project.video.frames?[ effect.startFrame ].url
-//                                    } else if effect.effectType == .generative {
-//                                        if frameIndex == 0 {
-//                                            url = store.project.video.frames?[frameIndex].url
-//                                        } else if let previousProcessedUrl = store.project.video.frames?[frameIndex-1].processedUrl {
-//                                            url = previousProcessedUrl
-//                                        } else if let previousUrl = store.project.video.frames?[frameIndex-1].url {
-//                                            url = previousUrl
-//                                        } else {
-//                                            print("Could not find previous frame for generative processing at index \(frameIndex - 1)...")
-//                                        }
-//                                    }
-//                                    if let url = url {
-//                                        cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
-//                                    }
-//                                }
-//                            } else {
-//                                if let url = store.project.video.frames?[ store.currentFrameNumber ?? 0 ].url {
-//                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
-//                                }
-//                            }
                         }
                     }
                 }
