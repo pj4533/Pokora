@@ -9,7 +9,7 @@
 
 Pokora is a video creation platform that combines existing video clips with AI generated video clips, using Stable Diffusion, in a native SwiftUI interface, completely local with no internet access necessary. Pokora uses the frames of an input movie to run image to image processing with a Stable Diffusion model. Check out [ml-stable-diffusion](https://github.com/apple/ml-stable-diffusion) for the latest CoreML model changes and how to convert models.
 
-🧙‍♂️ Pokora is named after Hans Pokora, author of many books on collectable psychedelic vinyl.
+🧙‍♂️ Pokora is named after Hans Pokora, author of many books on collectable psychedelic vinyl and the kickstarter of the legend of my favorite psych band [Paternoster](https://www.youtube.com/watch?v=d8yMK5kIq8w).
 
 ## Features
 
