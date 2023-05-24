@@ -22,8 +22,8 @@ Pokora is a video creation platform that combines existing video clips with AI g
 - Interpolate strength during an effect ✅
 - Persist between launches ✅
 - Add up rezzing using RealESRGAN ✅
+- Show preview while processing ✅
 - Update to use ControlNET [#10](https://github.com/pj4533/Pokora/issues/10)
-- Show preview while processing [#34](https://github.com/pj4533/Pokora/issues/34)
 
 ## Getting Started
 
