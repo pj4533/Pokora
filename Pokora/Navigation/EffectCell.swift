@@ -37,22 +37,22 @@ struct EffectCell: View {
                 .font(.title2)
                 .foregroundColor(.secondary)
 
+                HStack {
+                    if effect.startStrength == effect.endStrength {
+                        Image(systemName: "arrow.right.square.fill")
+                        Text("Strength: \(String(format: "%.3f", effect.startStrength))")
+                    } else if effect.startStrength < effect.endStrength {
+                        Image(systemName: "arrow.up.right.square.fill")
+                        Text("Strength: \(String(format: "%.3f ↗ %.3f", effect.startStrength, effect.endStrength))")
+                    } else {
+                        Image(systemName: "arrow.down.right.square.fill")
+                        Text("Strength: \(String(format: "%.3f ↘ %.3f", effect.startStrength, effect.endStrength))")
+                    }
+                }
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
                 // still settling on this UI so leaving this commented for now
-//                HStack {
-//                    if effect.startStrength == effect.endStrength {
-//                        Image(systemName: "arrow.right.square.fill")
-//                        Text("Strength: \(String(format: "%.3f", effect.startStrength))")
-//                    } else if effect.startStrength < effect.endStrength {
-//                        Image(systemName: "arrow.up.right.square.fill")
-//                        Text("Strength: \(String(format: "%.3f ↗ %.3f", effect.startStrength, effect.endStrength))")
-//                    } else {
-//                        Image(systemName: "arrow.down.right.square.fill")
-//                        Text("Strength: \(String(format: "%.3f ↘ %.3f", effect.startStrength, effect.endStrength))")
-//                    }
-//                }
-//                .font(.subheadline)
-//                .foregroundColor(.secondary)
-//
 //                HStack {
 //                    Image(systemName: "number.square.fill")
 //                    Text("Step Count: \(numberFormatter.string(from: NSNumber(value: effect.stepCount ?? 0))!)")
