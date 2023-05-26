@@ -14,7 +14,8 @@ extension VideoStore {
             self.shouldProcess = true
             self.isProcessing = true
         }
-        for effect in project.effects {
+        // process direct effects
+        for effect in project.effects.filter({ $0.effectType == .direct }) {
             do {
                 try await self.process(effect: effect, modelURL: modelURL)
             } catch {
@@ -22,7 +23,28 @@ extension VideoStore {
                     self.isProcessing = false
                 }
             }
-            if !self.shouldProcess { break }
+            if !self.shouldProcess {
+                await MainActor.run {
+                    self.isProcessing = false
+                }
+                return
+            }
+        }
+        // then process generative effects -- this allows for reverse generative effects
+        for effect in project.effects.filter({ $0.effectType == .generative }) {
+            do {
+                try await self.process(effect: effect, modelURL: modelURL)
+            } catch {
+                await MainActor.run {
+                    self.isProcessing = false
+                }
+            }
+            if !self.shouldProcess {
+                await MainActor.run {
+                    self.isProcessing = false
+                }
+                return
+            }
         }
         await MainActor.run {
             self.isProcessing = false
@@ -43,7 +65,14 @@ extension VideoStore {
             }
         }
 
-        for frameIndex in effect.startFrame...effect.endFrame {
+        var generativeSourceIndexOffset: Int
+        if effect.renderDirection == .forward {
+            generativeSourceIndexOffset = -1
+        } else {
+            generativeSourceIndexOffset = 1
+        }
+        let sequence = effect.renderDirection == .forward ? Array(effect.startFrame...effect.endFrame) : Array((effect.startFrame...effect.endFrame).reversed())
+        for frameIndex in sequence {
             var url: URL?
             if effect.effectType == .direct {
                 // i dont think this is needed anymore, but for older files it is....?
@@ -52,12 +81,12 @@ extension VideoStore {
                 }
                 url = project.video.frames?[frameIndex].url
             } else if effect.effectType == .generative {
-                if frameIndex == 0 {
+                if (frameIndex == 0) && (effect.renderDirection == .forward) {
                     url = project.video.frames?[frameIndex].url
-                } else if let previousProcessedUrl = project.video.frames?[frameIndex-1].processedUrl {
-                    url = previousProcessedUrl
-                } else if let previousUrl = project.video.frames?[frameIndex-1].url {
-                    url = previousUrl
+                } else if let processedUrl = project.video.frames?[frameIndex+generativeSourceIndexOffset].processedUrl {
+                    url = processedUrl
+                } else if let unprocessedUrl = project.video.frames?[frameIndex+generativeSourceIndexOffset].url {
+                    url = unprocessedUrl
                 } else {
                     print("Could not find previous frame for generative processing at index \(frameIndex - 1)...")
                 }
@@ -102,11 +131,13 @@ extension VideoStore {
                     })
                     await MainActor.run {
                         project.video.frames?[frameIndex].processedUrl = processedUrl
+                        project.video.frames?[frameIndex].processedTime = Date()
                     }
                 } else {
                     await MainActor.run {
                         print("INDEX: \(frameIndex)")
                         project.video.frames?[frameIndex].processedUrl = fileURL
+                        project.video.frames?[frameIndex].processedTime = Date()
                     }
                 }
 

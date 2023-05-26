@@ -30,8 +30,13 @@ struct EffectCell: View {
                         Image(systemName: "arrowtriangle.forward.square.fill")
                         Text("Direct")
                     } else if effect.effectType == .generative {
-                        Image(systemName: "arrow.uturn.right.square.fill")
-                        Text("Generative")
+                        if effect.renderDirection == .forward {
+                            Image(systemName: "arrow.uturn.right.square.fill")
+                            Text("Generative")
+                        } else {
+                            Image(systemName: "arrow.uturn.left.square.fill")
+                            Text("Reverse Generative")
+                        }
                     }
                 }
                 .font(.title2)

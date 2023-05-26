@@ -19,6 +19,10 @@ struct Effect: Identifiable, Codable {
         case clockwise = 1.0
         case counterclockwise = -1.0
     }
+    enum RenderDirection: Codable {
+        case forward
+        case reverse
+    }
 
     var id = UUID()
     var startFrame: Int
@@ -34,6 +38,8 @@ struct Effect: Identifiable, Codable {
     var rotateDirection: RotateDirection? = nil
     var rotateAngle: Float? = nil
     var zoomScale: Float? = nil
+    
+    var renderDirection: RenderDirection? = .forward
     
     var numberFramesToProcess: Int {
         (endFrame - startFrame) + 1
@@ -57,7 +63,7 @@ struct Effect: Identifiable, Codable {
         self.endFrame = endFrame
     }
     
-    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, prompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil) {
+    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, prompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil, renderDirection: RenderDirection = .forward) {
         self.id = UUID()
         self.effectType = effectType
         self.startFrame = startFrame
@@ -70,6 +76,7 @@ struct Effect: Identifiable, Codable {
         self.rotateAngle = rotateAngle
         self.rotateDirection = rotateDirection
         self.zoomScale = zoomScale
+        self.renderDirection = renderDirection
     }
     
     // Ease of use for copying
@@ -86,5 +93,6 @@ struct Effect: Identifiable, Codable {
         self.rotateAngle = existingEffect.rotateAngle
         self.rotateDirection = existingEffect.rotateDirection
         self.zoomScale = existingEffect.zoomScale
+        self.renderDirection = existingEffect.renderDirection
     }
 }

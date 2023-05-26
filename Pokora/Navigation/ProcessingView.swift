@@ -29,7 +29,7 @@ struct ProcessingView: View {
                 .foregroundStyle(.tertiary)
                 .font(.title3)
             if showThumbnails {
-                ThumbnailScrollView(imageUrls: store.project.video.frames?.compactMap { ($0.processedUrl, $0.index) }.sorted(by: { $0.1 > $1.1 }).compactMap { $0.0 } ?? [])
+                ThumbnailScrollView(imageUrls: store.project.video.frames?.compactMap { ($0.processedUrl, $0.processedTime) }.sorted(by: { ($0.1 ?? Date()) > ($1.1 ?? Date()) }).compactMap { $0.0 } ?? [])
                     .padding()
             }
             if showCancel {

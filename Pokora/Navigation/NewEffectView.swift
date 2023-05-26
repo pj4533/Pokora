@@ -20,8 +20,10 @@ struct NewEffectView: View {
     @State private var effectType: Effect.EffectType = .direct
     @State private var rotateAngle: Float = 0.4
     @State private var rotateDirection: Effect.RotateDirection = .clockwise
+    @State private var renderDirection: Effect.RenderDirection = .forward
     @State private var zoomScale: Float = 1.005
     @State private var startFrame: Int?
+    @State private var endFrame: Int?
     @Binding var modelURL: URL?
 
     var body: some View {
@@ -50,6 +52,10 @@ struct NewEffectView: View {
                             .buttonStyle(BorderlessButtonStyle())
                         }
                     } else {
+                        Picker("Render Direction", selection: $renderDirection) {
+                            Text("Forward").tag(Effect.RenderDirection.forward)
+                            Text("Reverse").tag(Effect.RenderDirection.reverse)
+                        }
                         Picker("Rotate Direction", selection: $rotateDirection) {
                             Text("Clockwise").tag(Effect.RotateDirection.clockwise)
                             Text("Counter Clockwise").tag(Effect.RotateDirection.counterclockwise)
@@ -76,19 +82,32 @@ struct NewEffectView: View {
                                 await store.extractFrames()
                             }
                             
-                            let frameIndex = startFrame ?? 0
+                            var frameIndex = startFrame ?? 0
                             var url: URL?
                             if effectType == .direct {
                                 url = store.project.video.frames?[ frameIndex ].url
                             } else if effectType == .generative {
-                                if frameIndex == 0 {
-                                    url = store.project.video.frames?[frameIndex].url
-                                } else if let previousProcessedUrl = store.project.video.frames?[frameIndex-1].processedUrl {
-                                    url = previousProcessedUrl
-                                } else if let previousUrl = store.project.video.frames?[frameIndex-1].url {
-                                    url = previousUrl
+                                if renderDirection == .forward {
+                                    if frameIndex == 0 {
+                                        url = store.project.video.frames?[frameIndex].url
+                                    } else if let previousProcessedUrl = store.project.video.frames?[frameIndex-1].processedUrl {
+                                        url = previousProcessedUrl
+                                    } else if let previousUrl = store.project.video.frames?[frameIndex-1].url {
+                                        url = previousUrl
+                                    } else {
+                                        print("Could not find previous frame for generative processing at index \(frameIndex - 1)...")
+                                    }
                                 } else {
-                                    print("Could not find previous frame for generative processing at index \(frameIndex - 1)...")
+                                    frameIndex = endFrame ?? 0
+                                    if frameIndex == store.project.video.lastFrameIndex ?? 0 {
+                                        url = store.project.video.frames?[frameIndex].url
+                                    } else if let nextProcessedUrl = store.project.video.frames?[frameIndex+1].processedUrl {
+                                        url = nextProcessedUrl
+                                    } else if let nextUrl = store.project.video.frames?[frameIndex+1].url {
+                                        url = nextUrl
+                                    } else {
+                                        print("Could not find next frame for generative processing at index \(frameIndex + 1)...")
+                                    }
                                 }
                             }
                             if let url = url {
@@ -115,11 +134,12 @@ struct NewEffectView: View {
                                 store.project.effects[index].stepCount = Int(stepCount)
                                 store.project.effects[index].effectType = effectType
                                 store.project.effects[index].rotateDirection = effectType == .direct ? nil : rotateDirection
+                                store.project.effects[index].renderDirection = renderDirection
                                 store.project.effects[index].rotateAngle = effectType == .direct ? nil : rotateAngle
                                 store.project.effects[index].zoomScale = effectType == .direct ? nil : zoomScale
                             }
                         } else {
-                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: effectType == .direct ? nil : rotateDirection, rotateAngle: effectType == .direct ? nil : rotateAngle, zoomScale: effectType == .direct ? nil : zoomScale)
+                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: effectType == .direct ? nil : rotateDirection, rotateAngle: effectType == .direct ? nil : rotateAngle, zoomScale: effectType == .direct ? nil : zoomScale, renderDirection: renderDirection)
                         }
                         dismiss()
                     }
@@ -137,8 +157,11 @@ struct NewEffectView: View {
                     rotateDirection = effect.rotateDirection ?? .clockwise
                     zoomScale = effect.zoomScale ?? 1.005
                     startFrame = effect.startFrame
+                    renderDirection = effect.renderDirection ?? .forward
+                    endFrame = effect.endFrame
                 } else {
                     startFrame = store.currentFrameNumber ?? 0
+                    endFrame = store.project.lastFrameOfEffect(withStartFrame: startFrame ?? 0)
                 }
             }
             if store.isExtracting {

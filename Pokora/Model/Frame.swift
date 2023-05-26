@@ -12,4 +12,5 @@ struct Frame: Identifiable, Codable {
     var index: Int
     var url: URL?
     var processedUrl: URL?
+    var processedTime: Date?
 }

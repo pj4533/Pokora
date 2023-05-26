@@ -8,10 +8,20 @@
 import Foundation
 
 extension PokoraProject {
-    @MainActor mutating func addEffect(effectType: Effect.EffectType, startFrame: Int, prompt: String, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?) {
+    func lastFrameOfEffect(withStartFrame startFrame: Int) -> Int {
+        let lastFrame = video.lastFrameIndex ?? startFrame
+        // Find the index of the next effect in the array
+        if let nextEffectIndex = effects.firstIndex(where: { $0.startFrame > startFrame }) {
+            return effects[nextEffectIndex].startFrame - 1
+        }
+        
+        return lastFrame
+    }
+    
+    @MainActor mutating func addEffect(effectType: Effect.EffectType, startFrame: Int, prompt: String, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, renderDirection: Effect.RenderDirection) {
         let currentFrame = startFrame
         let lastFrame = video.lastFrameIndex ?? currentFrame
-        let newEffect = Effect(effectType: effectType, startFrame: currentFrame, endFrame: lastFrame, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: stepCount, prompt: prompt, rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale)
+        let newEffect = Effect(effectType: effectType, startFrame: currentFrame, endFrame: lastFrame, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: stepCount, prompt: prompt, rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, renderDirection: renderDirection)
 
         // Find the index of the next effect in the array
         if let nextEffectIndex = effects.firstIndex(where: { $0.startFrame > newEffect.startFrame }) {
