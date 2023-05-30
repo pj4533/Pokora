@@ -36,6 +36,11 @@ struct ContentView: View {
                                         } label: {
                                             Text("Clear Render")
                                         }
+                                        Button {
+                                            store.cueTo(frame: effect.startFrame.wrappedValue)
+                                        } label: {
+                                            Text("Cue In Player")
+                                        }
                                     }
                             }
                         }
