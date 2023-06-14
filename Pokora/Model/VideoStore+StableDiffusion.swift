@@ -14,13 +14,14 @@ extension VideoStore {
     
     internal func initializePipeline(resourceURL: URL = URL(filePath: "model_output/Resources")) throws {
         let config = MLModelConfiguration()
-        config.computeUnits = .cpuAndNeuralEngine
+        config.computeUnits = .cpuAndGPU
 
         print("Initializing pipeline...")
         self.pipeline = try StableDiffusionPipeline(resourcesAt: resourceURL,
-                                                   configuration: config,
-                                                   disableSafety: true,
-                                                   reduceMemory: false)
+                                                    controlNet: [],
+                                                    configuration: config,
+                                                    disableSafety: true,
+                                                    reduceMemory: false)
         try self.pipeline?.loadResources()
     }
     
