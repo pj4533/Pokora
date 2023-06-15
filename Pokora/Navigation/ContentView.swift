@@ -52,8 +52,19 @@ struct ContentView: View {
                             Task {
                                 do {
                                     try await store.loadVideo()
-                                } catch let error {
-                                    print("ERROR LOADING VIDEO: \(error)")
+                                } catch {
+                                    let panel = NSOpenPanel()
+                                    panel.allowsMultipleSelection = false
+                                    panel.canChooseDirectories = false
+                                    if panel.runModal() == .OK, let url = panel.url {
+                                        Task {
+                                            do {
+                                                try await store.loadVideo(url: url)
+                                            } catch let error {
+                                                print("ERROR LOADING VIDEO: \(error)")
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
