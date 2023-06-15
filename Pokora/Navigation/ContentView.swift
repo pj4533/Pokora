@@ -41,6 +41,12 @@ struct ContentView: View {
                                         } label: {
                                             Text("Cue In Player")
                                         }
+                                        Button {
+                                            store.project.effects = store.project.effects.filter({ $0.id != effect.id })
+                                            store.project.updateEffects()
+                                        } label: {
+                                            Text("Remove Effect")
+                                        }
                                     }
                             }
                         }

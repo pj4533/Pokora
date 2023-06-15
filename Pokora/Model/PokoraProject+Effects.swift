@@ -46,6 +46,20 @@ extension PokoraProject {
         }
     }
     
+    @MainActor mutating func updateEffects() {
+        for thisEffect in effects {
+            if let thisIndex = effects.firstIndex(where: { $0.id == thisEffect.id }) {
+                if let nextIndex = effects.firstIndex(where: { $0.startFrame > thisEffect.startFrame } ) {
+                    effects[thisIndex].endFrame = effects[nextIndex].startFrame - 1
+                } else {
+                    effects[thisIndex].endFrame = video.lastFrameIndex ?? effects[thisIndex].endFrame
+                }
+            } else {
+                print("ERROR updating effects")
+            }
+        }
+    }
+    
     func hasEffect(atFrameIndex frameIndex: Int) -> Bool {
         for effect in effects {
             if effect.startFrame == frameIndex {
