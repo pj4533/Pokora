@@ -120,7 +120,11 @@ extension VideoStore {
                             self.showThumbnails = true
                             let totalNumberFramesToProcess = self.project.effects.map({ $0.numberFramesToProcess }).reduce(0, +)
                             let framesProcessed = self.project.video.frames?.compactMap { $0.processedUrl }.count ?? 0
-                            self.processingStatus = "Step #\(progress.step) of #\(progress.stepCount) (\(totalNumberFramesToProcess - framesProcessed) frames remaining)"
+                            if self.usingControlNet {
+                                self.processingStatus = "Step #\(progress.step) of #\(progress.stepCount) using ControlNet (\(totalNumberFramesToProcess - framesProcessed) frames remaining)"
+                            } else {
+                                self.processingStatus = "Step #\(progress.step) of #\(progress.stepCount) (\(totalNumberFramesToProcess - framesProcessed) frames remaining)"
+                            }
                             self.timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
                         }
 

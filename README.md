@@ -23,7 +23,7 @@ Pokora is a video creation platform that combines existing video clips with AI g
 - Persist between launches ✅
 - Add up rezzing using RealESRGAN ✅
 - Show preview while processing ✅
-- Update to use ControlNET [#10](https://github.com/pj4533/Pokora/issues/10)
+- Update to use ControlNET ✅
 
 ## Getting Started
 
@@ -54,6 +54,12 @@ Built using below, but haven't tested elsewhere yet.
 You will need to convert or download models in CoreML format. You can download from the HuggingFace org [here](https://huggingface.co/coreml).
 
 NOTE: I had trouble with the v2.1 model, I think it doesn't like the 768x768. I verified this model works [here](https://huggingface.co/coreml/coreml-stable-diffusion-v1-5/blob/main/split-einsum/v1-5_split-einsum.zip), however I have had better speeds with a model I converted myself. 
+
+## ControlNet
+
+ControlNet support is very basic for now. Inside your model directory place a directory called 'controlnet', and in that directory put a single model you would like to use for ControlNet input (such as Depth). Pokora will see this, and for each frame processed will first send the frame thru the ControlNet model. For now, you can only use one ControlNet model, and it is either on or off (based on whether your controlNet model was found or not). On my M2 MacStudio Ultra I was getting about 7.1 iter/s without controlNet and using controlNet I get about 4.5 iter/s, so it is quite slower. 
+
+This is a good resource for models to use, both for SD and ControlNet [here](https://huggingface.co/coreml/ControlNet-Models-For-Core-ML).
 
 ## License
 

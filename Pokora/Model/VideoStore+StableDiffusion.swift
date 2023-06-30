@@ -17,9 +17,20 @@ extension VideoStore {
         config.computeUnits = .cpuAndGPU
 
         print("Initializing pipeline...")
+        var controlNet: [String] = []
+
+        if FileManager().fileExists(atPath: resourceURL.appendingPathComponent("controlnet").path(percentEncoded: false)) {
+            let controlNetModels = try FileManager().contentsOfDirectory(atPath: resourceURL.appendingPathComponent("controlnet").path(percentEncoded: false))
+            if let firstModel = controlNetModels.filter({ $0.hasSuffix("mlmodelc") }).first?.components(separatedBy: ".").first {
+                controlNet = [ firstModel ]
+                usingControlNet = true
+            } else {
+                usingControlNet = false
+            }
+        }
+        
         self.pipeline = try StableDiffusionPipeline(resourcesAt: resourceURL,
-                                                    controlNet: ["Depth-5x5"],
-//                                                    controlNet: [],
+                                                    controlNet: controlNet,
                                                     configuration: config,
                                                     disableSafety: true,
                                                     reduceMemory: false)
@@ -40,7 +51,7 @@ extension VideoStore {
             
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
-            pipelineConfig.controlNetInputs = [startingImage]
+            pipelineConfig.controlNetInputs = usingControlNet ? [startingImage] : []
             pipelineConfig.negativePrompt = "watermark"
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
@@ -106,7 +117,7 @@ extension VideoStore {
 
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
-            pipelineConfig.controlNetInputs = [startingImage]
+            pipelineConfig.controlNetInputs = usingControlNet ? [startingImage] : []
             pipelineConfig.negativePrompt = "watermark"
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
@@ -119,7 +130,11 @@ extension VideoStore {
             if let images = try pipeline?.generateImages(configuration: pipelineConfig, progressHandler: { progress in
                 sampleTimer.stop()
                 DispatchQueue.main.async {
-                    self.processingStatus = "Step #\(progress.step) of #\(progress.stepCount)"
+                    if self.usingControlNet {
+                        self.processingStatus = "Step #\(progress.step) of #\(progress.stepCount) using ControlNet"
+                    } else {
+                        self.processingStatus = "Step #\(progress.step) of #\(progress.stepCount)"
+                    }
                     self.timingStatus = "[ \(String(format: "mean: %.2f, median: %.2f, last %.2f", 1.0/sampleTimer.mean, 1.0/sampleTimer.median, 1.0/sampleTimer.allSamples.last!)) ] step/sec"
                 }
 

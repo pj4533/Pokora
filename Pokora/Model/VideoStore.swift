@@ -47,6 +47,7 @@ final class VideoStore: ReferenceFileDocument {
     // Whether we want to show the thumbnails or not on processing
     @Published var showThumbnails = false
 
+    internal var usingControlNet: Bool = false
     internal var pipeline: StableDiffusionPipeline?
     
     // This enables the update of the currently frame of the player
