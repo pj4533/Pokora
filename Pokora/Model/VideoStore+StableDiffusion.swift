@@ -18,7 +18,8 @@ extension VideoStore {
 
         print("Initializing pipeline...")
         self.pipeline = try StableDiffusionPipeline(resourcesAt: resourceURL,
-                                                    controlNet: [],
+                                                    controlNet: ["Depth-5x5"],
+//                                                    controlNet: [],
                                                     configuration: config,
                                                     disableSafety: true,
                                                     reduceMemory: false)
@@ -26,6 +27,7 @@ extension VideoStore {
     }
     
     internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
+        
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
             
             var startingImage = cgImage
@@ -38,6 +40,7 @@ extension VideoStore {
             
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
+            pipelineConfig.controlNetInputs = [startingImage]
             pipelineConfig.negativePrompt = "watermark"
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
@@ -84,7 +87,7 @@ extension VideoStore {
                 try initializePipeline()
             }
         }
-        
+
         let sampleTimer = SampleTimer()
         sampleTimer.start()
 
@@ -103,6 +106,7 @@ extension VideoStore {
 
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
+            pipelineConfig.controlNetInputs = [startingImage]
             pipelineConfig.negativePrompt = "watermark"
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength

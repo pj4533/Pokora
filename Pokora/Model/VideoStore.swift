@@ -58,6 +58,7 @@ final class VideoStore: ReferenceFileDocument {
         case processing(String)
         case uprezzing(String)
         case extracting(String)
+        case depth(String)
     }
 
     typealias Snapshot = PokoraProject

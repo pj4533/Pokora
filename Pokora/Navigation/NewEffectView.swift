@@ -111,7 +111,11 @@ struct NewEffectView: View {
                                 }
                             }
                             if let url = url {
-                                cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
+                                do {
+                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
+                                } catch let error {
+                                    print("ERROR: \(error.localizedDescription)")
+                                }
                             }
                         }
                     }
