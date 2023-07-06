@@ -54,7 +54,7 @@ extension VideoStore {
         }
     }
     
-    func extractFrames() async {
+    func extractFrames(indexToExtract: Int? = nil) async {
         await MainActor.run {
             isExtracting = true
         }
@@ -88,6 +88,11 @@ extension VideoStore {
                         var index = 0
                         
                         while let sampleBuffer = trackReaderOutput.copyNextSampleBuffer() {
+                            if let toExtract = indexToExtract, index != toExtract {
+                                frames.append(Frame(index: index))
+                                index += 1
+                                continue
+                            }
                             // see below. Duuurrrrr, what is this.
                             let ughIndex = index
                             await MainActor.run {

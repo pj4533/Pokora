@@ -80,6 +80,34 @@ extension VideoStore {
         return nil
     }
 
+    func createBlackCGImage(basedOn originalImage: CGImage) -> CGImage? {
+        let width = originalImage.width
+        let height = originalImage.height
+        let bitsPerComponent = originalImage.bitsPerComponent
+        let bytesPerRow = originalImage.bytesPerRow
+        let colorSpace = originalImage.colorSpace ?? CGColorSpace(name: CGColorSpace.sRGB)!
+        let bitmapInfo = originalImage.bitmapInfo
+
+        // Create an empty context with the same parameters as the original image
+        guard let context = CGContext(data: nil,
+                                      width: width,
+                                      height: height,
+                                      bitsPerComponent: bitsPerComponent,
+                                      bytesPerRow: bytesPerRow,
+                                      space: colorSpace,
+                                      bitmapInfo: bitmapInfo.rawValue) else {
+            return nil
+        }
+
+        // Fill the context with black color
+        context.setFillColor(CGColor.black)
+        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+
+        // Create a new CGImage from the context
+        return context.makeImage()
+    }
+
+    
     func processPreview(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, modelURL: URL?) async throws -> CGImage? {
         await MainActor.run {
             self.showThumbnails = false
@@ -117,6 +145,9 @@ extension VideoStore {
 
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
+//            if let nullCGImage = createBlackCGImage(basedOn: startingImage) {
+//                pipelineConfig.controlNetInputs = [nullCGImage]
+//            }
             pipelineConfig.controlNetInputs = usingControlNet ? [startingImage] : []
             pipelineConfig.negativePrompt = "watermark"
             pipelineConfig.startingImage = startingImage
