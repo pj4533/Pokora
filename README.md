@@ -24,6 +24,7 @@ Pokora is a video creation platform that combines existing video clips with AI g
 - Add up rezzing using RealESRGAN ✅
 - Show preview while processing ✅
 - Update to use ControlNET ✅
+- Audio Reactivity ✅
 
 ## Getting Started
 
@@ -36,6 +37,16 @@ Pokora is a video creation platform that combines existing video clips with AI g
 - Once extracted, the rendering of your applied effects will start, this can take hours
 - Tapping export creates a new movie with rendered frames from your effects, original frames where there were no effects, and the audio track from the original movie
 - Save, share and enjoy!
+
+## Effect Types
+#### Direct
+Applies image to image to the underlying frame using strength settings (ramp or constant).
+
+#### Generative
+Applies image to image to the previously processed frame, can rotate/zoom (also can go in reverse). Useful for fading out and back into video.
+
+#### Audio Reactive
+Set an amplitude threshold, for any frame the average amplitude is calculated, if the frames amplitude is greater than the threshold the strength of the image to image is set to 0.9. An envelope then starts, if all the following frames are below the threshold, the strength ramps linearly back down to 0 after 15 frames. If the threshold is crossed again, the strength goes back to 0.9 and the envelope starts again. Each time the strength goes from 0 to 0.9 a new seed is used.
 
 ## Limitations
 

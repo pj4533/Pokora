@@ -38,18 +38,21 @@ extension VideoStore {
                                                 includingResourceValuesForKeys: nil,
                                                 relativeTo: nil)
         let localVideo = Video(bookmarkData: bookmarkData)
+
         let player = AVPlayer(url: url)
         let framerate = try await player.currentItem?.asset.loadTracks(withMediaType: .video).first?.load(.nominalFrameRate)
         if let durationTime = try await player.currentItem?.asset.load(.duration) {
             let duration = CMTimeGetSeconds(durationTime)
+            let amplitudes = try await self.getAverageAmplitudes()
 
             await MainActor.run {
                 self.player = player
                 project.video = localVideo
                 project.video.framerate = framerate
                 project.video.duration = duration
+                project.video.amplitudes = amplitudes
             }
-            
+
             addTimeObserver()
         }
     }

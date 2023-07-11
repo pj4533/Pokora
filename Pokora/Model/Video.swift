@@ -13,6 +13,7 @@ struct Video: Identifiable, Codable {
     var duration: Float64?
     var framerate: Float?
     var frames: [Frame]?
+    var amplitudes: [Float]?
     
     var lastFrameIndex: Int? {
         guard let frameRate = framerate, let duration = duration else {

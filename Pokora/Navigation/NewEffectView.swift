@@ -14,6 +14,7 @@ struct NewEffectView: View {
     @State private var prompt = "A cyberpunk cityscape"
     @State private var startStrength: Float = 0.2
     @State private var endStrength: Float = 0.2
+    @State private var threshold: Float = 0.7
     @State private var seed = globalSeed
     @State private var stepCount: Double = 30
     @State private var cgImage: CGImage? = nil
@@ -24,6 +25,7 @@ struct NewEffectView: View {
     @State private var zoomScale: Float = 1.005
     @State private var startFrame: Int?
     @State private var endFrame: Int?
+    @State private var numTransientsString: String = ""
     @Binding var modelURL: URL?
 
     var body: some View {
@@ -37,31 +39,37 @@ struct NewEffectView: View {
                     }
                     TextField("Prompt", text: $prompt)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    Stepper("Start Strength", value: $startStrength, step: 0.1, format: .number)
-                    Stepper("End Strength", value: $endStrength, step: 0.1, format: .number)
-                    Stepper("Step Count", value: $stepCount, step: 1.0, format: .number)
-                    if effectType == .direct {
-                        HStack {
-                            TextField("Seed", value: $seed, format: .number.grouping(.never))
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            Button {
-                                seed = UInt32.random(in: 0...UInt32.max)
-                            } label: {
-                                Label("", systemImage: "die.face.3.fill")
-                            }
-                            .buttonStyle(BorderlessButtonStyle())
-                        }
+                    if effectType == .audioReactive {
+                        Stepper("Threshold", value: $threshold, step: 0.7, format: .number)
+                        TextField("Number of Transients", text: $numTransientsString)
+                            .disabled(true)
                     } else {
-                        Picker("Render Direction", selection: $renderDirection) {
-                            Text("Forward").tag(Effect.RenderDirection.forward)
-                            Text("Reverse").tag(Effect.RenderDirection.reverse)
+                        Stepper("Start Strength", value: $startStrength, step: 0.1, format: .number)
+                        Stepper("End Strength", value: $endStrength, step: 0.1, format: .number)
+                        Stepper("Step Count", value: $stepCount, step: 1.0, format: .number)
+                        if effectType == .direct {
+                            HStack {
+                                TextField("Seed", value: $seed, format: .number.grouping(.never))
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                Button {
+                                    seed = UInt32.random(in: 0...UInt32.max)
+                                } label: {
+                                    Label("", systemImage: "die.face.3.fill")
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                            }
+                        } else {
+                            Picker("Render Direction", selection: $renderDirection) {
+                                Text("Forward").tag(Effect.RenderDirection.forward)
+                                Text("Reverse").tag(Effect.RenderDirection.reverse)
+                            }
+                            Picker("Rotate Direction", selection: $rotateDirection) {
+                                Text("Clockwise").tag(Effect.RotateDirection.clockwise)
+                                Text("Counter Clockwise").tag(Effect.RotateDirection.counterclockwise)
+                            }
+                            Stepper("Rotate Angle", value: $rotateAngle, step: 0.1, format: .number)
+                            Stepper("Zoom Scale", value: $zoomScale, step: 0.001, format: .number)
                         }
-                        Picker("Rotate Direction", selection: $rotateDirection) {
-                            Text("Clockwise").tag(Effect.RotateDirection.clockwise)
-                            Text("Counter Clockwise").tag(Effect.RotateDirection.counterclockwise)
-                        }
-                        Stepper("Rotate Angle", value: $rotateAngle, step: 0.1, format: .number)
-                        Stepper("Zoom Scale", value: $zoomScale, step: 0.001, format: .number)
                     }
                 }
                 .formStyle(.grouped)
@@ -76,49 +84,47 @@ struct NewEffectView: View {
                             .frame(minWidth: 512.0, minHeight: 512.0)
                             .cornerRadius(12.0)
                     }
-                    Button("Preview") {
-                        Task {
-//                            if (store.project.video.frames?.count ?? 0) == 0 {
-//                                await store.extractFrames()
-//                            }
-                            
-                            var frameIndex = startFrame ?? 0
+                    if effectType != .audioReactive {
+                        Button("Preview") {
+                            Task {
+                                var frameIndex = startFrame ?? 0
 
-                            await store.extractFrames(indexToExtract: frameIndex)
+                                await store.extractFrames(indexToExtract: frameIndex)
 
-                            var url: URL?
-                            if effectType == .direct {
-                                url = store.project.video.frames?[ frameIndex ].url
-                            } else if effectType == .generative {
-                                if renderDirection == .forward {
-                                    if frameIndex == 0 {
-                                        url = store.project.video.frames?[frameIndex].url
-                                    } else if let previousProcessedUrl = store.project.video.frames?[frameIndex-1].processedUrl {
-                                        url = previousProcessedUrl
-                                    } else if let previousUrl = store.project.video.frames?[frameIndex-1].url {
-                                        url = previousUrl
+                                var url: URL?
+                                if effectType == .direct {
+                                    url = store.project.video.frames?[ frameIndex ].url
+                                } else if effectType == .generative {
+                                    if renderDirection == .forward {
+                                        if frameIndex == 0 {
+                                            url = store.project.video.frames?[frameIndex].url
+                                        } else if let previousProcessedUrl = store.project.video.frames?[frameIndex-1].processedUrl {
+                                            url = previousProcessedUrl
+                                        } else if let previousUrl = store.project.video.frames?[frameIndex-1].url {
+                                            url = previousUrl
+                                        } else {
+                                            print("Could not find previous frame for generative processing at index \(frameIndex - 1)...")
+                                        }
                                     } else {
-                                        print("Could not find previous frame for generative processing at index \(frameIndex - 1)...")
-                                    }
-                                } else {
-                                    frameIndex = endFrame ?? 0
-                                    if frameIndex == store.project.video.lastFrameIndex ?? 0 {
-                                        url = store.project.video.frames?[frameIndex].url
-                                    } else if let nextProcessedUrl = store.project.video.frames?[frameIndex+1].processedUrl {
-                                        url = nextProcessedUrl
-                                    } else if let nextUrl = store.project.video.frames?[frameIndex+1].url {
-                                        url = nextUrl
-                                    } else {
-                                        print("Could not find next frame for generative processing at index \(frameIndex + 1)...")
+                                        frameIndex = endFrame ?? 0
+                                        if frameIndex == store.project.video.lastFrameIndex ?? 0 {
+                                            url = store.project.video.frames?[frameIndex].url
+                                        } else if let nextProcessedUrl = store.project.video.frames?[frameIndex+1].processedUrl {
+                                            url = nextProcessedUrl
+                                        } else if let nextUrl = store.project.video.frames?[frameIndex+1].url {
+                                            url = nextUrl
+                                        } else {
+                                            print("Could not find next frame for generative processing at index \(frameIndex + 1)...")
+                                        }
                                     }
                                 }
-                            }
-                            if let url = url {
-                                do {
-                                    cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
-                                    store.project.video.frames = nil
-                                } catch let error {
-                                    print("ERROR: \(error.localizedDescription)")
+                                if let url = url {
+                                    do {
+                                        cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
+                                        store.project.video.frames = nil
+                                    } catch let error {
+                                        print("ERROR: \(error.localizedDescription)")
+                                    }
                                 }
                             }
                         }
@@ -138,21 +144,31 @@ struct NewEffectView: View {
                                 store.project.effects[index].prompt = prompt
                                 store.project.effects[index].startStrength = startStrength
                                 store.project.effects[index].endStrength = endStrength
+                                store.project.effects[index].threshold = threshold
                                 store.project.effects[index].seed = seed
                                 store.project.effects[index].stepCount = Int(stepCount)
                                 store.project.effects[index].effectType = effectType
-                                store.project.effects[index].rotateDirection = effectType == .direct ? nil : rotateDirection
+                                store.project.effects[index].rotateDirection = effectType == .generative ? rotateDirection : nil
                                 store.project.effects[index].renderDirection = renderDirection
-                                store.project.effects[index].rotateAngle = effectType == .direct ? nil : rotateAngle
-                                store.project.effects[index].zoomScale = effectType == .direct ? nil : zoomScale
+                                store.project.effects[index].rotateAngle = effectType == .generative ? rotateAngle : nil
+                                store.project.effects[index].zoomScale = effectType == .generative ? zoomScale : nil
                             }
                         } else {
-                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: effectType == .direct ? nil : rotateDirection, rotateAngle: effectType == .direct ? nil : rotateAngle, zoomScale: effectType == .direct ? nil : zoomScale, renderDirection: renderDirection)
+                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: effectType == .generative ? rotateDirection : nil, rotateAngle: effectType == .generative ? rotateAngle : nil, zoomScale: effectType == .generative ? zoomScale : nil, renderDirection: renderDirection, threshold: threshold)
                         }
                         dismiss()
                     }
                 }
             }
+            .onChange(of: threshold, perform: { newThreshold in
+                Task {
+                    do {
+                        numTransientsString = try await "\(store.getNumberOfTransientsWithThreshold(threshold: newThreshold))"
+                    } catch {
+                        
+                    }
+                }
+            })
             .onAppear {
                 if let id = selectedEffect, let effect = store.project.effects.first(where: { $0.id == id }) {
                     prompt = effect.prompt
@@ -167,6 +183,7 @@ struct NewEffectView: View {
                     startFrame = effect.startFrame
                     renderDirection = effect.renderDirection ?? .forward
                     endFrame = effect.endFrame
+                    threshold = effect.threshold ?? 0.7
                 } else {
                     startFrame = store.currentFrameNumber ?? 0
                     endFrame = store.project.lastFrameOfEffect(withStartFrame: startFrame ?? 0)

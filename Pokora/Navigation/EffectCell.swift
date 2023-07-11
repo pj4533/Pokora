@@ -29,6 +29,9 @@ struct EffectCell: View {
                     if effect.effectType == .direct {
                         Image(systemName: "arrowtriangle.forward.square.fill")
                         Text("Direct")
+                    } else if effect.effectType == .audioReactive {
+                        Image(systemName: "waveform.path")
+                        Text("Audio Reactive")
                     } else if effect.effectType == .generative {
                         if effect.renderDirection == .forward {
                             Image(systemName: "arrow.uturn.right.square.fill")
@@ -43,15 +46,20 @@ struct EffectCell: View {
                 .foregroundColor(.secondary)
 
                 HStack {
-                    if effect.startStrength == effect.endStrength {
+                    if effect.effectType == .audioReactive {
                         Image(systemName: "arrow.right.square.fill")
-                        Text("Strength: \(String(format: "%.3f", effect.startStrength))")
-                    } else if effect.startStrength < effect.endStrength {
-                        Image(systemName: "arrow.up.right.square.fill")
-                        Text("Strength: \(String(format: "%.3f ↗ %.3f", effect.startStrength, effect.endStrength))")
+                        Text("Threshold: \(String(format: "%.3f", effect.threshold ?? 0.0))")
                     } else {
-                        Image(systemName: "arrow.down.right.square.fill")
-                        Text("Strength: \(String(format: "%.3f ↘ %.3f", effect.startStrength, effect.endStrength))")
+                        if effect.startStrength == effect.endStrength {
+                            Image(systemName: "arrow.right.square.fill")
+                            Text("Strength: \(String(format: "%.3f", effect.startStrength))")
+                        } else if effect.startStrength < effect.endStrength {
+                            Image(systemName: "arrow.up.right.square.fill")
+                            Text("Strength: \(String(format: "%.3f ↗ %.3f", effect.startStrength, effect.endStrength))")
+                        } else {
+                            Image(systemName: "arrow.down.right.square.fill")
+                            Text("Strength: \(String(format: "%.3f ↘ %.3f", effect.startStrength, effect.endStrength))")
+                        }
                     }
                 }
                 .font(.subheadline)

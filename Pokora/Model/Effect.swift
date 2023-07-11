@@ -13,6 +13,7 @@ struct Effect: Identifiable, Codable {
     enum EffectType: String, Codable, CaseIterable {
         case direct
         case generative
+        case audioReactive
     }
     
     enum RotateDirection: Float, Codable {
@@ -38,7 +39,8 @@ struct Effect: Identifiable, Codable {
     var rotateDirection: RotateDirection? = nil
     var rotateAngle: Float? = nil
     var zoomScale: Float? = nil
-    
+    var threshold: Float? = 0.7
+
     var renderDirection: RenderDirection? = .forward
     
     var numberFramesToProcess: Int {
@@ -63,7 +65,7 @@ struct Effect: Identifiable, Codable {
         self.endFrame = endFrame
     }
     
-    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, prompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil, renderDirection: RenderDirection = .forward) {
+    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, prompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil, renderDirection: RenderDirection = .forward, threshold: Float = 0.7) {
         self.id = UUID()
         self.effectType = effectType
         self.startFrame = startFrame
@@ -77,6 +79,7 @@ struct Effect: Identifiable, Codable {
         self.rotateDirection = rotateDirection
         self.zoomScale = zoomScale
         self.renderDirection = renderDirection
+        self.threshold = threshold
     }
     
     // Ease of use for copying
@@ -94,5 +97,6 @@ struct Effect: Identifiable, Codable {
         self.rotateDirection = existingEffect.rotateDirection
         self.zoomScale = existingEffect.zoomScale
         self.renderDirection = existingEffect.renderDirection
+        self.threshold = existingEffect.threshold
     }
 }

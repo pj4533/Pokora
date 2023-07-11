@@ -35,6 +35,7 @@
 		0AE8DC582A0E9C300097F169 /* realesrgan512.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0AE8DC572A0E9C300097F169 /* realesrgan512.mlmodelc */; };
 		0AE8DC5C2A1537170097F169 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE8DC5B2A1537170097F169 /* ThumbnailView.swift */; };
 		0AE8DC5E2A1537830097F169 /* ThumbnailScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE8DC5D2A1537830097F169 /* ThumbnailScrollView.swift */; };
+		B0D8C04E2A598865007BD6F4 /* VideoStore+Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8C04D2A598865007BD6F4 /* VideoStore+Audio.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		0AE8DC572A0E9C300097F169 /* realesrgan512.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = realesrgan512.mlmodelc; sourceTree = "<group>"; };
 		0AE8DC5B2A1537170097F169 /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
 		0AE8DC5D2A1537830097F169 /* ThumbnailScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailScrollView.swift; sourceTree = "<group>"; };
+		B0D8C04D2A598865007BD6F4 /* VideoStore+Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoStore+Audio.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 				0A191D3A29FF08C10011A439 /* Video.swift */,
 				0A7FBC562A03201F008DFFAC /* Frame.swift */,
 				0A191D3829FF08750011A439 /* VideoStore.swift */,
+				B0D8C04D2A598865007BD6F4 /* VideoStore+Audio.swift */,
 				0A191D3E29FF2B230011A439 /* VideoStore+Player.swift */,
 				0A3B463E2A00914C0066F462 /* VideoStore+TimeObserver.swift */,
 				0A7FBC542A031F80008DFFAC /* VideoStore+Video.swift */,
@@ -246,6 +249,7 @@
 			files = (
 				0A8933362A169AE800E94476 /* SettingsView.swift in Sources */,
 				0A191D3929FF08750011A439 /* VideoStore.swift in Sources */,
+				B0D8C04E2A598865007BD6F4 /* VideoStore+Audio.swift in Sources */,
 				0A191D3D29FF25B50011A439 /* Effect.swift in Sources */,
 				0AE8DC5E2A1537830097F169 /* ThumbnailScrollView.swift in Sources */,
 				0A89333A2A16DA1D00E94476 /* VideoStore+Transformations.swift in Sources */,
