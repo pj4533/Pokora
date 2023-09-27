@@ -34,6 +34,7 @@ struct Effect: Identifiable, Codable {
     var seed: UInt32 = globalSeed
     var stepCount: Int? = 30
     var prompt: String = "a cyberpunk cityscape"
+    var negativePrompt: String? = "watermark"
     var effectType: EffectType? = .direct
     
     var rotateDirection: RotateDirection? = nil
@@ -65,7 +66,7 @@ struct Effect: Identifiable, Codable {
         self.endFrame = endFrame
     }
     
-    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, prompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil, renderDirection: RenderDirection = .forward, threshold: Float = 0.7) {
+    init(effectType: Effect.EffectType, startFrame: Int, endFrame: Int, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, prompt: String, negativePrompt: String, rotateDirection: RotateDirection? = nil, rotateAngle: Float? = nil, zoomScale: Float? = nil, renderDirection: RenderDirection = .forward, threshold: Float = 0.7) {
         self.id = UUID()
         self.effectType = effectType
         self.startFrame = startFrame
@@ -75,6 +76,7 @@ struct Effect: Identifiable, Codable {
         self.seed = seed
         self.stepCount = stepCount
         self.prompt = prompt
+        self.negativePrompt = negativePrompt
         self.rotateAngle = rotateAngle
         self.rotateDirection = rotateDirection
         self.zoomScale = zoomScale
@@ -93,6 +95,7 @@ struct Effect: Identifiable, Codable {
         self.seed = existingEffect.seed
         self.stepCount = existingEffect.stepCount
         self.prompt = existingEffect.prompt
+        self.negativePrompt = existingEffect.negativePrompt
         self.rotateAngle = existingEffect.rotateAngle
         self.rotateDirection = existingEffect.rotateDirection
         self.zoomScale = existingEffect.zoomScale

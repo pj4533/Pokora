@@ -18,10 +18,10 @@ extension PokoraProject {
         return lastFrame
     }
     
-    @MainActor mutating func addEffect(effectType: Effect.EffectType, startFrame: Int, prompt: String, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, renderDirection: Effect.RenderDirection, threshold: Float) {
+    @MainActor mutating func addEffect(effectType: Effect.EffectType, startFrame: Int, prompt: String, negativePrompt: String, startStrength: Float, endStrength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, renderDirection: Effect.RenderDirection, threshold: Float) {
         let currentFrame = startFrame
         let lastFrame = video.lastFrameIndex ?? currentFrame
-        let newEffect = Effect(effectType: effectType, startFrame: currentFrame, endFrame: lastFrame, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: stepCount, prompt: prompt, rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, renderDirection: renderDirection, threshold: threshold)
+        let newEffect = Effect(effectType: effectType, startFrame: currentFrame, endFrame: lastFrame, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: stepCount, prompt: prompt, negativePrompt: negativePrompt, rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, renderDirection: renderDirection, threshold: threshold)
 
         // Find the index of the next effect in the array
         if let nextEffectIndex = effects.firstIndex(where: { $0.startFrame > newEffect.startFrame }) {

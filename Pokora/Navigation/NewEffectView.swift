@@ -12,6 +12,7 @@ struct NewEffectView: View {
     @EnvironmentObject var store: VideoStore
     @Binding var selectedEffect: UUID?
     @State private var prompt = "A cyberpunk cityscape"
+    @State private var negativePrompt = "watermark"
     @State private var startStrength: Float = 0.2
     @State private var endStrength: Float = 0.2
     @State private var threshold: Float = 0.7
@@ -38,6 +39,8 @@ struct NewEffectView: View {
                         }
                     }
                     TextField("Prompt", text: $prompt)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField("Negative Prompt", text: $negativePrompt)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     if effectType == .audioReactive {
                         Stepper("Threshold", value: $threshold, step: 0.7, format: .number)
@@ -120,7 +123,7 @@ struct NewEffectView: View {
                                 }
                                 if let url = url {
                                     do {
-                                        cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
+                                        cgImage = try await store.processPreview(imageUrl: url, prompt: prompt, negativePrompt: negativePrompt, strength: startStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: rotateDirection, rotateAngle: rotateAngle, zoomScale: zoomScale, modelURL: modelURL)
                                         store.project.video.frames = nil
                                     } catch let error {
                                         print("ERROR: \(error.localizedDescription)")
@@ -142,6 +145,7 @@ struct NewEffectView: View {
                         if let id = selectedEffect {
                             if let index = store.project.effects.firstIndex(where: { $0.id == id }) {
                                 store.project.effects[index].prompt = prompt
+                                store.project.effects[index].negativePrompt = negativePrompt
                                 store.project.effects[index].startStrength = startStrength
                                 store.project.effects[index].endStrength = endStrength
                                 store.project.effects[index].threshold = threshold
@@ -154,7 +158,7 @@ struct NewEffectView: View {
                                 store.project.effects[index].zoomScale = effectType == .generative ? zoomScale : nil
                             }
                         } else {
-                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: effectType == .generative ? rotateDirection : nil, rotateAngle: effectType == .generative ? rotateAngle : nil, zoomScale: effectType == .generative ? zoomScale : nil, renderDirection: renderDirection, threshold: threshold)
+                            store.project.addEffect(effectType: effectType, startFrame: store.currentFrameNumber ?? 0, prompt: prompt, negativePrompt: negativePrompt, startStrength: startStrength, endStrength: endStrength, seed: seed, stepCount: Int(stepCount), rotateDirection: effectType == .generative ? rotateDirection : nil, rotateAngle: effectType == .generative ? rotateAngle : nil, zoomScale: effectType == .generative ? zoomScale : nil, renderDirection: renderDirection, threshold: threshold)
                         }
                         dismiss()
                     }
@@ -172,6 +176,7 @@ struct NewEffectView: View {
             .onAppear {
                 if let id = selectedEffect, let effect = store.project.effects.first(where: { $0.id == id }) {
                     prompt = effect.prompt
+                    negativePrompt = effect.negativePrompt ?? ""
                     startStrength = effect.startStrength
                     endStrength = effect.endStrength
                     seed = effect.seed

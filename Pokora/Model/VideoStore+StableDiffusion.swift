@@ -37,7 +37,7 @@ extension VideoStore {
         try self.pipeline?.loadResources()
     }
     
-    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, strength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
+    internal func processImageToImage(withImageUrl imageUrl: URL, toOutputUrl outputUrl: URL, prompt: String, negativePrompt: String, strength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, progressHandler: (StableDiffusionPipeline.Progress) -> Bool = { _ in true }) throws -> URL? {
         
         if let imageSource = CGImageSourceCreateWithURL(imageUrl as CFURL, nil), let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
             
@@ -52,7 +52,7 @@ extension VideoStore {
             var pipelineConfig = StableDiffusionPipeline.Configuration(prompt: prompt)
 
             pipelineConfig.controlNetInputs = usingControlNet ? [startingImage] : []
-            pipelineConfig.negativePrompt = "watermark"
+            pipelineConfig.negativePrompt = negativePrompt
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1
@@ -108,7 +108,7 @@ extension VideoStore {
     }
 
     
-    func processPreview(imageUrl: URL, prompt: String, strength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, modelURL: URL?) async throws -> CGImage? {
+    func processPreview(imageUrl: URL, prompt: String, negativePrompt: String, strength: Float, seed: UInt32, stepCount: Int, rotateDirection: Effect.RotateDirection?, rotateAngle: Float?, zoomScale: Float?, modelURL: URL?) async throws -> CGImage? {
         await MainActor.run {
             self.showThumbnails = false
             self.shouldProcess = true
@@ -149,7 +149,7 @@ extension VideoStore {
 //                pipelineConfig.controlNetInputs = [nullCGImage]
 //            }
             pipelineConfig.controlNetInputs = usingControlNet ? [startingImage] : []
-            pipelineConfig.negativePrompt = "watermark"
+            pipelineConfig.negativePrompt = negativePrompt
             pipelineConfig.startingImage = startingImage
             pipelineConfig.strength = strength
             pipelineConfig.imageCount = 1

@@ -157,6 +157,7 @@ extension VideoStore {
                         let processedUrl = try processImageToImage(withImageUrl: url,
                                                                    toOutputUrl: fileURL,
                                                          prompt: effect.prompt,
+                                                                   negativePrompt: effect.negativePrompt ?? "",
                                                                    strength: effect.effectType == .audioReactive ? currentStrength : effect.strength(forFrameIndex: frameIndex),
                                                                    seed: effect.effectType == .generative ? UInt32.random(in: 0...UInt32.max) : effectSeed,
                                                                    stepCount: effect.stepCount ?? 30,
