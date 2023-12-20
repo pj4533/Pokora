@@ -122,10 +122,10 @@ extension VideoStore {
                     // TODO: should use the stored amplitudes not get it again, but there might be an off by one error
                     let amplitudeAtFrame = try await self.getAverageAmplitudeAtFrame(frame: frameIndex)
                     if amplitudeAtFrame > threshhold {
-                        if currentStrength == 0.0 {
+//                        if currentStrength == 0.0 {
                             // this is an alternate way of doing new seeds for audio reactive stuff. rather than only at the end of the envelope,
                             // it changes the seed if the envelope has work on at least one frame and not been triggered again
-//                        if (currentStrength == 0.0) || (currentEnvelopeFramesRemaining != maxEnvelopeFrames) {
+                        if (currentStrength == 0.0) || (currentEnvelopeFramesRemaining != maxEnvelopeFrames) {
                             effectSeed = UInt32.random(in: 0...UInt32.max)
                             print("NEW SEED: \(effectSeed)")
                         }
